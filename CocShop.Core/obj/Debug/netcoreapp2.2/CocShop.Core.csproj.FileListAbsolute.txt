@@ -1,0 +1,5 @@
+F:\SE1278\cn7\swd\coc\CocShopProject\CocShop.Core\bin\Debug\netcoreapp2.2\CocShop.Core.deps.json
+F:\SE1278\cn7\swd\coc\CocShopProject\CocShop.Core\bin\Debug\netcoreapp2.2\CocShop.Core.dll
+F:\SE1278\cn7\swd\coc\CocShopProject\CocShop.Core\obj\Debug\netcoreapp2.2\CocShop.Core.csproj.CoreCompileInputs.cache
+F:\SE1278\cn7\swd\coc\CocShopProject\CocShop.Core\obj\Debug\netcoreapp2.2\CocShop.Core.AssemblyInfoInputs.cache
+F:\SE1278\cn7\swd\coc\CocShopProject\CocShop.Core\obj\Debug\netcoreapp2.2\CocShop.Core.AssemblyInfo.cs
