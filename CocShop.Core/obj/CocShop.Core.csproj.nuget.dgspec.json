@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\SE1278\\cn7\\swd\\coc\\CocShopProject\\CocShop.Core\\CocShop.Core.csproj": {}
+    "F:\\SE1278\\cn7\\swd\\project\\CocShopProject\\CocShop.Core\\CocShop.Core.csproj": {}
   },
   "projects": {
-    "F:\\SE1278\\cn7\\swd\\coc\\CocShopProject\\CocShop.Core\\CocShop.Core.csproj": {
+    "F:\\SE1278\\cn7\\swd\\project\\CocShopProject\\CocShop.Core\\CocShop.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\SE1278\\cn7\\swd\\coc\\CocShopProject\\CocShop.Core\\CocShop.Core.csproj",
+        "projectUniqueName": "F:\\SE1278\\cn7\\swd\\project\\CocShopProject\\CocShop.Core\\CocShop.Core.csproj",
         "projectName": "CocShop.Core",
-        "projectPath": "F:\\SE1278\\cn7\\swd\\coc\\CocShopProject\\CocShop.Core\\CocShop.Core.csproj",
+        "projectPath": "F:\\SE1278\\cn7\\swd\\project\\CocShopProject\\CocShop.Core\\CocShop.Core.csproj",
         "packagesPath": "C:\\Users\\benfi\\.nuget\\packages\\",
-        "outputPath": "F:\\SE1278\\cn7\\swd\\coc\\CocShopProject\\CocShop.Core\\obj\\",
+        "outputPath": "F:\\SE1278\\cn7\\swd\\project\\CocShopProject\\CocShop.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",

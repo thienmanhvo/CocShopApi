@@ -6819,11 +6819,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\SE1278\\cn7\\swd\\coc\\CocShopProject\\CocShop.Data\\CocShop.Data.csproj",
+      "projectUniqueName": "F:\\SE1278\\cn7\\swd\\project\\CocShopProject\\CocShop.Data\\CocShop.Data.csproj",
       "projectName": "CocShop.Data",
-      "projectPath": "F:\\SE1278\\cn7\\swd\\coc\\CocShopProject\\CocShop.Data\\CocShop.Data.csproj",
+      "projectPath": "F:\\SE1278\\cn7\\swd\\project\\CocShopProject\\CocShop.Data\\CocShop.Data.csproj",
       "packagesPath": "C:\\Users\\benfi\\.nuget\\packages\\",
-      "outputPath": "F:\\SE1278\\cn7\\swd\\coc\\CocShopProject\\CocShop.Data\\obj\\",
+      "outputPath": "F:\\SE1278\\cn7\\swd\\project\\CocShopProject\\CocShop.Data\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -6844,8 +6844,8 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "F:\\SE1278\\cn7\\swd\\coc\\CocShopProject\\CocShop.Model\\CocShop.Model.csproj": {
-              "projectPath": "F:\\SE1278\\cn7\\swd\\coc\\CocShopProject\\CocShop.Model\\CocShop.Model.csproj"
+            "F:\\SE1278\\cn7\\swd\\project\\CocShopProject\\CocShop.Model\\CocShop.Model.csproj": {
+              "projectPath": "F:\\SE1278\\cn7\\swd\\project\\CocShopProject\\CocShop.Model\\CocShop.Model.csproj"
             }
           }
         }
