@@ -1,11 +1,12 @@
 ﻿
-using CocShop.Core;
-using CocShop.Core.Appsettings;
 using CocShop.Core.Entity;
-using CocShop.Core.Infrastructure;
-using CocShop.Core.Repositories;
+using CocShop.Data;
+using CocShop.Data.Appsettings;
+using CocShop.Data.Infrastructure;
+using CocShop.Data.Repositories;
 using CocShop.Model;
 using CocShop.Service.Service;
+using CocShopProject.Extentions;
 using CocShopProject.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -159,7 +160,7 @@ namespace CocShopProject
             #endregion
 
             #region Swagger
-            services.AddSwagger();
+            services.AddSwaggerDocumentation();
             #endregion
 
             #region Cors
@@ -186,26 +187,7 @@ namespace CocShopProject
             app.UseAuthentication();
             app.UseStaticFiles();
 
-            #region Swagger
-            app.UseSwaggerUi3WithApiExplorer(settings =>
-            {
-                settings.GeneratorSettings.DefaultPropertyNameHandling =
-                    PropertyNameHandling.CamelCase;
-
-                settings.GeneratorSettings.Title = "VAS API";
-
-                settings.GeneratorSettings.OperationProcessors.Add(new OperationSecurityScopeProcessor("Bearer"));
-
-                settings.GeneratorSettings.DocumentProcessors.Add(new SecurityDefinitionAppender("Bearer",
-                    new SwaggerSecurityScheme
-                    {
-                        Type = SwaggerSecuritySchemeType.ApiKey,
-                        Name = "Authorization",
-                        Description = "Copy 'Bearer ' + valid JWT token into field",
-                        In = SwaggerSecurityApiKeyLocation.Header
-                    }));
-            });
-            #endregion
+            app.UseSwaggerDocumentation();
 
             //#region Identity
             //var task = RolesExtenstions.InitAsync(roleManager);
@@ -222,7 +204,7 @@ namespace CocShopProject
             //app.UseHangfireServer();
             //#endregion
 
-            app.UseCors("AllowAll");
+            app.UseCorsSettings();
 
             app.UseHttpsRedirection();
 

@@ -18,6 +18,7 @@ namespace CocShop.Core.Entity
         public string OtherDetail { get; set; }
         public bool? IsDelete { get; set; }
 
+        public virtual Users User { get; set; }
         public virtual ICollection<Orders> Orders { get; set; }
     }
 }

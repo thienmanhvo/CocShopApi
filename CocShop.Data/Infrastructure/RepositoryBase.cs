@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace CocShop.Core.Infrastructure
+namespace CocShop.Data.Infrastructure
 {
     public abstract class RepositoryBase<T> where T : class
     {

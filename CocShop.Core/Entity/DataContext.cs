@@ -1,6 +1,8 @@
 ﻿using System;
+using CocShop.Data.Appsettings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 namespace CocShop.Core.Entity
 {
@@ -14,22 +16,26 @@ namespace CocShop.Core.Entity
             : base(options)
         {
         }
-        public void Commit()
-        {
-            base.SaveChanges();
-        }
-        public virtual DbSet<Categories> Categories { get; set; }
+
+        public virtual DbSet<GoodsIssueInvoices> GoodsIssueInvoices { get; set; }
+        public virtual DbSet<GoodsReceiptInvoices> GoodsReceiptInvoices { get; set; }
         public virtual DbSet<HubUserConnections> HubUserConnections { get; set; }
         public virtual DbSet<Images> Images { get; set; }
+        public virtual DbSet<InvoiceCategories> InvoiceCategories { get; set; }
+        public virtual DbSet<IssueInvoicesDetail> IssueInvoicesDetail { get; set; }
         public virtual DbSet<Locations> Locations { get; set; }
         public virtual DbSet<Notifications> Notifications { get; set; }
         public virtual DbSet<OrderDetails> OrderDetails { get; set; }
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<PaymentMeThods> PaymentMeThods { get; set; }
         public virtual DbSet<Prices> Prices { get; set; }
+        public virtual DbSet<ProductCategories> ProductCategories { get; set; }
+        public virtual DbSet<ProductSupplier> ProductSupplier { get; set; }
         public virtual DbSet<Products> Products { get; set; }
+        public virtual DbSet<ReceiptInvoicesDetails> ReceiptInvoicesDetails { get; set; }
         public virtual DbSet<RoleClaims> RoleClaims { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
+        public virtual DbSet<Supplier> Supplier { get; set; }
         public virtual DbSet<UserClaims> UserClaims { get; set; }
         public virtual DbSet<UserLogins> UserLogins { get; set; }
         public virtual DbSet<UserRoles> UserRoles { get; set; }
@@ -37,12 +43,16 @@ namespace CocShop.Core.Entity
         public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<Users2> Users2 { get; set; }
 
+        public void Commit()
+        {
+            base.SaveChanges();
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=THIENNBSE63207\\SQLEXPRESS;Database=CocShop;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(AppSettings.Configs.GetConnectionString("DbConnection"));
             }
         }
 
@@ -50,8 +60,10 @@ namespace CocShop.Core.Entity
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
 
-            modelBuilder.Entity<Categories>(entity =>
+            modelBuilder.Entity<GoodsIssueInvoices>(entity =>
             {
+                entity.ToTable("Goods_Issue_Invoices");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -66,13 +78,16 @@ namespace CocShop.Core.Entity
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Description).HasMaxLength(1000);
+                entity.Property(e => e.InvoiceCategoriesId)
+                    .HasColumnName("Invoice_Categories_Id")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.IsDelete).HasColumnName("Is_Delete");
+                entity.Property(e => e.TotalPrice)
+                    .HasColumnName("Total_Price")
+                    .HasColumnType("decimal(18, 0)");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.TotalQuantity).HasColumnName("Total_Quantity");
 
                 entity.Property(e => e.UpdatedAt)
                     .HasColumnName("Updated_At")
@@ -82,6 +97,73 @@ namespace CocShop.Core.Entity
                     .HasColumnName("Updated_By")
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.UserId)
+                    .HasColumnName("User_Id")
+                    .HasMaxLength(450);
+
+                entity.HasOne(d => d.InvoiceCategories)
+                    .WithMany(p => p.GoodsIssueInvoices)
+                    .HasForeignKey(d => d.InvoiceCategoriesId)
+                    .HasConstraintName("FK_Goods_Issue_Invoices_Invoice_Categories");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.GoodsIssueInvoices)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Goods_Issue_Invoices_Users");
+            });
+
+            modelBuilder.Entity<GoodsReceiptInvoices>(entity =>
+            {
+                entity.ToTable("Goods_Receipt_Invoices");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnName("Created_At")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("Created_By")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.InvoiceCategoriesId)
+                    .HasColumnName("Invoice_Categories_Id")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TotalPrice)
+                    .HasColumnName("Total_Price")
+                    .HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.TotalQuantity).HasColumnName("Total_Quantity");
+
+                entity.Property(e => e.UpdatedAt)
+                    .HasColumnName("Updated_At")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("Updated_By")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UserId)
+                    .HasColumnName("User_Id")
+                    .HasMaxLength(450);
+
+                entity.HasOne(d => d.InvoiceCategories)
+                    .WithMany(p => p.GoodsReceiptInvoices)
+                    .HasForeignKey(d => d.InvoiceCategoriesId)
+                    .HasConstraintName("FK_Goods_Receipt_Invoices_Invoice_Categories");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.GoodsReceiptInvoices)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Goods_Receipt_Invoices_Users");
             });
 
             modelBuilder.Entity<HubUserConnections>(entity =>
@@ -136,6 +218,88 @@ namespace CocShop.Core.Entity
                     .HasForeignKey(d => d.ProdId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Image_Product");
+            });
+
+            modelBuilder.Entity<InvoiceCategories>(entity =>
+            {
+                entity.ToTable("Invoice_Categories");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnName("Created_At")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("Created_By")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+                entity.Property(e => e.UpdatedAt)
+                    .HasColumnName("Updated_At")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("Updated_By")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<IssueInvoicesDetail>(entity =>
+            {
+                entity.ToTable("Issue_Invoices_Detail");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnName("Created_At")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("Created_By")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IssueId)
+                    .HasColumnName("Issue_Id")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ProductId)
+                    .HasColumnName("Product_Id")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UnitPrice)
+                    .HasColumnName("Unit_Price")
+                    .HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.UpdatedAt)
+                    .HasColumnName("Updated_At")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("Updated_By")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Issue)
+                    .WithMany(p => p.IssueInvoicesDetail)
+                    .HasForeignKey(d => d.IssueId)
+                    .HasConstraintName("FK_Issue_Invoices_Detail_Goods_Issue_Invoices");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.IssueInvoicesDetail)
+                    .HasForeignKey(d => d.ProductId)
+                    .HasConstraintName("FK_Issue_Invoices_Detail_Products");
             });
 
             modelBuilder.Entity<Locations>(entity =>
@@ -253,9 +417,18 @@ namespace CocShop.Core.Entity
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.CreatedUserId)
+                    .IsRequired()
+                    .HasColumnName("Created_User_Id")
+                    .HasMaxLength(450);
+
                 entity.Property(e => e.DateCreate)
                     .HasColumnName("Date_Create")
                     .HasColumnType("datetime");
+
+                entity.Property(e => e.DeliveryUserId)
+                    .HasColumnName("Delivery_User_Id")
+                    .HasMaxLength(450);
 
                 entity.Property(e => e.IsDelete).HasColumnName("Is_Delete");
 
@@ -269,6 +442,16 @@ namespace CocShop.Core.Entity
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Status)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TotalPrice)
+                    .HasColumnName("Total_Price")
+                    .HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.TotalQuantity).HasColumnName("Total_Quantity");
+
                 entity.Property(e => e.UpdatedAt)
                     .HasColumnName("Updated_At")
                     .HasColumnType("datetime");
@@ -278,11 +461,16 @@ namespace CocShop.Core.Entity
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.UserEmail)
-                    .IsRequired()
-                    .HasColumnName("User_Email")
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+                entity.HasOne(d => d.CreatedUser)
+                    .WithMany(p => p.OrdersCreatedUser)
+                    .HasForeignKey(d => d.CreatedUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Orders_Users");
+
+                entity.HasOne(d => d.DeliveryUser)
+                    .WithMany(p => p.OrdersDeliveryUser)
+                    .HasForeignKey(d => d.DeliveryUserId)
+                    .HasConstraintName("FK_Orders_Users1");
 
                 entity.HasOne(d => d.Location)
                     .WithMany(p => p.Orders)
@@ -323,6 +511,11 @@ namespace CocShop.Core.Entity
                 entity.Property(e => e.UserId)
                     .HasColumnName("User_ID")
                     .HasMaxLength(450);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.PaymentMeThods)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Payment_MeThods_Users");
             });
 
             modelBuilder.Entity<Prices>(entity =>
@@ -373,6 +566,72 @@ namespace CocShop.Core.Entity
                     .WithMany(p => p.Prices)
                     .HasForeignKey(d => d.ProductId)
                     .HasConstraintName("FK_Price_Product");
+            });
+
+            modelBuilder.Entity<ProductCategories>(entity =>
+            {
+                entity.ToTable("Product_Categories");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnName("Created_At")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("Created_By")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Description).HasMaxLength(1000);
+
+                entity.Property(e => e.IsDelete).HasColumnName("Is_Delete");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.UpdatedAt)
+                    .HasColumnName("Updated_At")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("Updated_By")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ProductSupplier>(entity =>
+            {
+                entity.ToTable("Product_Supplier");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.ProductId)
+                    .HasColumnName("Product_Id")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SupplierId)
+                    .HasColumnName("Supplier_Id")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductSupplier)
+                    .HasForeignKey(d => d.ProductId)
+                    .HasConstraintName("FK_Product_Supplier_Products");
+
+                entity.HasOne(d => d.Supplier)
+                    .WithMany(p => p.ProductSupplier)
+                    .HasForeignKey(d => d.SupplierId)
+                    .HasConstraintName("FK_Product_Supplier_Supplier");
             });
 
             modelBuilder.Entity<Products>(entity =>
@@ -434,6 +693,68 @@ namespace CocShop.Core.Entity
                     .HasConstraintName("FK_Product_Category");
             });
 
+            modelBuilder.Entity<ReceiptInvoicesDetails>(entity =>
+            {
+                entity.ToTable("Receipt_Invoices_Details");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnName("Created_At")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("Created_By")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ProductId)
+                    .HasColumnName("Product_Id")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ReceiptId)
+                    .HasColumnName("Receipt_Id")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SupplierId)
+                    .HasColumnName("Supplier_Id")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UnitPrice)
+                    .HasColumnName("Unit_Price")
+                    .HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.UpdatedAt)
+                    .HasColumnName("Updated_At")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("Updated_By")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ReceiptInvoicesDetails)
+                    .HasForeignKey(d => d.ProductId)
+                    .HasConstraintName("FK_Receipt_Details_Products");
+
+                entity.HasOne(d => d.Receipt)
+                    .WithMany(p => p.ReceiptInvoicesDetails)
+                    .HasForeignKey(d => d.ReceiptId)
+                    .HasConstraintName("FK_Receipt_Details_Goods_Receipt_Invoices");
+
+                entity.HasOne(d => d.Supplier)
+                    .WithMany(p => p.ReceiptInvoicesDetails)
+                    .HasForeignKey(d => d.SupplierId)
+                    .HasConstraintName("FK_Receipt_Invoices_Details_Supplier");
+            });
+
             modelBuilder.Entity<RoleClaims>(entity =>
             {
                 entity.ToTable("Role_Claims");
@@ -459,6 +780,53 @@ namespace CocShop.Core.Entity
                 entity.Property(e => e.Name).HasMaxLength(256);
 
                 entity.Property(e => e.NormalizedName).HasMaxLength(256);
+            });
+
+            modelBuilder.Entity<Supplier>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Address).HasMaxLength(50);
+
+                entity.Property(e => e.BankName)
+                    .HasColumnName("Bank_Name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.BankNumber)
+                    .HasColumnName("Bank_Number")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.BusinessPhone)
+                    .HasColumnName("Business_Phone")
+                    .HasMaxLength(13)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Fax)
+                    .HasMaxLength(16)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IsDelete).HasColumnName("Is_Delete");
+
+                entity.Property(e => e.PhoneNumber)
+                    .HasColumnName("Phone_Number")
+                    .HasMaxLength(16)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SupplierName)
+                    .HasColumnName("Supplier_Name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Website)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<UserClaims>(entity =>

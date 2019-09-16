@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace CocShop.Core.Appsettings
+namespace CocShop.Data.Appsettings
 {
     public class AppSettings
     {

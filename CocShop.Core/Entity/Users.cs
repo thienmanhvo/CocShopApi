@@ -7,8 +7,13 @@ namespace CocShop.Core.Entity
     {
         public Users()
         {
+            GoodsIssueInvoices = new HashSet<GoodsIssueInvoices>();
+            GoodsReceiptInvoices = new HashSet<GoodsReceiptInvoices>();
             HubUserConnections = new HashSet<HubUserConnections>();
             Notifications = new HashSet<Notifications>();
+            OrdersCreatedUser = new HashSet<Orders>();
+            OrdersDeliveryUser = new HashSet<Orders>();
+            PaymentMeThods = new HashSet<PaymentMeThods>();
             UserClaims = new HashSet<UserClaims>();
             UserLogins = new HashSet<UserLogins>();
             UserRoles = new HashSet<UserRoles>();
@@ -33,8 +38,13 @@ namespace CocShop.Core.Entity
         public string FullName { get; set; }
         public string CardNumber { get; set; }
 
+        public virtual ICollection<GoodsIssueInvoices> GoodsIssueInvoices { get; set; }
+        public virtual ICollection<GoodsReceiptInvoices> GoodsReceiptInvoices { get; set; }
         public virtual ICollection<HubUserConnections> HubUserConnections { get; set; }
         public virtual ICollection<Notifications> Notifications { get; set; }
+        public virtual ICollection<Orders> OrdersCreatedUser { get; set; }
+        public virtual ICollection<Orders> OrdersDeliveryUser { get; set; }
+        public virtual ICollection<PaymentMeThods> PaymentMeThods { get; set; }
         public virtual ICollection<UserClaims> UserClaims { get; set; }
         public virtual ICollection<UserLogins> UserLogins { get; set; }
         public virtual ICollection<UserRoles> UserRoles { get; set; }

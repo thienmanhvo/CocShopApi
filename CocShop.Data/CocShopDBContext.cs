@@ -1,17 +1,19 @@
-﻿using CocShop.Model;
+﻿using CocShop.Data.Appsettings;
+using CocShop.Model;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CocShop.Core
+namespace CocShop.Data
 {
     public class CocShopDBContext : IdentityDbContext<MyUser,MyRole,string,MyUserClaim,MyUserRole,MyUserLogin,MyRoleClaim,MyUserToken>
     {
         public CocShopDBContext() : base((new DbContextOptionsBuilder())
         .UseLazyLoadingProxies()
-        .UseSqlServer(@"Server=THIENNBSE63207\SQLEXPRESS;Database=CocShop;user id=sa;password=080297;Trusted_Connection=True;Integrated Security=false;")
+        .UseSqlServer(AppSettings.Configs.GetConnectionString("DbConnection"))
         .Options)
         {
         }

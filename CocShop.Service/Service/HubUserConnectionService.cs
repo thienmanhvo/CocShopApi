@@ -1,5 +1,5 @@
-﻿using CocShop.Core.Infrastructure;
-using CocShop.Core.Repositories;
+﻿using CocShop.Data.Infrastructure;
+using CocShop.Data.Repositories;
 using CocShop.Model;
 using System;
 using System.Collections.Generic;

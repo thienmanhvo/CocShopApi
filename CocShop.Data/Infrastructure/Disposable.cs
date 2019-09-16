@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CocShop.Core.Infrastructure
+namespace CocShop.Data.Infrastructure
 {
     public class Disposable : IDisposable
     {

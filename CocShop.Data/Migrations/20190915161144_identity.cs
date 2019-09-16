@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CocShop.Core.Migrations
+namespace CocShop.Data.Migrations
 {
     public partial class identity : Migration
     {

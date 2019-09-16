@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace CocShop.Core.Entity
 {
-    public partial class Categories
+    public partial class ProductCategories
     {
-        public Categories()
+        public ProductCategories()
         {
             Products = new HashSet<Products>();
         }

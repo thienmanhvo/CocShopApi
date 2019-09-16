@@ -8,8 +8,11 @@ namespace CocShop.Core.Entity
         public Products()
         {
             Images = new HashSet<Images>();
+            IssueInvoicesDetail = new HashSet<IssueInvoicesDetail>();
             OrderDetails = new HashSet<OrderDetails>();
             Prices = new HashSet<Prices>();
+            ProductSupplier = new HashSet<ProductSupplier>();
+            ReceiptInvoicesDetails = new HashSet<ReceiptInvoicesDetails>();
         }
 
         public string Id { get; set; }
@@ -29,9 +32,12 @@ namespace CocShop.Core.Entity
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        public virtual Categories Cate { get; set; }
+        public virtual ProductCategories Cate { get; set; }
         public virtual ICollection<Images> Images { get; set; }
+        public virtual ICollection<IssueInvoicesDetail> IssueInvoicesDetail { get; set; }
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
         public virtual ICollection<Prices> Prices { get; set; }
+        public virtual ICollection<ProductSupplier> ProductSupplier { get; set; }
+        public virtual ICollection<ReceiptInvoicesDetails> ReceiptInvoicesDetails { get; set; }
     }
 }
