@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace CocShop.Data.Infrastructure
+namespace CocShop.Core.Infrastructure
 {
     public interface IRepository<T> where T : class
     {

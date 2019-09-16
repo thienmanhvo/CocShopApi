@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CocShop.Data.Infrastructure
+namespace CocShop.Core.Infrastructure
 {
     public interface IUnitOfWork
     {

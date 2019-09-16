@@ -1,11 +1,9 @@
-﻿using CocShop.Data.Infrastructure;
-using CocShop.Data.Repositories;
+﻿using CocShop.Core.Infrastructure;
+using CocShop.Core.Repositories;
 using CocShop.Model;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace CocShop.Service.Service
 {

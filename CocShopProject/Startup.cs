@@ -1,7 +1,9 @@
-﻿using CocShop.Core.Appsettings;
-using CocShop.Data;
-using CocShop.Data.Infrastructure;
-using CocShop.Data.Repositories;
+﻿
+using CocShop.Core;
+using CocShop.Core.Appsettings;
+using CocShop.Core.Entity;
+using CocShop.Core.Infrastructure;
+using CocShop.Core.Repositories;
 using CocShop.Model;
 using CocShop.Service.Service;
 using CocShopProject.Hubs;
@@ -40,6 +42,7 @@ namespace CocShopProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<DataContext>();
             services.AddDbContext<CocShopDBContext>();
 
             #region DI solutions
@@ -92,15 +95,16 @@ namespace CocShopProject
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 o.User.RequireUniqueEmail = false;
             });
-            authBuilder = new IdentityBuilder(authBuilder.UserType, typeof(IdentityRole), authBuilder.Services);
+            authBuilder = new IdentityBuilder(authBuilder.UserType, typeof(MyRole), authBuilder.Services);
             authBuilder.AddEntityFrameworkStores<CocShopDBContext>().AddDefaultTokenProviders();
 
 
-            services.AddIdentity<MyUser, IdentityRole>()
+            services.AddIdentity<MyUser, MyRole>()
                 .AddEntityFrameworkStores<CocShopDBContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddScoped<IUserClaimsPrincipalFactory<MyUser>, UserClaimsPrincipalFactory<MyUser, IdentityRole>>();
+            services.AddScoped<IUserClaimsPrincipalFactory<MyUser>, UserClaimsPrincipalFactory<MyUser, MyRole>>();
+
 
             //security key
             string securityKey = "qazedcVFRtgbNHYujmKIolp";

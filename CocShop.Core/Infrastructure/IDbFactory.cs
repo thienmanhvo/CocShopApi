@@ -1,11 +1,12 @@
-﻿using System;
+﻿using CocShop.Core.Entity;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CocShop.Data.Infrastructure
+namespace CocShop.Core.Infrastructure
 {
     public interface IDbFactory : IDisposable
     {
-        CocShopDBContext Init();
+        DataContext Init();
     }
 }
