@@ -6,7 +6,7 @@ using System;
 
 namespace CocShopProject.Extentions
 {
-    public static class CorsExtentions
+    public static class CorsServiceExtentions
     {
         public static IApplicationBuilder UseCorsSettings(this IApplicationBuilder app)
         {
