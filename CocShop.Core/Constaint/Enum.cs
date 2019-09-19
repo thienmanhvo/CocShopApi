@@ -20,5 +20,12 @@ namespace CocShop.Core.Constaint
             AccessDenied = -6,
         }
 
+        [JsonConverter(typeof(StringEnumConverter))]
+        public enum Role
+        {
+            Admin = 1,
+            User = 2
+        }
+
     }
 }
