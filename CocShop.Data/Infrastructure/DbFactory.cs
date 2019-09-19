@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CocShop.Core.Entity;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,11 +7,11 @@ namespace CocShop.Data.Infrastructure
 {
     public class DbFactory : Disposable, IDbFactory
     {
-        CocShopDBContext dbContext;
+        DataContext dbContext;
 
-        public CocShopDBContext Init()
+        public DataContext Init()
         {
-            return dbContext ?? (dbContext = new CocShopDBContext());
+            return dbContext ?? (dbContext = new DataContext());
         }
 
         protected override void DisposeCore()

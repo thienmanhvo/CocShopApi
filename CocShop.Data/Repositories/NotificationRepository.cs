@@ -1,8 +1,5 @@
-﻿using CocShop.Data.Infrastructure;
-using CocShop.Model;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CocShop.Core.Entity;
+using CocShop.Data.Infrastructure;
 
 namespace CocShop.Data.Repositories
 {

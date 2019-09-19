@@ -1,9 +1,9 @@
-﻿using CocShop.Core.Appsettings;
-using CocShop.Data;
+﻿using CocShop.Core.Entity;
+using CocShop.Data.Appsettings;
 using CocShop.Data.Infrastructure;
 using CocShop.Data.Repositories;
-using CocShop.Model;
 using CocShop.Service.Service;
+using CocShopProject.Extentions;
 using CocShopProject.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -16,10 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using NJsonSchema;
-using NSwag;
-using NSwag.AspNetCore;
-using NSwag.SwaggerGeneration.Processors.Security;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,7 +36,7 @@ namespace CocShopProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<CocShopDBContext>();
+            services.AddDbContext<DataContext>();
 
             #region DI solutions
             //add for data
@@ -92,15 +88,16 @@ namespace CocShopProject
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 o.User.RequireUniqueEmail = false;
             });
-            authBuilder = new IdentityBuilder(authBuilder.UserType, typeof(IdentityRole), authBuilder.Services);
-            authBuilder.AddEntityFrameworkStores<CocShopDBContext>().AddDefaultTokenProviders();
+            authBuilder = new IdentityBuilder(authBuilder.UserType, typeof(MyRole), authBuilder.Services);
+            authBuilder.AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
 
 
-            services.AddIdentity<MyUser, IdentityRole>()
-                .AddEntityFrameworkStores<CocShopDBContext>()
+            services.AddIdentity<MyUser, MyRole>()
+                .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddScoped<IUserClaimsPrincipalFactory<MyUser>, UserClaimsPrincipalFactory<MyUser, IdentityRole>>();
+            services.AddScoped<IUserClaimsPrincipalFactory<MyUser>, UserClaimsPrincipalFactory<MyUser, MyRole>>();
+
 
             //security key
             string securityKey = "qazedcVFRtgbNHYujmKIolp";
@@ -155,7 +152,7 @@ namespace CocShopProject
             #endregion
 
             #region Swagger
-            services.AddSwagger();
+            services.AddSwaggerDocumentation();
             #endregion
 
             #region Cors
@@ -182,26 +179,7 @@ namespace CocShopProject
             app.UseAuthentication();
             app.UseStaticFiles();
 
-            #region Swagger
-            app.UseSwaggerUi3WithApiExplorer(settings =>
-            {
-                settings.GeneratorSettings.DefaultPropertyNameHandling =
-                    PropertyNameHandling.CamelCase;
-
-                settings.GeneratorSettings.Title = "VAS API";
-
-                settings.GeneratorSettings.OperationProcessors.Add(new OperationSecurityScopeProcessor("Bearer"));
-
-                settings.GeneratorSettings.DocumentProcessors.Add(new SecurityDefinitionAppender("Bearer",
-                    new SwaggerSecurityScheme
-                    {
-                        Type = SwaggerSecuritySchemeType.ApiKey,
-                        Name = "Authorization",
-                        Description = "Copy 'Bearer ' + valid JWT token into field",
-                        In = SwaggerSecurityApiKeyLocation.Header
-                    }));
-            });
-            #endregion
+            app.UseSwaggerDocumentation();
 
             //#region Identity
             //var task = RolesExtenstions.InitAsync(roleManager);
@@ -218,7 +196,7 @@ namespace CocShopProject
             //app.UseHangfireServer();
             //#endregion
 
-            app.UseCors("AllowAll");
+            app.UseCorsSettings();
 
             app.UseHttpsRedirection();
 

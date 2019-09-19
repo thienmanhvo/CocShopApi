@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CocShop.Core.Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace CocShop.Data.Infrastructure
     public abstract class RepositoryBase<T> where T : class
     {
         #region Properties
-        private CocShopDBContext dataContext;
+        private DataContext dataContext;
         private readonly DbSet<T> dbSet;
 
         protected IDbFactory DbFactory
@@ -19,7 +20,7 @@ namespace CocShop.Data.Infrastructure
             private set;
         }
 
-        protected CocShopDBContext DbContext
+        protected DataContext DbContext
         {
             get { return dataContext ?? (dataContext = DbFactory.Init()); }
         }

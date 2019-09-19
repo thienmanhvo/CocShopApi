@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CocShop.Core.Entity;
 
 namespace CocShop.Data.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly IDbFactory dbFactory;
-        private CocShopDBContext dbContext;
+        private DataContext dbContext;
 
         public UnitOfWork(IDbFactory dbFactory)
         {
             this.dbFactory = dbFactory;
         }
 
-        public CocShopDBContext DbContext
+        public DataContext DbContext
         {
             get { return dbContext ?? (dbContext = dbFactory.Init()); }
         }
@@ -23,5 +21,6 @@ namespace CocShop.Data.Infrastructure
         {
             DbContext.Commit();
         }
+
     }
 }
