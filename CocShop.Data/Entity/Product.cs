@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CocShop.Core.Entity
+namespace CocShop.Data.Entity
 {
     [Table("Product")]
     public class Product

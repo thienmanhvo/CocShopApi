@@ -1,13 +1,17 @@
-﻿using CocShop.Core.Entity;
+﻿using CocShop.Data.Appsettings;
+using CocShop.Data.Entity;
 using CocShopProject.VIewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,13 +48,11 @@ namespace CocShopProject.Controllers
 
         private async Task<Token> GenerateToken(MyUser user)
         {
-            //security key
-            string securityKey = "qazedcVFRtgbNHYujmKIolp";
-            //symmectric security key
-            var symmectricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
+
+            var Key = BuildRsaSigningKey();
 
             //signing credentials
-            var signingCredentials = new SigningCredentials(symmectricSecurityKey, SecurityAlgorithms.HmacSha256);
+            var signingCredentials = new SigningCredentials(Key, SecurityAlgorithms.RsaSha512Signature);
 
             //add Claims
             var claims = new List<Claim>();
@@ -64,7 +66,7 @@ namespace CocShopProject.Controllers
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
             //create token
             var token = new JwtSecurityToken(
-                    issuer: "dongtv",
+                    issuer: AppSettings.Configs.GetValue<string>("JwtSettings:Issuer"),
                     audience: user.FullName,
                     expires: DateTime.Now.AddDays(1),
                     signingCredentials: signingCredentials,
@@ -109,5 +111,23 @@ namespace CocShopProject.Controllers
             }
         }
 
+        private RsaSecurityKey BuildRsaSigningKey()
+        {
+            var parameters = new RSAParameters()
+            {
+                Modulus = Base64UrlEncoder.DecodeBytes(AppSettings.Configs.GetValue<string>("JwtSettings:RsaModulus")),
+                Exponent = Base64UrlEncoder.DecodeBytes(AppSettings.Configs.GetValue<string>("JwtSettings:RsaExponent")),
+                P = Base64UrlEncoder.DecodeBytes(AppSettings.Configs.GetValue<string>("JwtSettings:P")),
+                Q = Base64UrlEncoder.DecodeBytes(AppSettings.Configs.GetValue<string>("JwtSettings:Q")),
+                DP = Base64UrlEncoder.DecodeBytes(AppSettings.Configs.GetValue<string>("JwtSettings:DP")),
+                DQ = Base64UrlEncoder.DecodeBytes(AppSettings.Configs.GetValue<string>("JwtSettings:DQ")),
+                InverseQ = Base64UrlEncoder.DecodeBytes(AppSettings.Configs.GetValue<string>("JwtSettings:InverseQ")),
+                D = Base64UrlEncoder.DecodeBytes(AppSettings.Configs.GetValue<string>("JwtSettings:D")),
+            };
+            var rsaProvider = new RSACryptoServiceProvider(2048);
+            rsaProvider.ImportParameters(parameters);
+            var key = new RsaSecurityKey(rsaProvider);
+            return key;
+        }
     }
 }
