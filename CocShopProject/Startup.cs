@@ -1,10 +1,7 @@
-﻿
-using CocShop.Core.Entity;
-using CocShop.Data;
+﻿using CocShop.Core.Entity;
 using CocShop.Data.Appsettings;
 using CocShop.Data.Infrastructure;
 using CocShop.Data.Repositories;
-using CocShop.Model;
 using CocShop.Service.Service;
 using CocShopProject.Extentions;
 using CocShopProject.Hubs;
@@ -40,7 +37,6 @@ namespace CocShopProject
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>();
-            services.AddDbContext<CocShopDBContext>();
 
             #region DI solutions
             //add for data
@@ -93,11 +89,11 @@ namespace CocShopProject
                 o.User.RequireUniqueEmail = false;
             });
             authBuilder = new IdentityBuilder(authBuilder.UserType, typeof(MyRole), authBuilder.Services);
-            authBuilder.AddEntityFrameworkStores<CocShopDBContext>().AddDefaultTokenProviders();
+            authBuilder.AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
 
 
             services.AddIdentity<MyUser, MyRole>()
-                .AddEntityFrameworkStores<CocShopDBContext>()
+                .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IUserClaimsPrincipalFactory<MyUser>, UserClaimsPrincipalFactory<MyUser, MyRole>>();

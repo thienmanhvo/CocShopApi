@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CocShop.Core\CocShop.Core.csproj" />
-    <ProjectReference Include="..\CocShop.Model\CocShop.Model.csproj" />
     <ProjectReference Include="..\CocShop.Service\CocShop.Service.csproj" />
   </ItemGroup>
 

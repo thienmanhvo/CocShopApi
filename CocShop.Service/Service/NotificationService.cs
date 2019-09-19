@@ -1,6 +1,6 @@
-﻿using CocShop.Data.Infrastructure;
+﻿using CocShop.Core.Entity;
+using CocShop.Data.Infrastructure;
 using CocShop.Data.Repositories;
-using CocShop.Model;
 using System;
 using System.Linq;
 using System.Linq.Expressions;

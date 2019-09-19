@@ -1,16 +1,18 @@
-﻿using System;
+﻿using CocShop.Core.Entity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace CocShop.Model
+namespace CocShop.Core.Entity
 {
+    [Table("Notification")]
     public class Notification
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public String Type { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }

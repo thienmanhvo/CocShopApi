@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CocShop.Data\CocShop.Data.csproj" />
-    <ProjectReference Include="..\CocShop.Model\CocShop.Model.csproj" />
   </ItemGroup>
 
 </Project>
