@@ -1,4 +1,4 @@
-﻿using CocShop.Core.Entity;
+﻿using CocShop.Data.Entity;
 using CocShop.Data.Appsettings;
 using CocShop.Data.Infrastructure;
 using CocShop.Data.Repositories;
@@ -19,6 +19,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Logging;
 
 namespace CocShopProject
 {
@@ -38,25 +39,7 @@ namespace CocShopProject
         {
             services.AddDbContext<DataContext>();
 
-            #region DI solutions
-            //add for data
-            services.AddScoped<IDbFactory, DbFactory>();
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            //EventLog
-
-
-            //SignalR
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            services.AddTransient<IHubUserConnectionRepository, HubUserConnectionRepository>();
-            services.AddTransient<IHubUserConnectionService, HubUserConnectionService>();
-
-            services.AddTransient<INotificationService, NotificationService>();
-            services.AddTransient<INotificationRepository, NotificationRepository>();
-
-
-            #endregion
-
+            services.AddDI();
 
             #region Setup1
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options =>
@@ -65,104 +48,20 @@ namespace CocShopProject
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
             #endregion
-
-            #region Identity
-            services.AddAuthorization();
-            var authBuilder = services.AddIdentityCore<MyUser>(o =>
-            {
-                // configure identity options
-                o.Password.RequireDigit = false;
-                o.Password.RequireLowercase = false;
-                o.Password.RequireUppercase = false;
-                o.Password.RequireNonAlphanumeric = false;
-                o.Password.RequiredLength = 6;
-                o.Password.RequiredUniqueChars = 0;
-
-                // Lockout settings.
-                o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                o.Lockout.MaxFailedAccessAttempts = 5;
-                o.Lockout.AllowedForNewUsers = true;
-
-                // User settings.
-                o.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                o.User.RequireUniqueEmail = false;
-            });
-            authBuilder = new IdentityBuilder(authBuilder.UserType, typeof(MyRole), authBuilder.Services);
-            authBuilder.AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
-
-
-            services.AddIdentity<MyUser, MyRole>()
-                .AddEntityFrameworkStores<DataContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddScoped<IUserClaimsPrincipalFactory<MyUser>, UserClaimsPrincipalFactory<MyUser, MyRole>>();
-
-
-            //security key
-            string securityKey = "qazedcVFRtgbNHYujmKIolp";
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(securityKey)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidIssuer = securityKey,
-                    ValidAudience = securityKey
-                };
-
-                x.Events = new JwtBearerEvents
-                {
-                    OnAuthenticationFailed = context =>
-                    {
-                        Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
-                        return Task.CompletedTask;
-                    },
-                    OnTokenValidated = context =>
-                    {
-                        Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
-                        return Task.CompletedTask;
-                    },
-                    OnMessageReceived = context =>
-                    {
-                        var accessToken = context.Request.Query["access_token"];
-
-                        // If the request is for our hub...
-                        var path = context.HttpContext.Request.Path;
-                        if (path.StartsWithSegments("/centerHub"))
-                        {
-                            // Read the token out of the query string
-                            context.Token = accessToken;
-                        }
-                        return Task.CompletedTask;
-                    }
-                };
-            });
-            #endregion
+            services.AddIdentity();
 
             #region Swagger
             services.AddSwaggerDocumentation();
             #endregion
 
-            #region Cors
-            services.AddCors(options =>
-            options.AddPolicy("AllowAll", builder => builder
-                                    .WithOrigins("http://localhost:4200", "http://localhost:4201")
-                                    .AllowAnyHeader()
-                                    .AllowAnyMethod()
-                                    .AllowCredentials()));
-            #endregion
+            //#region Cors
+            //services.AddCors(options =>
+            //options.AddPolicy("AllowAll", builder => builder
+            //                        .WithOrigins("http://localhost:4200", "http://localhost:4201")
+            //                        .AllowAnyHeader()
+            //                        .AllowAnyMethod()
+            //                        .AllowCredentials()));
+            //#endregion
 
             services.AddSignalR();
 
@@ -175,11 +74,14 @@ namespace CocShopProject
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                //IdentityModelEventSource.ShowPII = true;
             }
             app.UseAuthentication();
             app.UseStaticFiles();
 
             app.UseSwaggerDocumentation();
+
+            app.ConfigureExceptionHandler();
 
             //#region Identity
             //var task = RolesExtenstions.InitAsync(roleManager);

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 
-namespace CocShop.Core.Entity
+namespace CocShop.Data.Entity
 {
     public class DataContext : IdentityDbContext<MyUser, MyRole, string, MyUserClaim, MyUserRole, MyUserLogin, MyRoleClaim, MyUserToken>
     {

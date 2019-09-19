@@ -14,6 +14,8 @@ namespace CocShopProject.Extentions
     {
         public static IServiceCollection AddDI(this IServiceCollection services)
         {
+            AddServiceDI(services);
+            AddRepoistoryDI(services);
             //add for data
             services.AddScoped<IDbFactory, DbFactory>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -22,14 +24,19 @@ namespace CocShopProject.Extentions
 
             //SignalR
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            services.AddTransient<IHubUserConnectionRepository, HubUserConnectionRepository>();
-            services.AddTransient<IHubUserConnectionService, HubUserConnectionService>();
-
-            services.AddTransient<INotificationService, NotificationService>();
-            services.AddTransient<INotificationRepository, NotificationRepository>();
-
             return services;
+        }
+
+        public static void AddServiceDI(IServiceCollection services)
+        {
+            services.AddTransient<IHubUserConnectionService, HubUserConnectionService>();
+            services.AddTransient<INotificationService, NotificationService>();
+        }
+
+        public static void AddRepoistoryDI(IServiceCollection services)
+        {
+            services.AddTransient<IHubUserConnectionService, HubUserConnectionService>();
+            services.AddTransient<INotificationRepository, NotificationRepository>();
         }
 
     }

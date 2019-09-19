@@ -1,11 +1,11 @@
-﻿using CocShop.Core.Entity;
+﻿using CocShop.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace CocShop.Core.Entity
+namespace CocShop.Data.Entity
 {
     [Table("Hub_User_Connection")]
     public class HubUserConnection

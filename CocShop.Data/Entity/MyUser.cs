@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace CocShop.Core.Entity
+namespace CocShop.Data.Entity
 {
     public class MyUser : IdentityUser
     {

@@ -1,4 +1,4 @@
-﻿using CocShop.Core.Entity;
+﻿using CocShop.Data.Entity;
 using CocShop.Data.Infrastructure;
 
 namespace CocShop.Data.Repositories
