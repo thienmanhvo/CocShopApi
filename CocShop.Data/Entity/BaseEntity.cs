@@ -24,7 +24,7 @@ namespace CocShop.Data.Entity
         [Column("Updated_At")]
         public DateTime? UpdatedAt { get; set; }
 
-        public void SetDefaultInsertValue(string username)
+        public virtual void SetDefaultInsertValue(string username)
         {
             Id = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;
@@ -33,7 +33,7 @@ namespace CocShop.Data.Entity
             UpdatedBy = username;
         }
 
-        public void SetDefaultUpdateValue(string username)
+        public virtual void SetDefaultUpdateValue(string username)
         {
             UpdatedAt = DateTime.UtcNow;
             UpdatedBy = username;

@@ -45,12 +45,14 @@ namespace CocShopProject.Extentions
         {
             services.AddTransient<IHubUserConnectionService, HubUserConnectionService>();
             services.AddTransient<INotificationService, NotificationService>();
+            services.AddTransient<IProductService, ProductService>();
         }
 
         public static void AddRepoistoryDI(IServiceCollection services)
         {
             services.AddTransient<IHubUserConnectionService, HubUserConnectionService>();
             services.AddTransient<INotificationRepository, NotificationRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
         }
 
     }

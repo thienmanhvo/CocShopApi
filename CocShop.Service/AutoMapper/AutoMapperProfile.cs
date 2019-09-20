@@ -13,6 +13,12 @@ namespace CocShop.Service.AutoMapper
             
             CreateMap<RegisterViewModel, MyUser>();
             CreateMap<MyUser, RegisterViewModel>();
+
+            CreateMap<Product, ProductRequestViewModel>();
+            CreateMap<ProductRequestViewModel, Product>();
+
+            CreateMap<ProductViewModel, ProductRequestViewModel>();
+            CreateMap<ProductRequestViewModel, ProductViewModel>();
         }
     }
 }

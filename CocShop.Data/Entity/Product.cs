@@ -22,7 +22,7 @@ namespace CocShop.Data.Entity
         public int Quantity { get; set; }
 
         [Column("Price_Sale")]
-        public double? PriceSale { get; set; }
+        public decimal? PriceSale { get; set; }
 
         [Column("Price")]
         public decimal Price { get; set; }
@@ -34,20 +34,26 @@ namespace CocShop.Data.Entity
         public bool IsDelete { get; set; }
 
         [Column("Is_Sale")]
-        public bool IsSale { get; set; }
+        public bool? IsSale { get; set; }
 
         [Column("Is_New")]
-        public bool IsNew { get; set; }
+        public bool? IsNew { get; set; }
 
         [Column("Is_Best")]
-        public bool IsBest { get; set; }
+        public bool? IsBest { get; set; }
 
         [ForeignKey("Category")]
         [Column("Cate_Id")]
-        public Guid CateId { get; set; }
+        public Guid? CateId { get; set; }
 
         public virtual ProductCategory Category { get; set; }
         public virtual ICollection<Image> Image { get; set; }
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }
+
+        public override void SetDefaultInsertValue(string username)
+        {
+            base.SetDefaultInsertValue(username);
+            IsDelete = false;
+        }
     }
 }

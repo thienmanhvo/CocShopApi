@@ -24,5 +24,7 @@ namespace CocShop.Data.Infrastructure
         IQueryable<T> GetAll();
         // Gets entities using delegate
         IQueryable<T> GetMany(Expression<Func<T, bool>> where);
+
+        string GetUsername();
     }
 }
