@@ -1,6 +1,8 @@
-﻿using CocShop.Data.Appsettings;
+﻿using AutoMapper;
+using CocShop.Data.Appsettings;
 using CocShop.Data.Entity;
-using CocShopProject.VIewModel;
+using CocShop.Service.ViewModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +26,8 @@ namespace CocShopProject.Controllers
 
         private readonly UserManager<MyUser> _userManager;
         private readonly RoleManager<MyRole> _roleManager;
+        private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _accessor;
 
         #endregion
 
@@ -32,7 +36,9 @@ namespace CocShopProject.Controllers
         public AuthController(IServiceProvider serviceProvider)
         {
             _userManager = serviceProvider.GetRequiredService<UserManager<MyUser>>();
-            _roleManager = serviceProvider.GetRequiredService<RoleManager<MyRole>>(); ;
+            _roleManager = serviceProvider.GetRequiredService<RoleManager<MyRole>>();
+            _mapper = serviceProvider.GetRequiredService<IMapper>();
+            _accessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
         }
 
         #endregion
@@ -46,7 +52,7 @@ namespace CocShopProject.Controllers
         /// <returns></returns>
         /// <author>thiennb</author>
         [HttpPost("Login")]
-        public async Task<ActionResult> GetToken([FromBody]LoginVM request)
+        public async Task<ActionResult> GetToken([FromBody]LoginViewModel request)
         {
             var user = await _userManager.FindByNameAsync(request.Username);
             if (user == null)
@@ -74,15 +80,11 @@ namespace CocShopProject.Controllers
         /// <returns></returns>
         /// <author>thiennb</author>
         [HttpPost("Register")]
-        public async Task<ActionResult> Register([FromBody]RegisterVM request)
+        public async Task<ActionResult> Register([FromBody]RegisterViewModel request)
         {
-            var user = new MyUser()
-            {
-                UserName = request.Username,
-                Email = request.Email,
-                FullName = request.Fullname,
-            };
+            var user = _mapper.Map<MyUser>(request);
             await CreateRole();
+            user.SetDefaultInsertValue(user.UserName);
             var resultUser = await _userManager.CreateAsync(user, request.Password);
             IdentityResult resultRole;
             if (resultUser.Succeeded)
@@ -105,7 +107,7 @@ namespace CocShopProject.Controllers
 
         #endregion
 
-        private async Task<Token> GenerateToken(MyUser user)
+        private async Task<TokenViewModel> GenerateToken(MyUser user)
         {
 
             var Key = BuildRsaSigningKey();
@@ -132,7 +134,7 @@ namespace CocShopProject.Controllers
                     claims: claims
                 );
             //return token
-            return new Token
+            return new TokenViewModel
             {
                 roles = _userManager.GetRolesAsync(user).Result.ToArray(),
                 fullname = user.FullName,
@@ -170,10 +172,23 @@ namespace CocShopProject.Controllers
                 var roleExist = await _roleManager.RoleExistsAsync(roleName);
                 if (!roleExist)
                 {
-                    //create the roles and seed them to the database: Question 1
-                    roleResult = await _roleManager.CreateAsync(new MyRole() { Name = roleName });
+                    //create the roles and seed them to the database:
+                    MyRole role = new MyRole() { Name = roleName };
+                    role.SetDefaultInsertValue(GetCurrentUser());
+                    roleResult = await _roleManager.CreateAsync(role);
                 }
             }
+        }
+        private string GetCurrentUser()
+        {
+            //try
+            //{
+                return _accessor.HttpContext.User?.FindFirst("username")?.Value ?? "SYSTEM";
+            //}
+            //catch
+            //{
+            //    return "SYSTEM";
+            //}
         }
     }
 }

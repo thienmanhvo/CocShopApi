@@ -4,14 +4,16 @@ using CocShop.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CocShop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190920041443_updateModel")]
+    partial class updateModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,23 +122,11 @@ namespace CocShop.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnName("Created_At");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnName("Created_By");
-
                     b.Property<string>("Name")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256);
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnName("Updated_At");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnName("Updated_By");
 
                     b.HasKey("Id");
 
@@ -277,18 +267,6 @@ namespace CocShop.Data.Migrations
                     b.Property<string>("UserId");
 
                     b.Property<string>("RoleId");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnName("Created_At");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnName("Created_By");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnName("Updated_At");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnName("Updated_By");
 
                     b.HasKey("UserId", "RoleId");
 

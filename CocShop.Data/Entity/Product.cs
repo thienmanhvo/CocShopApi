@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CocShop.Data.Entity
 {
     [Table("Product")]
-    public class Product
+    public class Product : BaseEntity
     {
         //public Product()
         //{
@@ -14,9 +14,6 @@ namespace CocShop.Data.Entity
         //    OrderDetail = new HashSet<OrderDetail>();
         //}
 
-        [Key]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
 
         [Column("Product_Name")]
         public string ProductName { get; set; }
@@ -48,18 +45,6 @@ namespace CocShop.Data.Entity
         [ForeignKey("Category")]
         [Column("Cate_Id")]
         public string CateId { get; set; }
-
-        [Column("Created_By")]
-        public string CreatedBy { get; set; }
-
-        [Column("Created_At")]
-        public DateTime? CreatedAt { get; set; }
-
-        [Column("Updated_By")]
-        public string UpdatedBy { get; set; }
-
-        [Column("Updated_At")]
-        public DateTime? UpdatedAt { get; set; }
 
         public virtual ProductCategory Category { get; set; }
         public virtual ICollection<Image> Image { get; set; }

@@ -6,15 +6,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CocShop.Data.Entity
 {
     [Table("Order")]
-    public class Order
+    public class Order :BaseEntity
     {
         //public Order()
         //{
         //    OrderDetail = new HashSet<OrderDetail>();
         //}
-        [Key]
-       // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+
 
         [ForeignKey("CreatedUser")]
         [Column("Created_User_Id")]
@@ -29,18 +27,6 @@ namespace CocShop.Data.Entity
         [ForeignKey("Location")]
         [Column("Location_Id")]
         public string LocationId { get; set; }
-
-        [Column("Created_By")]
-        public string CreatedBy { get; set; }
-
-        [Column("Created_At")]
-        public DateTime? CreatedAt { get; set; }
-
-        [Column("Updated_By")]
-        public string UpdatedBy { get; set; }
-
-        [Column("Updated_At")]
-        public DateTime? UpdatedAt { get; set; }
 
         [ForeignKey("Payment")]
         [Column("Payment_Id")]

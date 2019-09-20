@@ -8,11 +8,9 @@ using System.Text;
 namespace CocShop.Data.Entity
 {
     [Table("Notification")]
-    public class Notification
+    public class Notification : BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+
         public String Type { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
