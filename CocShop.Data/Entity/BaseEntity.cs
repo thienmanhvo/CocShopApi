@@ -10,7 +10,7 @@ namespace CocShop.Data.Entity
     {
         [Key]
         [Column("Id")]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Column("Created_By")]
         public string CreatedBy { get; set; }
@@ -26,7 +26,7 @@ namespace CocShop.Data.Entity
 
         public void SetDefaultInsertValue(string username)
         {
-            Id = Guid.NewGuid().ToString();
+            Id = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;
             CreatedBy = username;
             UpdatedAt = DateTime.UtcNow;

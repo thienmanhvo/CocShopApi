@@ -11,11 +11,11 @@ namespace CocShop.Data.Entity
 
         [ForeignKey("Order")]
         [Column("Order_Id")]
-        public string OrderId { get; set; }
+        public Guid OrderId { get; set; }
 
         [ForeignKey("Product")]
         [Column("Product_Id")]
-        public string ProductId { get; set; }
+        public Guid ProductId { get; set; }
 
         [Column("Quantity")]
         public int Quantity { get; set; }

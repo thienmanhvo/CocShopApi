@@ -44,7 +44,7 @@ namespace CocShop.Data.Entity
 
         [ForeignKey("Category")]
         [Column("Cate_Id")]
-        public string CateId { get; set; }
+        public Guid CateId { get; set; }
 
         public virtual ProductCategory Category { get; set; }
         public virtual ICollection<Image> Image { get; set; }

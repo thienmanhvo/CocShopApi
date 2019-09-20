@@ -16,7 +16,7 @@ namespace CocShop.Data.Entity
 
         [ForeignKey("CreatedUser")]
         [Column("Created_User_Id")]
-        public string CreatedUserId { get; set; }
+        public Guid CreatedUserId { get; set; }
 
         [Column("Total_Price")]
         public decimal TotalPrice { get; set; }
@@ -26,11 +26,11 @@ namespace CocShop.Data.Entity
 
         [ForeignKey("Location")]
         [Column("Location_Id")]
-        public string LocationId { get; set; }
+        public Guid? LocationId { get; set; }
 
         [ForeignKey("Payment")]
         [Column("Payment_Id")]
-        public string PaymentId { get; set; }
+        public Guid? PaymentId { get; set; }
 
         [Column("Total_Quantity")]
         public int? TotalQuantity { get; set; }
@@ -40,7 +40,7 @@ namespace CocShop.Data.Entity
 
         [ForeignKey("DeliveryUser")]
         [Column("Delivery_User_Id")]
-        public string DeliveryUserId { get; set; }
+        public Guid? DeliveryUserId { get; set; }
 
         public virtual MyUser CreatedUser { get; set; }
         public virtual MyUser DeliveryUser { get; set; }

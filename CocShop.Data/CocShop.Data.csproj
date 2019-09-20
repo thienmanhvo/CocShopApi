@@ -7,6 +7,12 @@
   <ItemGroup>
     <Compile Remove="Migrations\20190920041235_updateModel.cs" />
     <Compile Remove="Migrations\20190920041235_updateModel.Designer.cs" />
+    <Compile Remove="Migrations\20190920052001_updateRole.cs" />
+    <Compile Remove="Migrations\20190920052001_updateRole.Designer.cs" />
+    <Compile Remove="Migrations\20190920061725_updateKey.cs" />
+    <Compile Remove="Migrations\20190920061725_updateKey.Designer.cs" />
+    <Compile Remove="Migrations\20190920062117_initDB.cs" />
+    <Compile Remove="Migrations\20190920062117_initDB.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

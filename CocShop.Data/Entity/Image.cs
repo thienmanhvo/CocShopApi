@@ -13,7 +13,7 @@ namespace CocShop.Data.Entity
         public string Path { get; set; }
         [ForeignKey("Product")]
         [Column("Product_Id")]
-        public string ProductId { get; set; }
+        public Guid ProductId { get; set; }
 
         public virtual Product Product { get; set; }
     }

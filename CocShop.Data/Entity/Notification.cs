@@ -18,7 +18,7 @@ namespace CocShop.Data.Entity
         public bool IsSeen { get; set; }
         public bool IsTouch { get; set; }
         public DateTime DateCreated { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         [ForeignKey("UserId")]
         public virtual MyUser User { get; set; }
     }

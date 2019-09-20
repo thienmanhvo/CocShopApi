@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CocShop.Data.Entity
 {
-    public class MyUser : IdentityUser
+    public class MyUser : IdentityUser<Guid>
     {
         [Column("Full_Name")]
         public string FullName { get; set; }
@@ -33,7 +33,7 @@ namespace CocShop.Data.Entity
             UpdatedBy = username;
         }
     }
-    public class MyUserRole : IdentityUserRole<string>
+    public class MyUserRole : IdentityUserRole<Guid>
     {
         [Column("Created_By")]
         public string CreatedBy { get; set; }
@@ -57,7 +57,7 @@ namespace CocShop.Data.Entity
             UpdatedBy = username;
         }
     }
-    public class MyRole : IdentityRole<string>
+    public class MyRole : IdentityRole<Guid>
     {
         [Column("Created_By")]
         public string CreatedBy { get; set; }
@@ -81,9 +81,9 @@ namespace CocShop.Data.Entity
             UpdatedBy = username;
         }
     }
-    public class MyUserClaim : IdentityUserClaim<string> { }
-    public class MyUserLogin : IdentityUserLogin<string> { }
-    public class MyRoleClaim : IdentityRoleClaim<string> { }
-    public class MyUserToken : IdentityUserToken<string> { }
+    public class MyUserClaim : IdentityUserClaim<Guid> { }
+    public class MyUserLogin : IdentityUserLogin<Guid> { }
+    public class MyRoleClaim : IdentityRoleClaim<Guid> { }
+    public class MyUserToken : IdentityUserToken<Guid> { }
 
 }

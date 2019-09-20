@@ -15,7 +15,7 @@ namespace CocShop.Data.Entity
 
         [ForeignKey("User")]
         [Column("User_Id")]
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         [Column("Card_Number")]
         public int? CardNumber { get; set; }
