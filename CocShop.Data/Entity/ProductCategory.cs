@@ -25,5 +25,12 @@ namespace CocShop.Data.Entity
         public bool IsDelete { get; set; }
 
         public virtual ICollection<Product> Product { get; set; }
+
+        public override void SetDefaultInsertValue(string username)
+        {
+            base.SetDefaultInsertValue(username);
+            IsDelete = false;
+        }
     }
 }
+

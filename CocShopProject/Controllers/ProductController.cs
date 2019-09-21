@@ -2,6 +2,7 @@
 using CocShop.Data.Entity;
 using CocShop.Service.Service;
 using CocShop.Service.ViewModel;
+using CocShopProject.Extentions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@ namespace CocShopProject.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductsController : ControllerBase
     {
 
         #region Field
@@ -25,7 +26,8 @@ namespace CocShopProject.Controllers
         private readonly IProductService _productService;
 
         #endregion
-        public ProductController(IServiceProvider serviceProvider)
+
+        public ProductsController(IServiceProvider serviceProvider)
         {
             _productService = serviceProvider.GetRequiredService<IProductService>();
             _mapper = serviceProvider.GetRequiredService<IMapper>();
@@ -41,7 +43,7 @@ namespace CocShopProject.Controllers
 
         // GET: api/Product/5
         [HttpGet("{id}")]
-        public  ActionResult<Product> GetProduct(string id)
+        public ActionResult<Product> GetProduct(string id)
         {
             var product = _productService.GetProduct(new Guid(id));
 
@@ -84,13 +86,14 @@ namespace CocShopProject.Controllers
         //}
 
         // POST: api/Product
+        [ValidateModel]
         [HttpPost]
         public ActionResult<ProductViewModel> PostProduct(ProductRequestViewModel product)
         {
-            _productService.CreateProduct(product);
+            var entity = _productService.CreateProduct(product);
             _productService.Save();
 
-            return Ok(_mapper.Map<ProductViewModel>(product)) ;
+            return Ok(_mapper.Map<ProductViewModel>(entity));
         }
 
         //// DELETE: api/Product/5

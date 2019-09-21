@@ -14,7 +14,7 @@ namespace CocShop.Service.Service
         IQueryable<Product> GetProducts();
         IQueryable<Product> GetProducts(Expression<Func<Product, bool>> where);
         Product GetProduct(Guid id);
-        void CreateProduct(ProductRequestViewModel product);
+        Product CreateProduct(ProductRequestViewModel product);
         void UpdateProduct(Product product);
         void DeleteProduct(Product product);
         void DeleteProduct(Expression<Func<Product, bool>> where);
@@ -33,11 +33,14 @@ namespace CocShop.Service.Service
             _mapper = mapper;
         }
 
-        public void CreateProduct(ProductRequestViewModel Product)
+        public Product CreateProduct(ProductRequestViewModel Product)
         {
             var entity = _mapper.Map<Product>(Product);
+            entity.Id = Guid.NewGuid();
             entity.SetDefaultInsertValue(_repository.GetUsername());
             _repository.Add(entity);
+
+            return entity;
         }
 
         public void DeleteProduct(Product Product)
@@ -57,7 +60,7 @@ namespace CocShop.Service.Service
 
         public IQueryable<Product> GetProducts()
         {
-            return _repository.GetAll();
+            return _repository.GetAll().Where(_ => _.IsDelete == false);
         }
 
         public IQueryable<Product> GetProducts(Expression<Func<Product, bool>> where)

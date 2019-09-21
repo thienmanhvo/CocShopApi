@@ -54,6 +54,9 @@ namespace CocShop.Data.Entity
         {
             base.SetDefaultInsertValue(username);
             IsDelete = false;
+            IsBest = IsBest ?? false;
+            IsNew = true;
+            IsSale = IsSale ?? false;
         }
     }
 }

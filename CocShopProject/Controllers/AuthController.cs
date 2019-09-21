@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CocShop.Core.Constaint;
 using CocShop.Data.Appsettings;
 using CocShop.Data.Entity;
 using CocShop.Service.ViewModel;
@@ -123,13 +124,13 @@ namespace CocShopProject.Controllers
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+            claims.Add(new Claim(Constants.CLAIM_USERNAME, user.UserName));
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
             //create token
             var token = new JwtSecurityToken(
                     issuer: AppSettings.Configs.GetValue<string>("JwtSettings:Issuer"),
                     audience: user.FullName,
-                    expires: DateTime.Now.AddDays(1),
+                    expires: DateTime.Now.AddMinutes(30),
                     signingCredentials: signingCredentials,
                     claims: claims
                 );
@@ -139,7 +140,9 @@ namespace CocShopProject.Controllers
                 roles = _userManager.GetRolesAsync(user).Result.ToArray(),
                 fullname = user.FullName,
                 access_token = new JwtSecurityTokenHandler().WriteToken(token),
-                expires_in = (int)TimeSpan.FromDays(1).TotalSeconds
+                expires_in = DateTime.Now.AddMinutes(30),
+
+                //(int)TimeSpan.FromDays(1).TotalSeconds
             };
         }
 
@@ -161,7 +164,6 @@ namespace CocShopProject.Controllers
             var key = new RsaSecurityKey(rsaProvider);
             return key;
         }
-
         private async Task CreateRole()
         {
             var roleNames = AppSettings.Configs.GetSection("Role").Get<List<string>>();
@@ -183,7 +185,7 @@ namespace CocShopProject.Controllers
         {
             //try
             //{
-                return _accessor.HttpContext.User?.FindFirst("username")?.Value ?? "SYSTEM";
+            return _accessor.HttpContext.User?.FindFirst("username")?.Value ?? "SYSTEM";
             //}
             //catch
             //{

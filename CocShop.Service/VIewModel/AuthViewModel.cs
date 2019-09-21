@@ -21,7 +21,7 @@ namespace CocShop.Service.ViewModel
         public string[] roles { get; set; }
         public string fullname { get; set; }
         public string access_token { get; set; }
-        public int expires_in { get; set; }
+        public DateTime expires_in { get; set; }
     }
 
     public class RegisterViewModel

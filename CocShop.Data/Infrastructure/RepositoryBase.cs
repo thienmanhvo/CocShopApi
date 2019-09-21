@@ -1,4 +1,5 @@
-﻿using CocShop.Data.Entity;
+﻿using CocShop.Core.Constaint;
+using CocShop.Data.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -94,7 +95,7 @@ namespace CocShop.Data.Infrastructure
             try
             {
                 var accessor = _serviceProvider.GetRequiredService<IHttpContextAccessor>();
-                return accessor?.HttpContext?.User?.FindFirst("username")?.Value ?? "anonymous";
+                return accessor?.HttpContext?.User?.FindFirst(Constants.CLAIM_USERNAME)?.Value ?? Constants.USER_ANONYMOUS;
             }
             catch
             {
