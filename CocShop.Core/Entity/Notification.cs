@@ -1,11 +1,7 @@
-﻿using CocShop.Data.Entity;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
-namespace CocShop.Data.Entity
+namespace CocShop.Core.Entity
 {
     [Table("Notification")]
     public class Notification : BaseEntity

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CocShop.Data.Entity
+namespace CocShop.Core.Entity
 {
     [Table("Product_Category")]
 

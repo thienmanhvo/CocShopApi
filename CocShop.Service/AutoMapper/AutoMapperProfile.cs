@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using CocShop.Core.Entity;
 using CocShop.Core.ViewModel;
-using CocShop.Data.Entity;
 using System;
 
 namespace CocShop.Service.AutoMapper
@@ -23,8 +23,7 @@ namespace CocShop.Service.AutoMapper
 
             CreateMap<ProductCategoryCreateRequest, ProductCategory>().ReverseMap();
 
-            CreateMap<UpdateProductRequestViewModel, Product>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
-            CreateMap<Product, UpdateProductRequestViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+            CreateMap<UpdateProductRequestViewModel, Product>().ReverseMap().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
 
 
             //CreateMap<string, Guid>().ConvertUsing(new StringToGuidConverter());

@@ -1,4 +1,4 @@
-﻿using CocShop.Data.Entity;
+﻿using CocShop.Core.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;

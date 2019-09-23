@@ -1,11 +1,10 @@
-﻿using System;
-using CocShop.Data.Appsettings;
+﻿using CocShop.Data.Appsettings;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
+using System;
 
-namespace CocShop.Data.Entity
+namespace CocShop.Core.Entity
 {
     public class DataContext : IdentityDbContext<MyUser, MyRole, Guid, MyUserClaim, MyUserRole, MyUserLogin, MyRoleClaim, MyUserToken>
     {

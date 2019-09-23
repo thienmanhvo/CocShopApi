@@ -51,7 +51,7 @@ namespace CocShopProject.Controllers
         [HttpPut("{id}")]
         public ActionResult<BaseViewModel<ProductViewModel>> PutProduct(string id, [FromBody]UpdateProductRequestViewModel product)
         {
-            return _productService.UpdateProduct(id, product);
+            return Ok(_productService.UpdateProduct(id, product));
         }
 
         // POST: api/Product

@@ -1,15 +1,12 @@
-﻿using CocShop.Data.Appsettings;
-using CocShop.Data.Entity;
+﻿using CocShop.Core.Entity;
+using CocShop.Data.Appsettings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CocShopProject.Extentions

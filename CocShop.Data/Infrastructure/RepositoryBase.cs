@@ -1,5 +1,5 @@
 ﻿using CocShop.Core.Constaint;
-using CocShop.Data.Entity;
+using CocShop.Core.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

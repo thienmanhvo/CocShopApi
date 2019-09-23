@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CocShop.Core.Constaint;
+using CocShop.Core.Entity;
 using CocShop.Core.MessageHandler;
 using CocShop.Core.ViewModel;
-using CocShop.Data.Entity;
 using CocShop.Data.Infrastructure;
 using CocShop.Data.Repositories;
 using System;
@@ -57,11 +57,11 @@ namespace CocShop.Service.Service
         public BaseViewModel<string> DeleteProduct(string id)
         {
             //Find product
-            var product = _repository.GetMany(_ => _.Id == (new Guid(id)) && _.IsDelete == false).FirstOrDefault();
+            var product = _repository.GetById(new Guid(id));
             //result to return
             BaseViewModel<string> result;
             //check product exist
-            if (product == null)
+            if (product == null || product.IsDelete)
             {
                 result = new BaseViewModel<string>()
                 {
@@ -98,7 +98,7 @@ namespace CocShop.Service.Service
                 {
                     Message = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
                     StatusCode = HttpStatusCode.NotFound
-                };  
+                };
             }
 
             return new BaseViewModel<ProductViewModel>
@@ -119,7 +119,7 @@ namespace CocShop.Service.Service
                 {
                     Message = MessageHandler.CustomMessage(MessageConstants.NORECORD),
                     StatusCode = HttpStatusCode.OK
-                };   
+                };
             }
 
             return new BaseViewModel<IEnumerable<ProductViewModel>>()

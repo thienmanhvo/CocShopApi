@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using CocShop.Core.Entity;
 using CocShop.Core.ViewModel;
-using CocShop.Data.Entity;
 using CocShop.Service.Service;
 using CocShopProject.Extentions;
 using Microsoft.AspNetCore.Authorization;
@@ -40,23 +40,16 @@ namespace CocShopProject.Controllers
 
         // GET: api/ProductCategories
         [HttpGet]
-        public  ActionResult<IEnumerable<ProductCategory>> GetProductCategory()
+        public ActionResult<BaseViewModel<IEnumerable<ProductCategory>>> GetProductCategory()
         {
-            return Ok(_producCategorytService.GetProductCategories().ToList());
+            return Ok(_producCategorytService.GetAllProductCategories());
         }
 
         // GET: api/ProductCategories/5
         [HttpGet("{id}")]
-        public ActionResult<ProductCategory> GetProductCategory(string id)
+        public ActionResult<BaseViewModel<ProductCategory>> GetProductCategory(string id)
         {
-            var product = _producCategorytService.GetProductCategory(new Guid(id));
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(product);
+            return Ok(_producCategorytService.GetProductCategory(id));
         }
 
         //// PUT: api/ProductCategories/5
@@ -92,29 +85,17 @@ namespace CocShopProject.Controllers
         // POST: api/ProductCategories
         [ValidateModel]
         [HttpPost]
-        public ActionResult<ProductCategoryViewModel> PostProductCategory(ProductCategoryCreateRequest request)
+        public ActionResult<BaseViewModel<ProductCategoryViewModel>> PostProductCategory(ProductCategoryCreateRequest request)
         {
-            var entity = _producCategorytService.CreateProductCategory(request);
-            _producCategorytService.Save();
-
-            return Ok(_mapper.Map<ProductCategoryViewModel>(entity));
+            return Ok(_producCategorytService.CreateProductCategory(request));
         }
 
-        //// DELETE: api/ProductCategories/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<ProductCategory>> DeleteProductCategory(Guid id)
-        //{
-        //    var productCategory = await _context.ProductCategory.FindAsync(id);
-        //    if (productCategory == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.ProductCategory.Remove(productCategory);
-        //    await _context.SaveChangesAsync();
-
-        //    return productCategory;
-        //}
+        // DELETE: api/ProductCategories/5
+        [HttpDelete("{id}")]
+        public ActionResult<ProductCategory> DeleteProductCategory(string id)
+        {
+            return Ok(_producCategorytService.DeleteProductCategory(id));
+        }
 
         //private bool ProductCategoryExists(Guid id)
         //{

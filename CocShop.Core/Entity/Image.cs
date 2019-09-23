@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CocShop.Data.Entity
+namespace CocShop.Core.Entity
 {
     [Table("Image")]
     public class Image : BaseEntity

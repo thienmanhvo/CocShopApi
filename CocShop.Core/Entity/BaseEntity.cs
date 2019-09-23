@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace CocShop.Data.Entity
+namespace CocShop.Core.Entity
 {
     public abstract class BaseEntity
     {
