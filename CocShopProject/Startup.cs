@@ -1,27 +1,15 @@
-﻿using CocShop.Data.Entity;
+﻿using CocShop.Core.Data.Entity;
 using CocShop.Data.Appsettings;
-using CocShop.Data.Infrastructure;
-using CocShop.Data.Repositories;
-using CocShop.Service.Service;
-using CocShopProject.Extentions;
-using CocShopProject.Hubs;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using CocShop.WebAPi.Extentions;
+using CocShop.WebAPi.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using System;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.IdentityModel.Logging;
 
-namespace CocShopProject
+namespace CocShop.WebAPi
 {
     public class Startup
     {

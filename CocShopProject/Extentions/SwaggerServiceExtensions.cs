@@ -4,7 +4,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Collections.Generic;
 
-namespace CocShopProject.Extentions
+namespace CocShop.WebAPi.Extentions
 {
     public static class SwaggerServiceExtensions
     {

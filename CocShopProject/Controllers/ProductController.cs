@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using CocShop.Core.Service;
 using CocShop.Core.ViewModel;
-using CocShop.Service.Service;
-using CocShopProject.Extentions;
+using CocShop.WebAPi.Extentions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 
-namespace CocShopProject.Controllers
+namespace CocShop.WebAPi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
@@ -51,7 +51,7 @@ namespace CocShopProject.Controllers
         [HttpPut("{id}")]
         public ActionResult<BaseViewModel<ProductViewModel>> PutProduct(string id, [FromBody]UpdateProductRequestViewModel product)
         {
-            return _productService.UpdateProduct(id, product);
+            return Ok(_productService.UpdateProduct(id, product));
         }
 
         // POST: api/Product

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CocShop.Core.Constaint;
+using CocShop.Core.Data.Entity;
 using CocShop.Core.ViewModel;
 using CocShop.Data.Appsettings;
-using CocShop.Data.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +17,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace CocShopProject.Controllers
+namespace CocShop.WebAPi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

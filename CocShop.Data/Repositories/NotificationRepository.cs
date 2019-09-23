@@ -1,13 +1,10 @@
-﻿using CocShop.Data.Entity;
-using CocShop.Data.Infrastructure;
+﻿using CocShop.Core.Data.Entity;
+using CocShop.Core.Data.Infrastructure;
+using CocShop.Core.Data.Repository;
 using System;
 
-namespace CocShop.Data.Repositories
+namespace CocShop.Repository.Repositories
 {
-    public interface INotificationRepository : IRepository<Notification>
-    {
-
-    }
 
     public class NotificationRepository : RepositoryBase<Notification>, INotificationRepository
     {

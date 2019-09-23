@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using System;
 
-namespace CocShopProject.Extentions
+namespace CocShop.WebAPi.Extentions
 {
     public static class CorsServiceExtentions
     {
