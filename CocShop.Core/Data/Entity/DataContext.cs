@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 
-namespace CocShop.Core.Entity
+namespace CocShop.Core.Data.Entity
 {
     public class DataContext : IdentityDbContext<MyUser, MyRole, Guid, MyUserClaim, MyUserRole, MyUserLogin, MyRoleClaim, MyUserToken>
     {

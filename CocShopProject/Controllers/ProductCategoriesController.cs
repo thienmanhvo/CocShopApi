@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using CocShop.Core.Entity;
+using CocShop.Core.Data.Entity;
+using CocShop.Core.Service;
 using CocShop.Core.ViewModel;
-using CocShop.Service.Service;
 using CocShopProject.Extentions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CocShopProject.Controllers
 {

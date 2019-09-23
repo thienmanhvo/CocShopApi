@@ -1,4 +1,4 @@
-﻿using CocShop.Core.Entity;
+﻿using CocShop.Core.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

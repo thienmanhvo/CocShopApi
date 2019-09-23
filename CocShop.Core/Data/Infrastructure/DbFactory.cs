@@ -1,9 +1,9 @@
-﻿using CocShop.Core.Entity;
+﻿using CocShop.Core.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CocShop.Data.Infrastructure
+namespace CocShop.Core.Data.Infrastructure
 {
     public class DbFactory : Disposable, IDbFactory
     {

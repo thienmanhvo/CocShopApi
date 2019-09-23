@@ -1,5 +1,5 @@
 ﻿using CocShop.Core.Constaint;
-using CocShop.Core.Entity;
+using CocShop.Core.Data.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,9 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
-namespace CocShop.Data.Infrastructure
+namespace CocShop.Core.Data.Infrastructure
 {
     public abstract class RepositoryBase<T> where T : class
     {

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CocShop.Core.Entity;
+using CocShop.Core.Data.Entity;
 using CocShop.Core.ViewModel;
 using System;
 

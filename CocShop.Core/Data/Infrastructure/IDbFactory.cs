@@ -1,7 +1,7 @@
-﻿using CocShop.Core.Entity;
+﻿using CocShop.Core.Data.Entity;
 using System;
 
-namespace CocShop.Data.Infrastructure
+namespace CocShop.Core.Data.Infrastructure
 {
     public interface IDbFactory : IDisposable
     {

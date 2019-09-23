@@ -1,23 +1,13 @@
-﻿using CocShop.Core.Entity;
-using CocShop.Data.Infrastructure;
-using CocShop.Data.Repositories;
+﻿using CocShop.Core.Data.Entity;
+using CocShop.Core.Data.Infrastructure;
+using CocShop.Core.Repository;
+using CocShop.Core.Service;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace CocShop.Service.Service
 {
-    public interface IHubUserConnectionService
-    {
-        IQueryable<HubUserConnection> GetHubUserConnections();
-        IQueryable<HubUserConnection> GetHubUserConnections(Expression<Func<HubUserConnection, bool>> where);
-        HubUserConnection GetHubUserConnection(Guid Id);
-        void CreateHubUserConnection(HubUserConnection HubUserConnection);
-        void UpdateHubUserConnection(HubUserConnection HubUserConnection);
-        void DeleteHubUserConnection(HubUserConnection HubUserConnection);
-        void DeleteHubUserConnection(Expression<Func<HubUserConnection, bool>> where);
-        void Save();
-    }
     public class HubUserConnectionService : IHubUserConnectionService
     {
         private readonly IHubUserConnectionRepository _repository;

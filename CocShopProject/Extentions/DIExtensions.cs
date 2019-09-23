@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
-using CocShop.Data.Infrastructure;
+using CocShop.Core.Data.Infrastructure;
+using CocShop.Core.Data.Repository;
+using CocShop.Core.Service;
 using CocShop.Data.Repositories;
 using CocShop.Service.AutoMapper;
 using CocShop.Service.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CocShopProject.Extentions
 {

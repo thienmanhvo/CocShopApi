@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CocShop.Core.Service;
 using CocShop.Core.ViewModel;
 using CocShop.Service.Service;
 using CocShopProject.Extentions;

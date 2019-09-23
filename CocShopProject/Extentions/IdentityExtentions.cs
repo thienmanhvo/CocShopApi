@@ -1,4 +1,4 @@
-﻿using CocShop.Core.Entity;
+﻿using CocShop.Core.Data.Entity;
 using CocShop.Data.Appsettings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;

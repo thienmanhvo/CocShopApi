@@ -1,29 +1,19 @@
 ﻿using AutoMapper;
 using CocShop.Core.Constaint;
-using CocShop.Core.Entity;
+using CocShop.Core.Data.Entity;
+using CocShop.Core.Data.Infrastructure;
+using CocShop.Core.Data.Repository;
 using CocShop.Core.MessageHandler;
+using CocShop.Core.Service;
 using CocShop.Core.ViewModel;
-using CocShop.Data.Infrastructure;
-using CocShop.Data.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
 
 namespace CocShop.Service.Service
 {
-    public interface IProductCategoryService
-    {
-        BaseViewModel<IEnumerable<ProductCategoryViewModel>> GetAllProductCategories();
-        BaseViewModel<ProductCategoryViewModel> GetProductCategory(string id);
-        BaseViewModel<ProductCategoryViewModel> CreateProductCategory(ProductCategoryCreateRequest request);
-        void UpdateProductCategory(ProductCategory ProductCategory);
-        BaseViewModel<string> DeleteProductCategory(string id);
-        void Save();
-    }
     public class ProductCategoryService : IProductCategoryService
     {
         private readonly IProductCategoryRepository _repository;

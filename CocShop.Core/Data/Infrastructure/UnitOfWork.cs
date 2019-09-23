@@ -1,6 +1,6 @@
-﻿using CocShop.Core.Entity;
+﻿using CocShop.Core.Data.Entity;
 
-namespace CocShop.Data.Infrastructure
+namespace CocShop.Core.Data.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
