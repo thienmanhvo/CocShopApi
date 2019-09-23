@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CocShop.Service.ViewModel
+namespace CocShop.Core.ViewModel
 {
     public class LoginViewModel
     {

@@ -29,8 +29,8 @@ namespace CocShop.Data.Entity
             Id = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;
             CreatedBy = username;
-            UpdatedAt = DateTime.UtcNow;
-            UpdatedBy = username;
+            //UpdatedAt = DateTime.UtcNow;
+            //UpdatedBy = username;
         }
 
         public virtual void SetDefaultUpdateValue(string username)

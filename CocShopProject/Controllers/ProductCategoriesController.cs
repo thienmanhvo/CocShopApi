@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using CocShop.Core.ViewModel;
+using CocShop.Data.Entity;
+using CocShop.Service.Service;
+using CocShopProject.Extentions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CocShop.Data.Entity;
-using AutoMapper;
-using CocShop.Service.Service;
 using Microsoft.Extensions.DependencyInjection;
-using CocShop.Service.ViewModel;
-using Microsoft.AspNetCore.Authorization;
-using CocShopProject.Extentions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CocShopProject.Controllers
 {

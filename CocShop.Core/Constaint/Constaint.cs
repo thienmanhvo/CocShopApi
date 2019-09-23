@@ -10,4 +10,15 @@ namespace CocShop.Core.Constaint
         public const string CLAIM_USERNAME = "username";
 
     }
+    public class ErrMessageConstants
+    {
+        public const string NOTFOUND = "NOTFOUND";
+
+    }
+    public class MessageConstants
+    {
+        public const string SUCCESS = "SUCCESS";
+        public const string NORECORD = "NORECORD";
+
+    }
 }

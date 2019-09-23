@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CocShop.Service.ViewModel
+namespace CocShop.Core.ViewModel
 {
     public class ProductCategoryCreateRequest
     {

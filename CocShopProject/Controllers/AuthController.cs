@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CocShop.Core.Constaint;
+using CocShop.Core.ViewModel;
 using CocShop.Data.Appsettings;
 using CocShop.Data.Entity;
-using CocShop.Service.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

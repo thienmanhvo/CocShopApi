@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using CocShop.Data.Entity;
+using CocShop.Core.ViewModel;
 using CocShop.Service.Service;
-using CocShop.Service.ViewModel;
 using CocShopProject.Extentions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CocShopProject.Controllers
 {
@@ -36,81 +34,40 @@ namespace CocShopProject.Controllers
 
         // GET: api/Product
         [HttpGet]
-        public ActionResult<IEnumerable<Product>> GetProduct()
+        public ActionResult<BaseViewModel<IEnumerable<ProductViewModel>>> GetProduct()
         {
-            return Ok(_productService.GetProducts().ToList());
+            return Ok(_productService.GetAllProducts());
         }
 
         // GET: api/Product/5
         [HttpGet("{id}")]
-        public ActionResult<Product> GetProduct(string id)
+        public ActionResult<BaseViewModel<ProductViewModel>> GetProduct(string id)
         {
-            var product = _productService.GetProduct(new Guid(id));
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(product);
+            return Ok(_productService.GetProduct(new Guid(id)));
         }
 
-        //// PUT: api/Product/5
-        //[HttpPut("{id}")]
-        //public IActionResult PutProduct(Guid id, Product product)
-        //{
-        //    if (id != product.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(product).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!ProductExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
+        // PUT: api/Product/5
+        [ValidateModel]
+        [HttpPut("{id}")]
+        public ActionResult<BaseViewModel<ProductViewModel>> PutProduct(string id, [FromBody]UpdateProductRequestViewModel product)
+        {
+            return _productService.UpdateProduct(id, product);
+        }
 
         // POST: api/Product
         [ValidateModel]
         [HttpPost]
-        public ActionResult<ProductViewModel> PostProduct(ProductRequestViewModel product)
+        public ActionResult<BaseViewModel<ProductViewModel>> PostProduct(CreateProductRequestViewModel product)
         {
-            var entity = _productService.CreateProduct(product);
-            _productService.Save();
-
-            return Ok(_mapper.Map<ProductViewModel>(entity));
+            return Ok(_productService.CreateProduct(product));
         }
 
-        //// DELETE: api/Product/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<Product>> DeleteProduct(string id)
-        //{
-        //    var product = await _context.Product.FindAsync(id);
-        //    if (product == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Product.Remove(product);
-        //    await _context.SaveChangesAsync();
-
-        //    return product;
-        //}
+        // DELETE: api/Product/5
+        [HttpDelete("{id}")]
+        public ActionResult<BaseViewModel<string>> DeleteProduct(string id)
+        {
+            return Ok(_productService.DeleteProduct(id));
+        }
 
         //private bool ProductExists(Guid id)
         //{

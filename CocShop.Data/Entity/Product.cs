@@ -19,13 +19,13 @@ namespace CocShop.Data.Entity
         public string ProductName { get; set; }
 
         [Column("Quantity")]
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
 
-        [Column("Price_Sale")]
+        [Column("Price_Sale", TypeName = "decimal(18,0)")]
         public decimal? PriceSale { get; set; }
 
-        [Column("Price")]
-        public decimal Price { get; set; }
+        [Column("Price", TypeName = "decimal(18,0)")]
+        public decimal? Price { get; set; }
 
         [Column("Description")]
         public string Description { get; set; }

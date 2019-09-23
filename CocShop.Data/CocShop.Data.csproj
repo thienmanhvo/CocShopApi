@@ -13,6 +13,8 @@
     <Compile Remove="Migrations\20190920061725_updateKey.Designer.cs" />
     <Compile Remove="Migrations\20190920062117_initDB.cs" />
     <Compile Remove="Migrations\20190920062117_initDB.Designer.cs" />
+    <Compile Remove="Migrations\20190922191544_updateDB.cs" />
+    <Compile Remove="Migrations\20190922191544_updateDB.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

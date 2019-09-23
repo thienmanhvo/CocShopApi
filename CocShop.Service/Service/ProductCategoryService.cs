@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
+using CocShop.Core.ViewModel;
 using CocShop.Data.Entity;
 using CocShop.Data.Infrastructure;
 using CocShop.Data.Repositories;
-using CocShop.Service.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace CocShop.Service.Service
 {
