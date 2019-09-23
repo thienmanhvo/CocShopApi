@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CocShopProject.Ultis
+namespace CocShop.WebAPi.Ultis
 {
     public enum UserRoles
     {

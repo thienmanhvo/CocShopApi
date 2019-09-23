@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
+using CocShop.Core.AutoMapper;
 using CocShop.Core.Data.Infrastructure;
 using CocShop.Core.Data.Repository;
 using CocShop.Core.Service;
-using CocShop.Data.Repositories;
-using CocShop.Service.AutoMapper;
-using CocShop.Service.Service;
+using CocShop.Repository.Repositories;
+using CocShop.Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CocShopProject.Extentions
+namespace CocShop.WebAPi.Extentions
 {
     public static class DIExtensions
     {

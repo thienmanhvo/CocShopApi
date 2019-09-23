@@ -3,7 +3,7 @@ using CocShop.Core.Data.Entity;
 using CocShop.Core.ViewModel;
 using System;
 
-namespace CocShop.Service.AutoMapper
+namespace CocShop.Core.AutoMapper
 {
     public class AutoMapperProfile : Profile
     {

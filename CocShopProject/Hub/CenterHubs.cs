@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 
-namespace CocShopProject.Hubs
+namespace CocShop.WebAPi.Hubs
 {
     public class CenterHub : Hub
     {

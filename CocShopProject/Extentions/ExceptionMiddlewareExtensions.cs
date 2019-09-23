@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.Net;
 
-namespace CocShopProject.Extentions
+namespace CocShop.WebAPi.Extentions
 {
     public static class ExceptionMiddlewareExtensions
     {

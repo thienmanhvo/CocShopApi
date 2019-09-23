@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CocShop.Core\CocShop.Core.csproj" />
-    <ProjectReference Include="..\CocShop.Data\CocShop.Data.csproj" />
+    <ProjectReference Include="..\CocShop.Data\CocShop.Repository.csproj" />
   </ItemGroup>
 
 </Project>

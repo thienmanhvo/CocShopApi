@@ -17,7 +17,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace CocShopProject.Controllers
+namespace CocShop.WebAPi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -9,7 +9,7 @@ using System;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace CocShopProject.Extentions
+namespace CocShop.WebAPi.Extentions
 {
     public static class IdentityExtentions
     {

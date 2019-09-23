@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using System.Net;
 using CocShop.Core.Data.Entity;
 
-namespace CocShop.Service.Service
+namespace CocShop.Service.Services
 {
     public class ProductService : IProductService
     {

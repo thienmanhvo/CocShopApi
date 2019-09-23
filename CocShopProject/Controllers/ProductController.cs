@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using CocShop.Core.Service;
 using CocShop.Core.ViewModel;
-using CocShop.Service.Service;
-using CocShopProject.Extentions;
+using CocShop.WebAPi.Extentions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 
-namespace CocShopProject.Controllers
+namespace CocShop.WebAPi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]

@@ -3,7 +3,7 @@ using CocShop.Core.Data.Infrastructure;
 using CocShop.Core.Repository;
 using System;
 
-namespace CocShop.Data.Repositories
+namespace CocShop.Repository.Repositories
 {
     public class HubUserConnectionRepository : RepositoryBase<HubUserConnection>, IHubUserConnectionRepository
     {

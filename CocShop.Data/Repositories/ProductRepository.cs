@@ -3,7 +3,7 @@ using CocShop.Core.Data.Infrastructure;
 using CocShop.Core.Data.Repository;
 using System;
 
-namespace CocShop.Data.Repositories
+namespace CocShop.Repository.Repositories
 {
     public class ProductRepository : RepositoryBase<Product>, IProductRepository
     {

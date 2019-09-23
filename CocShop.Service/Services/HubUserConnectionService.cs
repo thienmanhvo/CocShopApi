@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace CocShop.Service.Service
+namespace CocShop.Service.Services
 {
     public class HubUserConnectionService : IHubUserConnectionService
     {

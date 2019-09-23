@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CocShopProject", "CocShopProject\CocShopProject.csproj", "{47A47D8F-DB1E-47C5-8880-7DCC3970BD10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CocShop.WebAPi", "CocShopProject\CocShop.WebAPi.csproj", "{47A47D8F-DB1E-47C5-8880-7DCC3970BD10}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CocShop.Service", "CocShop.Service\CocShop.Service.csproj", "{A70048B6-BA66-4009-8EA8-79154057312E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CocShop.Data", "CocShop.Data\CocShop.Data.csproj", "{1EE1D807-296D-4657-9C62-289AC2892D7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CocShop.Repository", "CocShop.Data\CocShop.Repository.csproj", "{1EE1D807-296D-4657-9C62-289AC2892D7F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CocShop.Core", "CocShop.Core\CocShop.Core.csproj", "{04447655-5B4C-4985-A6E0-FE839F14C0B6}"
 EndProject

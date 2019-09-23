@@ -1,7 +1,7 @@
 ﻿using CocShop.Core.Data.Entity;
 using CocShop.Data.Appsettings;
-using CocShopProject.Extentions;
-using CocShopProject.Hubs;
+using CocShop.WebAPi.Extentions;
+using CocShop.WebAPi.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
-namespace CocShopProject
+namespace CocShop.WebAPi
 {
     public class Startup
     {
