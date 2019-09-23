@@ -8,13 +8,11 @@ using System.Text;
 namespace CocShop.Data.Entity
 {
     [Table("Hub_User_Connection")]
-    public class HubUserConnection
+    public class HubUserConnection : BaseEntity
     {
-        [Key]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+
         [Column("User_Id")]
-        public string UserId { get; set; }
+        public Guid? UserId { get; set; }
         [Column("Connection")]
         public string Connection { get; set; }
         [Column("Username")]

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace CocShop.Data.Entity
 {
-    public class DataContext : IdentityDbContext<MyUser, MyRole, string, MyUserClaim, MyUserRole, MyUserLogin, MyRoleClaim, MyUserToken>
+    public class DataContext : IdentityDbContext<MyUser, MyRole, Guid, MyUserClaim, MyUserRole, MyUserLogin, MyRoleClaim, MyUserToken>
     {
         public DataContext() : base((new DbContextOptionsBuilder())
         //.UseLazyLoadingProxies()

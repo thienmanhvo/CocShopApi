@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CocShopProject.VIewModel
+namespace CocShop.Core.ViewModel
 {
-    public class LoginVM
+    public class LoginViewModel
     {
         [Required]
         public string Username { get; set; }
@@ -16,15 +16,15 @@ namespace CocShopProject.VIewModel
         [Display(Name = "Password")]
         public string Password { get; set; }
     }
-    public class Token
+    public class TokenViewModel
     {
         public string[] roles { get; set; }
         public string fullname { get; set; }
         public string access_token { get; set; }
-        public int expires_in { get; set; }
+        public DateTime expires_in { get; set; }
     }
 
-    public class RegisterVM
+    public class RegisterViewModel
     {
         [Required]
         public string Username { get; set; }

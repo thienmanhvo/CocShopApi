@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CocShop.Data.Migrations
 {
-    public partial class CreateSchema : Migration
+    public partial class initDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,13 +12,13 @@ namespace CocShop.Data.Migrations
                 name: "Location",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    Location_Name = table.Column<string>(nullable: true),
-                    Is_Delete = table.Column<bool>(nullable: true),
+                    Id = table.Column<Guid>(nullable: false),
                     Created_By = table.Column<string>(nullable: true),
                     Created_At = table.Column<DateTime>(nullable: true),
                     Updated_By = table.Column<string>(nullable: true),
-                    Updated_At = table.Column<DateTime>(nullable: true)
+                    Updated_At = table.Column<DateTime>(nullable: true),
+                    Location_Name = table.Column<string>(nullable: true),
+                    Is_Delete = table.Column<bool>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -29,14 +29,14 @@ namespace CocShop.Data.Migrations
                 name: "Product_Category",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Is_Delete = table.Column<bool>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Created_By = table.Column<string>(nullable: true),
                     Created_At = table.Column<DateTime>(nullable: true),
                     Updated_By = table.Column<string>(nullable: true),
-                    Updated_At = table.Column<DateTime>(nullable: true)
+                    Updated_At = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Is_Delete = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,10 +47,14 @@ namespace CocShop.Data.Migrations
                 name: "Role",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true)
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Created_By = table.Column<string>(nullable: true),
+                    Created_At = table.Column<DateTime>(nullable: true),
+                    Updated_By = table.Column<string>(nullable: true),
+                    Updated_At = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -61,7 +65,7 @@ namespace CocShop.Data.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
@@ -91,7 +95,11 @@ namespace CocShop.Data.Migrations
                 name: "Product",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
+                    Created_By = table.Column<string>(nullable: true),
+                    Created_At = table.Column<DateTime>(nullable: true),
+                    Updated_By = table.Column<string>(nullable: true),
+                    Updated_At = table.Column<DateTime>(nullable: true),
                     Product_Name = table.Column<string>(nullable: true),
                     Quantity = table.Column<int>(nullable: false),
                     Price_Sale = table.Column<double>(nullable: true),
@@ -101,11 +109,7 @@ namespace CocShop.Data.Migrations
                     Is_Sale = table.Column<bool>(nullable: false),
                     Is_New = table.Column<bool>(nullable: false),
                     Is_Best = table.Column<bool>(nullable: false),
-                    Cate_Id = table.Column<string>(nullable: true),
-                    Created_By = table.Column<string>(nullable: true),
-                    Created_At = table.Column<DateTime>(nullable: true),
-                    Updated_By = table.Column<string>(nullable: true),
-                    Updated_At = table.Column<DateTime>(nullable: true)
+                    Cate_Id = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -115,7 +119,7 @@ namespace CocShop.Data.Migrations
                         column: x => x.Cate_Id,
                         principalTable: "Product_Category",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -124,7 +128,7 @@ namespace CocShop.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    RoleId = table.Column<string>(nullable: false),
+                    RoleId = table.Column<Guid>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
                 },
@@ -143,8 +147,12 @@ namespace CocShop.Data.Migrations
                 name: "Hub_User_Connection",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    User_Id = table.Column<string>(nullable: true),
+                    Id = table.Column<Guid>(nullable: false),
+                    Created_By = table.Column<string>(nullable: true),
+                    Created_At = table.Column<DateTime>(nullable: true),
+                    Updated_By = table.Column<string>(nullable: true),
+                    Updated_At = table.Column<DateTime>(nullable: true),
+                    User_Id = table.Column<Guid>(nullable: true),
                     Connection = table.Column<string>(nullable: true),
                     Username = table.Column<string>(nullable: true)
                 },
@@ -163,7 +171,11 @@ namespace CocShop.Data.Migrations
                 name: "Notification",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
+                    Created_By = table.Column<string>(nullable: true),
+                    Created_At = table.Column<DateTime>(nullable: true),
+                    Updated_By = table.Column<string>(nullable: true),
+                    Updated_At = table.Column<DateTime>(nullable: true),
                     Type = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
                     Body = table.Column<string>(nullable: true),
@@ -171,7 +183,7 @@ namespace CocShop.Data.Migrations
                     IsSeen = table.Column<bool>(nullable: false),
                     IsTouch = table.Column<bool>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<string>(nullable: true)
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -181,15 +193,19 @@ namespace CocShop.Data.Migrations
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Payment_Method",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    User_Id = table.Column<string>(nullable: true),
+                    Id = table.Column<Guid>(nullable: false),
+                    Created_By = table.Column<string>(nullable: true),
+                    Created_At = table.Column<DateTime>(nullable: true),
+                    Updated_By = table.Column<string>(nullable: true),
+                    Updated_At = table.Column<DateTime>(nullable: true),
+                    User_Id = table.Column<Guid>(nullable: false),
                     Card_Number = table.Column<int>(nullable: true),
                     Date_From = table.Column<DateTime>(nullable: true),
                     Date_To = table.Column<DateTime>(nullable: true),
@@ -204,7 +220,7 @@ namespace CocShop.Data.Migrations
                         column: x => x.User_Id,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -213,7 +229,7 @@ namespace CocShop.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<string>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
                 },
@@ -235,7 +251,7 @@ namespace CocShop.Data.Migrations
                     LoginProvider = table.Column<string>(nullable: false),
                     ProviderKey = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -252,8 +268,12 @@ namespace CocShop.Data.Migrations
                 name: "User_Role",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false)
+                    UserId = table.Column<Guid>(nullable: false),
+                    RoleId = table.Column<Guid>(nullable: false),
+                    Created_By = table.Column<string>(nullable: true),
+                    Created_At = table.Column<DateTime>(nullable: true),
+                    Updated_By = table.Column<string>(nullable: true),
+                    Updated_At = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -276,7 +296,7 @@ namespace CocShop.Data.Migrations
                 name: "User_Token",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
                     LoginProvider = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     Value = table.Column<string>(nullable: true)
@@ -296,13 +316,13 @@ namespace CocShop.Data.Migrations
                 name: "Image",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    Path = table.Column<string>(nullable: true),
-                    Product_Id = table.Column<string>(nullable: true),
+                    Id = table.Column<Guid>(nullable: false),
                     Created_By = table.Column<string>(nullable: true),
                     Created_At = table.Column<DateTime>(nullable: true),
                     Updated_By = table.Column<string>(nullable: true),
-                    Updated_At = table.Column<DateTime>(nullable: true)
+                    Updated_At = table.Column<DateTime>(nullable: true),
+                    Path = table.Column<string>(nullable: true),
+                    Product_Id = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -312,26 +332,26 @@ namespace CocShop.Data.Migrations
                         column: x => x.Product_Id,
                         principalTable: "Product",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Order",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    Created_User_Id = table.Column<string>(nullable: true),
-                    Total_Price = table.Column<decimal>(nullable: false),
-                    Is_Delete = table.Column<bool>(nullable: false),
-                    Location_Id = table.Column<string>(nullable: true),
+                    Id = table.Column<Guid>(nullable: false),
                     Created_By = table.Column<string>(nullable: true),
                     Created_At = table.Column<DateTime>(nullable: true),
                     Updated_By = table.Column<string>(nullable: true),
                     Updated_At = table.Column<DateTime>(nullable: true),
-                    Payment_Id = table.Column<string>(nullable: true),
+                    Created_User_Id = table.Column<Guid>(nullable: false),
+                    Total_Price = table.Column<decimal>(nullable: false),
+                    Is_Delete = table.Column<bool>(nullable: false),
+                    Location_Id = table.Column<Guid>(nullable: true),
+                    Payment_Id = table.Column<Guid>(nullable: true),
                     Total_Quantity = table.Column<int>(nullable: true),
                     Status = table.Column<string>(nullable: true),
-                    Delivery_User_Id = table.Column<string>(nullable: true)
+                    Delivery_User_Id = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -341,7 +361,7 @@ namespace CocShop.Data.Migrations
                         column: x => x.Created_User_Id,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Order_User_Delivery_User_Id",
                         column: x => x.Delivery_User_Id,
@@ -366,16 +386,16 @@ namespace CocShop.Data.Migrations
                 name: "OrderDetail",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    Order_Id = table.Column<string>(nullable: true),
-                    Product_Id = table.Column<string>(nullable: true),
-                    Quantity = table.Column<int>(nullable: false),
-                    Total = table.Column<double>(nullable: true),
-                    Price = table.Column<decimal>(nullable: true),
+                    Id = table.Column<Guid>(nullable: false),
                     Created_By = table.Column<string>(nullable: true),
                     Created_At = table.Column<DateTime>(nullable: true),
                     Updated_By = table.Column<string>(nullable: true),
-                    Updated_At = table.Column<DateTime>(nullable: true)
+                    Updated_At = table.Column<DateTime>(nullable: true),
+                    Order_Id = table.Column<Guid>(nullable: false),
+                    Product_Id = table.Column<Guid>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false),
+                    Total = table.Column<double>(nullable: true),
+                    Price = table.Column<decimal>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -385,13 +405,13 @@ namespace CocShop.Data.Migrations
                         column: x => x.Order_Id,
                         principalTable: "Order",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_OrderDetail_Product_Product_Id",
                         column: x => x.Product_Id,
                         principalTable: "Product",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

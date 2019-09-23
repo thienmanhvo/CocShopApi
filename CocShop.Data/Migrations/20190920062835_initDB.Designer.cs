@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CocShop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190919152226_CreateSchema")]
-    partial class CreateSchema
+    [Migration("20190920062835_initDB")]
+    partial class initDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,13 +23,26 @@ namespace CocShop.Data.Migrations
 
             modelBuilder.Entity("CocShop.Data.Entity.HubUserConnection", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id");
 
                     b.Property<string>("Connection")
                         .HasColumnName("Connection");
 
-                    b.Property<string>("UserId")
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnName("Created_At");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnName("Created_By");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnName("Updated_At");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnName("Updated_By");
+
+                    b.Property<Guid?>("UserId")
                         .HasColumnName("User_Id");
 
                     b.Property<string>("Username")
@@ -44,8 +57,9 @@ namespace CocShop.Data.Migrations
 
             modelBuilder.Entity("CocShop.Data.Entity.Image", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnName("Created_At");
@@ -55,7 +69,7 @@ namespace CocShop.Data.Migrations
 
                     b.Property<string>("Path");
 
-                    b.Property<string>("ProductId")
+                    b.Property<Guid>("ProductId")
                         .HasColumnName("Product_Id");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -73,8 +87,9 @@ namespace CocShop.Data.Migrations
 
             modelBuilder.Entity("CocShop.Data.Entity.Location", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnName("Created_At");
@@ -101,17 +116,29 @@ namespace CocShop.Data.Migrations
 
             modelBuilder.Entity("CocShop.Data.Entity.MyRole", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnName("Created_At");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnName("Created_By");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256);
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnName("Updated_At");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnName("Updated_By");
 
                     b.HasKey("Id");
 
@@ -133,8 +160,7 @@ namespace CocShop.Data.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired();
+                    b.Property<Guid>("RoleId");
 
                     b.HasKey("Id");
 
@@ -145,7 +171,7 @@ namespace CocShop.Data.Migrations
 
             modelBuilder.Entity("CocShop.Data.Entity.MyUser", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
@@ -219,8 +245,7 @@ namespace CocShop.Data.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
 
@@ -237,8 +262,7 @@ namespace CocShop.Data.Migrations
 
                     b.Property<string>("ProviderDisplayName");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -249,9 +273,21 @@ namespace CocShop.Data.Migrations
 
             modelBuilder.Entity("CocShop.Data.Entity.MyUserRole", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<Guid>("UserId");
 
-                    b.Property<string>("RoleId");
+                    b.Property<Guid>("RoleId");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnName("Created_At");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnName("Created_By");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnName("Updated_At");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnName("Updated_By");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -262,7 +298,7 @@ namespace CocShop.Data.Migrations
 
             modelBuilder.Entity("CocShop.Data.Entity.MyUserToken", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<Guid>("UserId");
 
                     b.Property<string>("LoginProvider");
 
@@ -277,10 +313,17 @@ namespace CocShop.Data.Migrations
 
             modelBuilder.Entity("CocShop.Data.Entity.Notification", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id");
 
                     b.Property<string>("Body");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnName("Created_At");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnName("Created_By");
 
                     b.Property<DateTime>("DateCreated");
 
@@ -294,7 +337,13 @@ namespace CocShop.Data.Migrations
 
                     b.Property<string>("Type");
 
-                    b.Property<string>("UserId");
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnName("Updated_At");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnName("Updated_By");
+
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
 
@@ -305,8 +354,9 @@ namespace CocShop.Data.Migrations
 
             modelBuilder.Entity("CocShop.Data.Entity.Order", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnName("Created_At");
@@ -314,19 +364,19 @@ namespace CocShop.Data.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnName("Created_By");
 
-                    b.Property<string>("CreatedUserId")
+                    b.Property<Guid>("CreatedUserId")
                         .HasColumnName("Created_User_Id");
 
-                    b.Property<string>("DeliveryUserId")
+                    b.Property<Guid?>("DeliveryUserId")
                         .HasColumnName("Delivery_User_Id");
 
                     b.Property<bool>("IsDelete")
                         .HasColumnName("Is_Delete");
 
-                    b.Property<string>("LocationId")
+                    b.Property<Guid?>("LocationId")
                         .HasColumnName("Location_Id");
 
-                    b.Property<string>("PaymentId")
+                    b.Property<Guid?>("PaymentId")
                         .HasColumnName("Payment_Id");
 
                     b.Property<string>("Status")
@@ -359,8 +409,9 @@ namespace CocShop.Data.Migrations
 
             modelBuilder.Entity("CocShop.Data.Entity.OrderDetail", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnName("Created_At");
@@ -368,13 +419,13 @@ namespace CocShop.Data.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnName("Created_By");
 
-                    b.Property<string>("OrderId")
+                    b.Property<Guid>("OrderId")
                         .HasColumnName("Order_Id");
 
                     b.Property<decimal?>("Price")
                         .HasColumnName("Price");
 
-                    b.Property<string>("ProductId")
+                    b.Property<Guid>("ProductId")
                         .HasColumnName("Product_Id");
 
                     b.Property<int>("Quantity")
@@ -400,11 +451,18 @@ namespace CocShop.Data.Migrations
 
             modelBuilder.Entity("CocShop.Data.Entity.PaymentMethod", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id");
 
                     b.Property<int?>("CardNumber")
                         .HasColumnName("Card_Number");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnName("Created_At");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnName("Created_By");
 
                     b.Property<DateTime?>("DateFrom")
                         .HasColumnName("Date_From");
@@ -418,7 +476,13 @@ namespace CocShop.Data.Migrations
                     b.Property<string>("OtherDetail")
                         .HasColumnName("Other_Detail");
 
-                    b.Property<string>("UserId")
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnName("Updated_At");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnName("Updated_By");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnName("User_Id");
 
                     b.HasKey("Id");
@@ -430,10 +494,11 @@ namespace CocShop.Data.Migrations
 
             modelBuilder.Entity("CocShop.Data.Entity.Product", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id");
 
-                    b.Property<string>("CateId")
+                    b.Property<Guid>("CateId")
                         .HasColumnName("Cate_Id");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -484,8 +549,9 @@ namespace CocShop.Data.Migrations
 
             modelBuilder.Entity("CocShop.Data.Entity.ProductCategory", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnName("Created_At");
@@ -524,7 +590,8 @@ namespace CocShop.Data.Migrations
                 {
                     b.HasOne("CocShop.Data.Entity.Product", "Product")
                         .WithMany("Image")
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CocShop.Data.Entity.MyRoleClaim", b =>
@@ -576,14 +643,16 @@ namespace CocShop.Data.Migrations
                 {
                     b.HasOne("CocShop.Data.Entity.MyUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CocShop.Data.Entity.Order", b =>
                 {
                     b.HasOne("CocShop.Data.Entity.MyUser", "CreatedUser")
                         .WithMany()
-                        .HasForeignKey("CreatedUserId");
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CocShop.Data.Entity.MyUser", "DeliveryUser")
                         .WithMany()
@@ -602,25 +671,29 @@ namespace CocShop.Data.Migrations
                 {
                     b.HasOne("CocShop.Data.Entity.Order", "Order")
                         .WithMany("OrderDetail")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CocShop.Data.Entity.Product", "Product")
                         .WithMany("OrderDetail")
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CocShop.Data.Entity.PaymentMethod", b =>
                 {
                     b.HasOne("CocShop.Data.Entity.MyUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CocShop.Data.Entity.Product", b =>
                 {
                     b.HasOne("CocShop.Data.Entity.ProductCategory", "Category")
                         .WithMany("Product")
-                        .HasForeignKey("CateId");
+                        .HasForeignKey("CateId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

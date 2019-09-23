@@ -6,19 +6,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CocShop.Data.Entity
 {
     [Table("Order")]
-    public class Order
+    public class Order :BaseEntity
     {
         //public Order()
         //{
         //    OrderDetail = new HashSet<OrderDetail>();
         //}
-        [Key]
-       // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+
 
         [ForeignKey("CreatedUser")]
         [Column("Created_User_Id")]
-        public string CreatedUserId { get; set; }
+        public Guid CreatedUserId { get; set; }
 
         [Column("Total_Price")]
         public decimal TotalPrice { get; set; }
@@ -28,23 +26,11 @@ namespace CocShop.Data.Entity
 
         [ForeignKey("Location")]
         [Column("Location_Id")]
-        public string LocationId { get; set; }
-
-        [Column("Created_By")]
-        public string CreatedBy { get; set; }
-
-        [Column("Created_At")]
-        public DateTime? CreatedAt { get; set; }
-
-        [Column("Updated_By")]
-        public string UpdatedBy { get; set; }
-
-        [Column("Updated_At")]
-        public DateTime? UpdatedAt { get; set; }
+        public Guid? LocationId { get; set; }
 
         [ForeignKey("Payment")]
         [Column("Payment_Id")]
-        public string PaymentId { get; set; }
+        public Guid? PaymentId { get; set; }
 
         [Column("Total_Quantity")]
         public int? TotalQuantity { get; set; }
@@ -54,7 +40,7 @@ namespace CocShop.Data.Entity
 
         [ForeignKey("DeliveryUser")]
         [Column("Delivery_User_Id")]
-        public string DeliveryUserId { get; set; }
+        public Guid? DeliveryUserId { get; set; }
 
         public virtual MyUser CreatedUser { get; set; }
         public virtual MyUser DeliveryUser { get; set; }

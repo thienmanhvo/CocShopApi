@@ -1,5 +1,8 @@
-﻿using CocShop.Data.Entity;
+﻿using CocShop.Core.Constaint;
+using CocShop.Data.Entity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +16,7 @@ namespace CocShop.Data.Infrastructure
         #region Properties
         private DataContext dataContext;
         private readonly DbSet<T> dbSet;
-
+        private IServiceProvider _serviceProvider;
         protected IDbFactory DbFactory
         {
             get;
@@ -26,10 +29,11 @@ namespace CocShop.Data.Infrastructure
         }
         #endregion
 
-        protected RepositoryBase(IDbFactory dbFactory)
+        protected RepositoryBase(IDbFactory dbFactory, IServiceProvider serviceProvider)
         {
             DbFactory = dbFactory;
             dbSet = DbContext.Set<T>();
+            _serviceProvider = serviceProvider;
         }
 
         #region Implementation
@@ -86,7 +90,18 @@ namespace CocShop.Data.Infrastructure
         {
             return dbSet.Where(where).FirstOrDefault<T>();
         }
-
+        public string GetUsername()
+        {
+            try
+            {
+                var accessor = _serviceProvider.GetRequiredService<IHttpContextAccessor>();
+                return accessor?.HttpContext?.User?.FindFirst(Constants.CLAIM_USERNAME)?.Value ?? Constants.USER_ANONYMOUS;
+            }
+            catch
+            {
+                return "SYSTEM";
+            }
+        }
         #endregion
 
     }

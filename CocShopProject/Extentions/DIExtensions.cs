@@ -1,5 +1,7 @@
-﻿using CocShop.Data.Infrastructure;
+﻿using AutoMapper;
+using CocShop.Data.Infrastructure;
 using CocShop.Data.Repositories;
+using CocShop.Service.AutoMapper;
 using CocShop.Service.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +26,18 @@ namespace CocShopProject.Extentions
 
             //SignalR
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            #region automapper
+            // Auto Mapper Configurations
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new AutoMapperProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            #endregion
             return services;
         }
 
@@ -31,12 +45,16 @@ namespace CocShopProject.Extentions
         {
             services.AddTransient<IHubUserConnectionService, HubUserConnectionService>();
             services.AddTransient<INotificationService, NotificationService>();
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IProductCategoryService, ProductCategoryService>();
         }
 
         public static void AddRepoistoryDI(IServiceCollection services)
         {
             services.AddTransient<IHubUserConnectionService, HubUserConnectionService>();
             services.AddTransient<INotificationRepository, NotificationRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IProductCategoryRepository, ProductCategoryRepository>();
         }
 
     }

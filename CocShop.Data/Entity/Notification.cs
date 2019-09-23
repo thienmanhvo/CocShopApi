@@ -8,11 +8,9 @@ using System.Text;
 namespace CocShop.Data.Entity
 {
     [Table("Notification")]
-    public class Notification
+    public class Notification : BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+
         public String Type { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
@@ -20,7 +18,7 @@ namespace CocShop.Data.Entity
         public bool IsSeen { get; set; }
         public bool IsTouch { get; set; }
         public DateTime DateCreated { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         [ForeignKey("UserId")]
         public virtual MyUser User { get; set; }
     }

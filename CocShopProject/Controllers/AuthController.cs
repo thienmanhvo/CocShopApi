@@ -1,10 +1,13 @@
-﻿using CocShop.Data.Appsettings;
+﻿using AutoMapper;
+using CocShop.Core.Constaint;
+using CocShop.Core.ViewModel;
+using CocShop.Data.Appsettings;
 using CocShop.Data.Entity;
-using CocShopProject.VIewModel;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -12,7 +15,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CocShopProject.Controllers
@@ -21,22 +23,44 @@ namespace CocShopProject.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<MyUser> _userManager;
+        #region Field
 
-        public AuthController(UserManager<MyUser> userManager)
+        private readonly UserManager<MyUser> _userManager;
+        private readonly RoleManager<MyRole> _roleManager;
+        private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _accessor;
+
+        #endregion
+
+        #region Ctor
+
+        public AuthController(IServiceProvider serviceProvider)
         {
-            _userManager = userManager;
+            _userManager = serviceProvider.GetRequiredService<UserManager<MyUser>>();
+            _roleManager = serviceProvider.GetRequiredService<RoleManager<MyRole>>();
+            _mapper = serviceProvider.GetRequiredService<IMapper>();
+            _accessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
         }
 
-        [HttpPost("token")]
-        public async Task<ActionResult> GetToken([FromBody]LoginVM model)
+        #endregion
+
+        #region Login
+
+        /// <summary>
+        /// Login
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <author>thiennb</author>
+        [HttpPost("Login")]
+        public async Task<ActionResult> GetToken([FromBody]LoginViewModel request)
         {
-            var user = await _userManager.FindByNameAsync(model.Username);
+            var user = await _userManager.FindByNameAsync(request.Username);
             if (user == null)
             {
                 return BadRequest("Invalid Username");
             }
-            var result = await _userManager.CheckPasswordAsync(user, model.Password);
+            var result = await _userManager.CheckPasswordAsync(user, request.Password);
             if (!result)
             {
                 return BadRequest("Invalid Password");
@@ -46,7 +70,45 @@ namespace CocShopProject.Controllers
             return new OkObjectResult(GenerateToken(user).Result);
         }
 
-        private async Task<Token> GenerateToken(MyUser user)
+        #endregion
+
+        #region Register
+
+        /// <summary>
+        /// Register
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <author>thiennb</author>
+        [HttpPost("Register")]
+        public async Task<ActionResult> Register([FromBody]RegisterViewModel request)
+        {
+            var user = _mapper.Map<MyUser>(request);
+            await CreateRole();
+            user.SetDefaultInsertValue(user.UserName);
+            var resultUser = await _userManager.CreateAsync(user, request.Password);
+            IdentityResult resultRole;
+            if (resultUser.Succeeded)
+            {
+                resultRole = await _userManager.AddToRoleAsync(user, AppSettings.Configs.GetValue<string>("Role:User"));
+                if (resultRole.Succeeded)
+                {
+                    return new OkObjectResult(GenerateToken(user).Result);
+                }
+                else
+                {
+                    return BadRequest(resultRole.Errors);
+                }
+            }
+            else
+            {
+                return BadRequest(resultUser.Errors);
+            }
+        }
+
+        #endregion
+
+        private async Task<TokenViewModel> GenerateToken(MyUser user)
         {
 
             var Key = BuildRsaSigningKey();
@@ -62,53 +124,26 @@ namespace CocShopProject.Controllers
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+            claims.Add(new Claim(Constants.CLAIM_USERNAME, user.UserName));
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
             //create token
             var token = new JwtSecurityToken(
                     issuer: AppSettings.Configs.GetValue<string>("JwtSettings:Issuer"),
                     audience: user.FullName,
-                    expires: DateTime.Now.AddDays(1),
+                    expires: DateTime.Now.AddMinutes(30),
                     signingCredentials: signingCredentials,
                     claims: claims
                 );
             //return token
-            return new Token
+            return new TokenViewModel
             {
                 roles = _userManager.GetRolesAsync(user).Result.ToArray(),
                 fullname = user.FullName,
                 access_token = new JwtSecurityTokenHandler().WriteToken(token),
-                expires_in = (int)TimeSpan.FromDays(1).TotalSeconds
-            };
-        }
-        //tự đăng kí
-        [HttpPost("Register")]
-        public async Task<ActionResult> Register([FromBody]RegisterVM model)
-        {
-            try
-            {
-                var user = new MyUser()
-                {
-                    UserName = model.Username,
-                    Email = model.Email,
-                    FullName = model.Fullname,
-                };
-                var resultUser = await _userManager.CreateAsync(user, model.Password);
-                //var resultRole = await _userManager.AddToRoleAsync(user, "user");
-                if (resultUser.Succeeded)// && resultRole.Succeeded)
-                {
-                    return new OkObjectResult(GenerateToken(user).Result);
-                }
-                else
-                {
-                    return BadRequest(resultUser.Errors);// + " \n" + resultRole.Errors);
-                }
+                expires_in = DateTime.Now.AddMinutes(30),
 
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+                //(int)TimeSpan.FromDays(1).TotalSeconds
+            };
         }
 
         private RsaSecurityKey BuildRsaSigningKey()
@@ -128,6 +163,34 @@ namespace CocShopProject.Controllers
             rsaProvider.ImportParameters(parameters);
             var key = new RsaSecurityKey(rsaProvider);
             return key;
+        }
+        private async Task CreateRole()
+        {
+            var roleNames = AppSettings.Configs.GetSection("Role").Get<List<string>>();
+            IdentityResult roleResult;
+
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await _roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    //create the roles and seed them to the database:
+                    MyRole role = new MyRole() { Name = roleName };
+                    role.SetDefaultInsertValue(GetCurrentUser());
+                    roleResult = await _roleManager.CreateAsync(role);
+                }
+            }
+        }
+        private string GetCurrentUser()
+        {
+            //try
+            //{
+            return _accessor.HttpContext.User?.FindFirst("username")?.Value ?? "SYSTEM";
+            //}
+            //catch
+            //{
+            //    return "SYSTEM";
+            //}
         }
     }
 }

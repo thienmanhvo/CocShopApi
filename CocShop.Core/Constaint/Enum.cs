@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CocShop.Core.Constaint
 {
@@ -18,6 +15,17 @@ namespace CocShop.Core.Constaint
             IncorrectPassword = -4,
             UserLockedOut = -5,
             AccessDenied = -6,
+        }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public enum Role
+        {
+            //"Quản lý tài khoản"
+            Admin = 0,
+            //"Nhân viên"
+            Staff = 1,
+            //"Khách Hàng")
+            User = 2,
         }
 
     }

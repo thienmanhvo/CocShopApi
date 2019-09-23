@@ -6,19 +6,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CocShop.Data.Entity
 {
     [Table("Payment_Method")]
-    public class PaymentMethod
+    public class PaymentMethod : BaseEntity
     {
         //public PaymentMethod()
         //{
         //    Order = new HashSet<Order>();
         //}
-        [Key]
-       // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
 
         [ForeignKey("User")]
         [Column("User_Id")]
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         [Column("Card_Number")]
         public int? CardNumber { get; set; }

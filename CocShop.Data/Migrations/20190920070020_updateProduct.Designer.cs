@@ -4,14 +4,16 @@ using CocShop.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CocShop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190920070020_updateProduct")]
+    partial class updateProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -520,18 +522,16 @@ namespace CocShop.Data.Migrations
                     b.Property<bool?>("IsSale")
                         .HasColumnName("Is_Sale");
 
-                    b.Property<decimal?>("Price")
-                        .HasColumnName("Price")
-                        .HasColumnType("decimal(18,0)");
+                    b.Property<decimal>("Price")
+                        .HasColumnName("Price");
 
                     b.Property<decimal?>("PriceSale")
-                        .HasColumnName("Price_Sale")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnName("Price_Sale");
 
                     b.Property<string>("ProductName")
                         .HasColumnName("Product_Name");
 
-                    b.Property<int?>("Quantity")
+                    b.Property<int>("Quantity")
                         .HasColumnName("Quantity");
 
                     b.Property<DateTime?>("UpdatedAt")

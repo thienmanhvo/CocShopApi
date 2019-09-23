@@ -7,16 +7,13 @@ namespace CocShop.Data.Entity
 {
     [Table("Product_Category")]
 
-    public class ProductCategory
+    public class ProductCategory : BaseEntity
     {
         //public ProductCategory()
         //{
         //    Product = new HashSet<Product>();
         //}
 
-        [Key]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
 
         [Column("Name")]
         public string Name { get; set; }
@@ -26,18 +23,14 @@ namespace CocShop.Data.Entity
 
         [Column("Is_Delete")]
         public bool IsDelete { get; set; }
-        [Column("Created_By")]
-        public string CreatedBy { get; set; }
-
-        [Column("Created_At")]
-        public DateTime? CreatedAt { get; set; }
-
-        [Column("Updated_By")]
-        public string UpdatedBy { get; set; }
-
-        [Column("Updated_At")]
-        public DateTime? UpdatedAt { get; set; }
 
         public virtual ICollection<Product> Product { get; set; }
+
+        public override void SetDefaultInsertValue(string username)
+        {
+            base.SetDefaultInsertValue(username);
+            IsDelete = false;
+        }
     }
 }
+

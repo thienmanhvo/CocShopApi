@@ -44,8 +44,14 @@ namespace CocShopProject
             #region Setup1
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options =>
             {
-                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                //options.SerializerSettings.ContractResolver = new DefaultContractResolver();
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
             });
             #endregion
             services.AddIdentity();
@@ -64,7 +70,7 @@ namespace CocShopProject
             //#endregion
 
             services.AddSignalR();
-
+            services.AddHttpContextAccessor();
 
         }
 

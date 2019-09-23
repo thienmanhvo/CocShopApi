@@ -1,5 +1,6 @@
 ﻿using CocShop.Data.Entity;
 using CocShop.Data.Infrastructure;
+using System;
 
 namespace CocShop.Data.Repositories
 {
@@ -10,7 +11,7 @@ namespace CocShop.Data.Repositories
 
     public class NotificationRepository : RepositoryBase<Notification>, INotificationRepository
     {
-        public NotificationRepository(IDbFactory dbFactory) : base(dbFactory)
+        public NotificationRepository(IDbFactory dbFactory, IServiceProvider serviceProvider) : base(dbFactory, serviceProvider)
         {
         }
     }
