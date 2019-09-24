@@ -21,7 +21,5 @@ namespace CocShop.Core.ViewModel
         public DateTime? CreatedAt { get; set; }
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }
-       public virtual ICollection<Product> Product { get; set; }
-
     }
 }

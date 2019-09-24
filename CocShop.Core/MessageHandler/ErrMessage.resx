@@ -117,16 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="FAILURE" xml:space="preserve">
+  <data name="Failure" xml:space="preserve">
     <value>Failure</value>
   </data>
-  <data name="INVALIDPASSWORD" xml:space="preserve">
+  <data name="InvalidPassword" xml:space="preserve">
     <value>The password you entered is incorrect.</value>
   </data>
-  <data name="INVALIDUSERNAME" xml:space="preserve">
+  <data name="InvalidUsername" xml:space="preserve">
     <value>The username does not exist.</value>
   </data>
-  <data name="NOTFOUND" xml:space="preserve">
+  <data name="NotFound" xml:space="preserve">
     <value>The requested URL was not found on this server.</value>
   </data>
 </root>

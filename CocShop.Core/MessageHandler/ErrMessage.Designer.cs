@@ -63,36 +63,36 @@ namespace CocShop.Core.MessageHandler {
         /// <summary>
         ///   Looks up a localized string similar to Failure.
         /// </summary>
-        internal static string FAILURE {
+        internal static string Failure {
             get {
-                return ResourceManager.GetString("FAILURE", resourceCulture);
+                return ResourceManager.GetString("Failure", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The password you entered is incorrect..
         /// </summary>
-        internal static string INVALIDPASSWORD {
+        internal static string InvalidPassword {
             get {
-                return ResourceManager.GetString("INVALIDPASSWORD", resourceCulture);
+                return ResourceManager.GetString("InvalidPassword", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The username does not exist..
         /// </summary>
-        internal static string INVALIDUSERNAME {
+        internal static string InvalidUsername {
             get {
-                return ResourceManager.GetString("INVALIDUSERNAME", resourceCulture);
+                return ResourceManager.GetString("InvalidUsername", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The requested URL was not found on this server..
         /// </summary>
-        internal static string NOTFOUND {
+        internal static string NotFound {
             get {
-                return ResourceManager.GetString("NOTFOUND", resourceCulture);
+                return ResourceManager.GetString("NotFound", resourceCulture);
             }
         }
     }

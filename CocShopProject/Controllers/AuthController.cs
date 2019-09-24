@@ -60,19 +60,21 @@ namespace CocShop.WebAPi.Controllers
             var user = await _userManager.FindByNameAsync(request.Username);
             if (user == null)
             {
-                return Ok(new BaseViewModel<TokenViewModel>
+                return BadRequest(new BaseViewModel<TokenViewModel>
                 {
-                    Message = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALIDUSERNAME),
-                    StatusCode = HttpStatusCode.Forbidden
+                    Code = ErrMessageConstants.INVALIDUSERNAME,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALIDUSERNAME),
+                    StatusCode = HttpStatusCode.BadRequest
                 });
             }
             var result = await _userManager.CheckPasswordAsync(user, request.Password);
             if (!result)
             {
-                return Ok(new BaseViewModel<TokenViewModel>
+                return BadRequest(new BaseViewModel<TokenViewModel>
                 {
-                    Message = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALIDPASSWORD),
-                    StatusCode = HttpStatusCode.Forbidden
+                    Code = ErrMessageConstants.INVALIDPASSWORD,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALIDPASSWORD),
+                    StatusCode = HttpStatusCode.BadRequest
                 });
             }
 
@@ -80,8 +82,6 @@ namespace CocShop.WebAPi.Controllers
             return Ok(new BaseViewModel<TokenViewModel>
             {
                 Data = GenerateToken(user).Result,
-                StatusCode = HttpStatusCode.OK,
-                Message = MessageHandler.CustomMessage(MessageConstants.SUCCESS)
             });
         }
 
@@ -108,27 +108,16 @@ namespace CocShop.WebAPi.Controllers
                 resultRole = await _userManager.AddToRoleAsync(user, AppSettings.Configs.GetValue<string>("Role:User"));
                 if (resultRole.Succeeded)
                 {
-                    return Ok(new BaseViewModel<TokenViewModel>(GenerateToken(user).Result)
-                    {
-                        Message = MessageHandler.CustomMessage(MessageConstants.SUCCESS),
-                    });
+                    return Ok(new BaseViewModel<TokenViewModel>(GenerateToken(user).Result));
                 }
                 else
                 {
-                    return Ok(new BaseViewModel<IEnumerable<IdentityError>>(resultRole.Errors)
-                    {
-                        Message = MessageHandler.CustomErrMessage(ErrMessageConstants.FAILURE),
-                        StatusCode = HttpStatusCode.BadRequest
-                    });
+                    return BadRequest(resultRole.Errors);
                 }
             }
             else
             {
-                return Ok(new BaseViewModel<IEnumerable<IdentityError>>(resultUser.Errors)
-                {
-                    Message = MessageHandler.CustomErrMessage(ErrMessageConstants.FAILURE),
-                    StatusCode = HttpStatusCode.BadRequest
-                });
+                return BadRequest(resultUser.Errors);
             }
         }
 

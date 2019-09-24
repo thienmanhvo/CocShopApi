@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using CocShop.Core.Constaint;
 using CocShop.Core.Data.Entity;
+using CocShop.Core.MessageHandler;
 using CocShop.Core.Service;
 using CocShop.Core.ViewModel;
 using CocShop.WebAPi.Extentions;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Net;
 
 namespace CocShop.WebAPi.Controllers
 {
@@ -39,16 +42,29 @@ namespace CocShop.WebAPi.Controllers
 
         // GET: api/ProductCategories
         [HttpGet]
-        public ActionResult<BaseViewModel<IEnumerable<ProductCategory>>> GetProductCategory()
+        public ActionResult<BaseViewModel<IEnumerable<ProductCategoryViewModel>>> GetProductCategory()
         {
-            return Ok(_producCategorytService.GetAllProductCategories());
+            var result = _producCategorytService.GetAllProductCategories();
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+            return result;
         }
 
         // GET: api/ProductCategories/5
         [HttpGet("{id}")]
-        public ActionResult<BaseViewModel<ProductCategory>> GetProductCategory(string id)
+        public ActionResult<BaseViewModel<ProductCategoryViewModel>> GetProductCategory(string id)
         {
-            return Ok(_producCategorytService.GetProductCategory(id));
+            if (!Guid.TryParse(id, out Guid guidId))
+            {
+                return NotFound(new BaseViewModel<string>()
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                });
+            };
+            var result = _producCategorytService.GetProductCategory(guidId);
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+            return result;
         }
 
         //// PUT: api/ProductCategories/5
@@ -86,14 +102,28 @@ namespace CocShop.WebAPi.Controllers
         [HttpPost]
         public ActionResult<BaseViewModel<ProductCategoryViewModel>> PostProductCategory(ProductCategoryCreateRequest request)
         {
-            return Ok(_producCategorytService.CreateProductCategory(request));
+            var result = _producCategorytService.CreateProductCategory(request);
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+            return result;
         }
 
         // DELETE: api/ProductCategories/5
         [HttpDelete("{id}")]
-        public ActionResult<ProductCategory> DeleteProductCategory(string id)
+        public ActionResult<BaseViewModel<string>> DeleteProductCategory(string id)
         {
-            return Ok(_producCategorytService.DeleteProductCategory(id));
+            if (!Guid.TryParse(id, out Guid guidId))
+            {
+                return NotFound(new BaseViewModel<string>()
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                });
+            };
+            var result = _producCategorytService.DeleteProductCategory(guidId);
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+
+            return result;
         }
 
         //private bool ProductCategoryExists(Guid id)

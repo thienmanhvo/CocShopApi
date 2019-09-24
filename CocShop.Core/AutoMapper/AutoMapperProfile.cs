@@ -23,8 +23,11 @@ namespace CocShop.Core.AutoMapper
 
             CreateMap<ProductCategoryCreateRequest, ProductCategory>().ReverseMap();
 
-            CreateMap<UpdateProductRequestViewModel, Product>().ReverseMap().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+            CreateMap<UpdateProductRequestViewModel, Product>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+            CreateMap<Product, UpdateProductRequestViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
 
+           // CreateMap<ProductCategory, ProductCategoryCreateRequest>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+          //  CreateMap<UpdateProductRequestViewModel, Product>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
 
             //CreateMap<string, Guid>().ConvertUsing(new StringToGuidConverter());
             //CreateMap<Guid, string>().ConvertUsing(new GuidToStringConverter());
