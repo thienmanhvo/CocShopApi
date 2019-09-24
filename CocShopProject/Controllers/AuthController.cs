@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CocShop.Core.Constaint;
 using CocShop.Core.Data.Entity;
+using CocShop.Core.MessageHandler;
 using CocShop.Core.ViewModel;
 using CocShop.Data.Appsettings;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -53,21 +55,34 @@ namespace CocShop.WebAPi.Controllers
         /// <returns></returns>
         /// <author>thiennb</author>
         [HttpPost("Login")]
-        public async Task<ActionResult> GetToken([FromBody]LoginViewModel request)
+        public async Task<ActionResult<BaseViewModel<TokenViewModel>>> GetToken([FromBody]LoginViewModel request)
         {
             var user = await _userManager.FindByNameAsync(request.Username);
             if (user == null)
             {
-                return BadRequest("Invalid Username");
+                return Ok(new BaseViewModel<TokenViewModel>
+                {
+                    Message = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALIDUSERNAME),
+                    StatusCode = HttpStatusCode.Forbidden
+                });
             }
             var result = await _userManager.CheckPasswordAsync(user, request.Password);
             if (!result)
             {
-                return BadRequest("Invalid Password");
+                return Ok(new BaseViewModel<TokenViewModel>
+                {
+                    Message = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALIDPASSWORD),
+                    StatusCode = HttpStatusCode.Forbidden
+                });
             }
 
             await _userManager.UpdateAsync(user);
-            return new OkObjectResult(GenerateToken(user).Result);
+            return Ok(new BaseViewModel<TokenViewModel>
+            {
+                Data = GenerateToken(user).Result,
+                StatusCode = HttpStatusCode.OK,
+                Message = MessageHandler.CustomMessage(MessageConstants.SUCCESS)
+            });
         }
 
         #endregion
@@ -93,16 +108,27 @@ namespace CocShop.WebAPi.Controllers
                 resultRole = await _userManager.AddToRoleAsync(user, AppSettings.Configs.GetValue<string>("Role:User"));
                 if (resultRole.Succeeded)
                 {
-                    return new OkObjectResult(GenerateToken(user).Result);
+                    return Ok(new BaseViewModel<TokenViewModel>(GenerateToken(user).Result)
+                    {
+                        Message = MessageHandler.CustomMessage(MessageConstants.SUCCESS),
+                    });
                 }
                 else
                 {
-                    return BadRequest(resultRole.Errors);
+                    return Ok(new BaseViewModel<IEnumerable<IdentityError>>(resultRole.Errors)
+                    {
+                        Message = MessageHandler.CustomErrMessage(ErrMessageConstants.FAILURE),
+                        StatusCode = HttpStatusCode.BadRequest
+                    });
                 }
             }
             else
             {
-                return BadRequest(resultUser.Errors);
+                return Ok(new BaseViewModel<IEnumerable<IdentityError>>(resultUser.Errors)
+                {
+                    Message = MessageHandler.CustomErrMessage(ErrMessageConstants.FAILURE),
+                    StatusCode = HttpStatusCode.BadRequest
+                });
             }
         }
 

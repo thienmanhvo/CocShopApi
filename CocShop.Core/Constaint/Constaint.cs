@@ -13,6 +13,9 @@ namespace CocShop.Core.Constaint
     public class ErrMessageConstants
     {
         public const string NOTFOUND = "NOTFOUND";
+        public const string INVALIDPASSWORD = "INVALIDPASSWORD";
+        public const string INVALIDUSERNAME = "INVALIDUSERNAME";
+        public const string FAILURE = "FAILURE";
 
     }
     public class MessageConstants

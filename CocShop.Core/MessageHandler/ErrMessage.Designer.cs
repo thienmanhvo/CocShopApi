@@ -61,6 +61,33 @@ namespace CocShop.Core.MessageHandler {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failure.
+        /// </summary>
+        internal static string FAILURE {
+            get {
+                return ResourceManager.GetString("FAILURE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The password you entered is incorrect..
+        /// </summary>
+        internal static string INVALIDPASSWORD {
+            get {
+                return ResourceManager.GetString("INVALIDPASSWORD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The username does not exist..
+        /// </summary>
+        internal static string INVALIDUSERNAME {
+            get {
+                return ResourceManager.GetString("INVALIDUSERNAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The requested URL was not found on this server..
         /// </summary>
         internal static string NOTFOUND {
