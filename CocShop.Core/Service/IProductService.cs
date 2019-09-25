@@ -9,6 +9,7 @@ namespace CocShop.Core.Service
     {
         BaseViewModel<IEnumerable<ProductViewModel>> GetAllProducts();
         BaseViewModel<ProductViewModel> GetProduct(Guid id);
+        BaseViewModel<IEnumerable<ProductViewModel>> GetProductByCategoryID(Guid cateId);
         BaseViewModel<ProductViewModel> CreateProduct(CreateProductRequestViewModel product);
         BaseViewModel<ProductViewModel> UpdateProduct(Guid id, UpdateProductRequestViewModel product);
         BaseViewModel<string> DeleteProduct(Guid id);

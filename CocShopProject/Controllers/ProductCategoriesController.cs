@@ -26,6 +26,7 @@ namespace CocShop.WebAPi.Controllers
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _accessor;
         private readonly IProductCategoryService _producCategorytService;
+        private readonly IProductService _productService;
 
         #endregion
 
@@ -36,6 +37,7 @@ namespace CocShop.WebAPi.Controllers
             _producCategorytService = serviceProvider.GetRequiredService<IProductCategoryService>();
             _mapper = serviceProvider.GetRequiredService<IMapper>();
             _accessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+            _productService = serviceProvider.GetRequiredService<IProductService>();
         }
 
         #endregion
@@ -67,10 +69,29 @@ namespace CocShop.WebAPi.Controllers
             return result;
         }
 
+        // GET: api/ProductCategories/5/Products
+        [HttpGet]
+        [Route("{id}/Products")]
+        public ActionResult<BaseViewModel<IEnumerable<ProductViewModel>>> GetProductByCategoryID(string id)
+        {
+            if (!Guid.TryParse(id, out Guid guidId))
+            {
+                return NotFound(new BaseViewModel<string>()
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                });
+            };
+            var result = _productService.GetProductByCategoryID(guidId);
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+            return result;
+        }
+
         // PUT: api/ProductCategories/5
         [ValidateModel]
         [HttpPut("{id}")]
-        public  ActionResult<BaseViewModel<ProductCategoryViewModel>> PutProductCategory(string id, UpdateProductCategoryViewModel productCategory)
+        public ActionResult<BaseViewModel<ProductCategoryViewModel>> PutProductCategory(string id, UpdateProductCategoryViewModel productCategory)
         {
             if (!Guid.TryParse(id, out Guid guidId))
             {

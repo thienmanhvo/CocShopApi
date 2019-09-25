@@ -17,14 +17,16 @@ namespace CocShop.Service.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository _repository;
+        private readonly IProductCategoryRepository _productCategoryRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ProductService(IProductRepository repository, IUnitOfWork unitOfWork, IMapper mapper)
+        public ProductService(IProductRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IProductCategoryRepository productCategoryRepository)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _productCategoryRepository = productCategoryRepository;
         }
 
         public BaseViewModel<ProductViewModel> CreateProduct(CreateProductRequestViewModel Product)
@@ -141,6 +143,31 @@ namespace CocShop.Service.Services
             Save();
 
             return result;
+        }
+
+        public BaseViewModel<IEnumerable<ProductViewModel>> GetProductByCategoryID(Guid cateId)
+        {
+            var cate = _productCategoryRepository.GetById(cateId);
+            if (cate == null || cate.IsDelete)
+            {
+                return new BaseViewModel<IEnumerable<ProductViewModel>>
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                    Code = ErrMessageConstants.NOTFOUND
+                };
+            }
+            var listProduct = _repository.GetMany(_ => _.IsDelete == false && _.CateId == cateId);
+            if (listProduct == null || !listProduct.Any())
+            {
+                return new BaseViewModel<IEnumerable<ProductViewModel>>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Description = MessageHandler.CustomMessage(MessageConstants.NORECORD),
+                    Code = MessageConstants.NORECORD
+                };
+            }
+            return new BaseViewModel<IEnumerable<ProductViewModel>>(_mapper.Map<IEnumerable<ProductViewModel>>(listProduct));
         }
     }
 }
