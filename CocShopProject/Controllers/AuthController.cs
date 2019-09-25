@@ -4,6 +4,7 @@ using CocShop.Core.Data.Entity;
 using CocShop.Core.MessageHandler;
 using CocShop.Core.ViewModel;
 using CocShop.Data.Appsettings;
+using CocShop.WebAPi.Extentions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +55,7 @@ namespace CocShop.WebAPi.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         /// <author>thiennb</author>
+        [ValidateModel]
         [HttpPost("Login")]
         public async Task<ActionResult<BaseViewModel<TokenViewModel>>> GetToken([FromBody]LoginViewModel request)
         {
@@ -95,6 +97,7 @@ namespace CocShop.WebAPi.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         /// <author>thiennb</author>
+        [ValidateModel]
         [HttpPost("Register")]
         public async Task<ActionResult> Register([FromBody]RegisterViewModel request)
         {
