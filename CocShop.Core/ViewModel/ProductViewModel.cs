@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace CocShop.Core.ViewModel
@@ -20,11 +21,17 @@ namespace CocShop.Core.ViewModel
     }
     public class UpdateProductRequestViewModel
     {
-        [StringLength(100, MinimumLength = 8, ErrorMessage = "The {0} characters must between {2} and {1} characters.")]
+        [JsonIgnore]
+        public Guid Id { get; set; }
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "The {0} characters must between {2} and {1} characters.")]
         public string ProductName { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
         public int? Quantity { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
         public double? PriceSale { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
         public decimal? Price { get; set; }
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "The {0} characters must between {2} and {1} characters.")]
         public string Description { get; set; }
         public bool? IsSale { get; set; }
         public bool? IsBest { get; set; }

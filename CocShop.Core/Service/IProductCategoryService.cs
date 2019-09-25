@@ -9,8 +9,8 @@ namespace CocShop.Core.Service
     {
         BaseViewModel<IEnumerable<ProductCategoryViewModel>> GetAllProductCategories();
         BaseViewModel<ProductCategoryViewModel> GetProductCategory(Guid id);
-        BaseViewModel<ProductCategoryViewModel> CreateProductCategory(ProductCategoryCreateRequest request);
-        void UpdateProductCategory(ProductCategory ProductCategory);
+        BaseViewModel<ProductCategoryViewModel> CreateProductCategory(CreateProductCategoryRequestViewModel request);
+        BaseViewModel<ProductCategoryViewModel> UpdateProductCategory(UpdateProductCategoryViewModel productCategory);
         BaseViewModel<string> DeleteProductCategory(Guid id);
         void Save();
     }

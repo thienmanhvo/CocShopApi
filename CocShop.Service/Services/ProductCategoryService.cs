@@ -27,7 +27,7 @@ namespace CocShop.Service.Services
             _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
         }
 
-        public BaseViewModel<ProductCategoryViewModel> CreateProductCategory(ProductCategoryCreateRequest request)
+        public BaseViewModel<ProductCategoryViewModel> CreateProductCategory(CreateProductCategoryRequestViewModel request)
         {
             var entity = _mapper.Map<ProductCategory>(request);
             entity.Id = Guid.NewGuid();
@@ -118,9 +118,31 @@ namespace CocShop.Service.Services
             _unitOfWork.Commit();
         }
 
-        public void UpdateProductCategory(ProductCategory ProductCategory)
+        public BaseViewModel<ProductCategoryViewModel> UpdateProductCategory(UpdateProductCategoryViewModel productCategory)
         {
-            _repository.Update(ProductCategory);
+            var entity = _repository.GetById(productCategory.Id);
+            if (entity == null || entity.IsDelete)
+            {
+                return new BaseViewModel<ProductCategoryViewModel>
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                    Code = ErrMessageConstants.NOTFOUND
+                };
+            }
+
+            entity = _mapper.Map(productCategory, entity);
+
+            entity.SetDefaultUpdateValue(_repository.GetUsername());
+            _repository.Update(entity);
+            var result = new BaseViewModel<ProductCategoryViewModel>
+            {
+                Data = _mapper.Map<ProductCategoryViewModel>(entity),
+            };
+
+            Save();
+
+            return result;
         }
     }
 }

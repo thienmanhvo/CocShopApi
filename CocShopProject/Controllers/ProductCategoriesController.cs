@@ -67,40 +67,30 @@ namespace CocShop.WebAPi.Controllers
             return result;
         }
 
-        //// PUT: api/ProductCategories/5
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutProductCategory(Guid id, ProductCategory productCategory)
-        //{
-        //    if (id != productCategory.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(productCategory).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!ProductCategoryExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
+        // PUT: api/ProductCategories/5
+        [ValidateModel]
+        [HttpPut("{id}")]
+        public  ActionResult<BaseViewModel<ProductCategoryViewModel>> PutProductCategory(string id, UpdateProductCategoryViewModel productCategory)
+        {
+            if (!Guid.TryParse(id, out Guid guidId))
+            {
+                return NotFound(new BaseViewModel<string>()
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                });
+            };
+            productCategory.Id = guidId;
+            var result = _producCategorytService.UpdateProductCategory(productCategory);
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+            return result;
+        }
 
         // POST: api/ProductCategories
         [ValidateModel]
         [HttpPost]
-        public ActionResult<BaseViewModel<ProductCategoryViewModel>> PostProductCategory(ProductCategoryCreateRequest request)
+        public ActionResult<BaseViewModel<ProductCategoryViewModel>> PostProductCategory(CreateProductCategoryRequestViewModel request)
         {
             var result = _producCategorytService.CreateProductCategory(request);
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
