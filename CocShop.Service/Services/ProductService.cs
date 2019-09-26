@@ -17,14 +17,16 @@ namespace CocShop.Service.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository _repository;
+        private readonly IProductCategoryRepository _productCategoryRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ProductService(IProductRepository repository, IUnitOfWork unitOfWork, IMapper mapper)
+        public ProductService(IProductRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IProductCategoryRepository productCategoryRepository)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _productCategoryRepository = productCategoryRepository;
         }
 
         public BaseViewModel<ProductViewModel> CreateProduct(CreateProductRequestViewModel Product)
@@ -37,8 +39,6 @@ namespace CocShop.Service.Services
             var result = new BaseViewModel<ProductViewModel>()
             {
                 Data = _mapper.Map<ProductViewModel>(entity),
-                Message = MessageHandler.CustomMessage(MessageConstants.SUCCESS),
-                StatusCode = HttpStatusCode.OK
             };
 
             Save();
@@ -46,19 +46,20 @@ namespace CocShop.Service.Services
             return result;
         }
 
-        public BaseViewModel<string> DeleteProduct(string id)
+        public BaseViewModel<string> DeleteProduct(Guid id)
         {
             //Find product
-            var product = _repository.GetById(new Guid(id));
+            var product = _repository.GetById(id);
             //result to return
-            BaseViewModel<string> result;
+            BaseViewModel<string> result = null;
             //check product exist
             if (product == null || product.IsDelete)
             {
                 result = new BaseViewModel<string>()
                 {
                     StatusCode = HttpStatusCode.NotFound,
-                    Message = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND)
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND)
                 };
             }
             else
@@ -66,17 +67,10 @@ namespace CocShop.Service.Services
                 //update column isDelete = true
                 product.IsDelete = true;
                 _repository.Update(product);
-
-
-                result = new BaseViewModel<string>()
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Message = MessageHandler.CustomMessage(MessageConstants.SUCCESS)
-                };
+                result = new BaseViewModel<string>();
                 //save change
                 Save();
             }
-
             return result;
         }
 
@@ -88,16 +82,15 @@ namespace CocShop.Service.Services
             {
                 return new BaseViewModel<ProductViewModel>
                 {
-                    Message = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-                    StatusCode = HttpStatusCode.NotFound
+                    StatusCode = HttpStatusCode.NotFound,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                    Code = ErrMessageConstants.NOTFOUND
                 };
             }
 
             return new BaseViewModel<ProductViewModel>
             {
                 Data = _mapper.Map<ProductViewModel>(product),
-                Message = MessageHandler.CustomMessage(MessageConstants.SUCCESS),
-                StatusCode = HttpStatusCode.OK
             };
         }
 
@@ -109,39 +102,32 @@ namespace CocShop.Service.Services
             {
                 return new BaseViewModel<IEnumerable<ProductViewModel>>()
                 {
-                    Message = MessageHandler.CustomMessage(MessageConstants.NORECORD),
-                    StatusCode = HttpStatusCode.OK
+                    Description = MessageHandler.CustomMessage(MessageConstants.NORECORD),
+                    Code = MessageConstants.NORECORD
                 };
             }
 
             return new BaseViewModel<IEnumerable<ProductViewModel>>()
             {
-                Data = _mapper.Map<IEnumerable<ProductViewModel>>(data),
-                Message = MessageHandler.CustomMessage(MessageConstants.SUCCESS),
-                StatusCode = HttpStatusCode.OK
+                Data = _mapper.Map<IEnumerable<ProductViewModel>>(data)
             };
 
         }
-
-        public IQueryable<Product> GetProducts(Expression<Func<Product, bool>> where)
-        {
-            return _repository.GetMany(where);
-        }
-
         public void Save()
         {
             _unitOfWork.Commit();
         }
 
-        public BaseViewModel<ProductViewModel> UpdateProduct(string id, UpdateProductRequestViewModel product)
+        public BaseViewModel<ProductViewModel> UpdateProduct(Guid id, UpdateProductRequestViewModel product)
         {
-            var entity = _repository.GetById(new Guid(id));
+            var entity = _repository.GetById(id);
             if (entity == null || entity.IsDelete)
             {
                 return new BaseViewModel<ProductViewModel>
                 {
-                    Message = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-                    StatusCode = HttpStatusCode.NotFound
+                    StatusCode = HttpStatusCode.NotFound,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                    Code = ErrMessageConstants.NOTFOUND
                 };
             }
 
@@ -152,13 +138,36 @@ namespace CocShop.Service.Services
             var result = new BaseViewModel<ProductViewModel>
             {
                 Data = _mapper.Map<ProductViewModel>(entity),
-                Message = MessageHandler.CustomMessage(MessageConstants.SUCCESS),
-                StatusCode = HttpStatusCode.OK
             };
 
             Save();
 
             return result;
+        }
+
+        public BaseViewModel<IEnumerable<ProductViewModel>> GetProductByCategoryID(Guid cateId)
+        {
+            var cate = _productCategoryRepository.GetById(cateId);
+            if (cate == null || cate.IsDelete)
+            {
+                return new BaseViewModel<IEnumerable<ProductViewModel>>
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                    Code = ErrMessageConstants.NOTFOUND
+                };
+            }
+            var listProduct = _repository.GetMany(_ => _.IsDelete == false && _.CateId == cateId);
+            if (listProduct == null || !listProduct.Any())
+            {
+                return new BaseViewModel<IEnumerable<ProductViewModel>>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Description = MessageHandler.CustomMessage(MessageConstants.NORECORD),
+                    Code = MessageConstants.NORECORD
+                };
+            }
+            return new BaseViewModel<IEnumerable<ProductViewModel>>(_mapper.Map<IEnumerable<ProductViewModel>>(listProduct));
         }
     }
 }

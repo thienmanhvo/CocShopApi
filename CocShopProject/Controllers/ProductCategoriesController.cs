@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using CocShop.Core.Constaint;
 using CocShop.Core.Data.Entity;
+using CocShop.Core.MessageHandler;
 using CocShop.Core.Service;
 using CocShop.Core.ViewModel;
 using CocShop.WebAPi.Extentions;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Net;
 
 namespace CocShop.WebAPi.Controllers
 {
@@ -23,6 +26,7 @@ namespace CocShop.WebAPi.Controllers
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _accessor;
         private readonly IProductCategoryService _producCategorytService;
+        private readonly IProductService _productService;
 
         #endregion
 
@@ -33,67 +37,104 @@ namespace CocShop.WebAPi.Controllers
             _producCategorytService = serviceProvider.GetRequiredService<IProductCategoryService>();
             _mapper = serviceProvider.GetRequiredService<IMapper>();
             _accessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+            _productService = serviceProvider.GetRequiredService<IProductService>();
         }
 
         #endregion
 
         // GET: api/ProductCategories
         [HttpGet]
-        public ActionResult<BaseViewModel<IEnumerable<ProductCategory>>> GetProductCategory()
+        public ActionResult<BaseViewModel<IEnumerable<ProductCategoryViewModel>>> GetProductCategory()
         {
-            return Ok(_producCategorytService.GetAllProductCategories());
+            var result = _producCategorytService.GetAllProductCategories();
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+            return result;
         }
 
         // GET: api/ProductCategories/5
         [HttpGet("{id}")]
-        public ActionResult<BaseViewModel<ProductCategory>> GetProductCategory(string id)
+        public ActionResult<BaseViewModel<ProductCategoryViewModel>> GetProductCategory(string id)
         {
-            return Ok(_producCategorytService.GetProductCategory(id));
+            if (!Guid.TryParse(id, out Guid guidId))
+            {
+                return NotFound(new BaseViewModel<string>()
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                });
+            };
+            var result = _producCategorytService.GetProductCategory(guidId);
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+            return result;
         }
 
-        //// PUT: api/ProductCategories/5
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutProductCategory(Guid id, ProductCategory productCategory)
-        //{
-        //    if (id != productCategory.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+        // GET: api/ProductCategories/5/Products
+        [HttpGet]
+        [Route("{id}/Products")]
+        public ActionResult<BaseViewModel<IEnumerable<ProductViewModel>>> GetProductByCategoryID(string id)
+        {
+            if (!Guid.TryParse(id, out Guid guidId))
+            {
+                return NotFound(new BaseViewModel<string>()
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                });
+            };
+            var result = _productService.GetProductByCategoryID(guidId);
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+            return result;
+        }
 
-        //    _context.Entry(productCategory).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!ProductCategoryExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
+        // PUT: api/ProductCategories/5
+        [ValidateModel]
+        [HttpPut("{id}")]
+        public ActionResult<BaseViewModel<ProductCategoryViewModel>> PutProductCategory(string id, UpdateProductCategoryViewModel productCategory)
+        {
+            if (!Guid.TryParse(id, out Guid guidId))
+            {
+                return NotFound(new BaseViewModel<string>()
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                });
+            };
+            productCategory.Id = guidId;
+            var result = _producCategorytService.UpdateProductCategory(productCategory);
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+            return result;
+        }
 
         // POST: api/ProductCategories
         [ValidateModel]
         [HttpPost]
-        public ActionResult<BaseViewModel<ProductCategoryViewModel>> PostProductCategory(ProductCategoryCreateRequest request)
+        public ActionResult<BaseViewModel<ProductCategoryViewModel>> PostProductCategory(CreateProductCategoryRequestViewModel request)
         {
-            return Ok(_producCategorytService.CreateProductCategory(request));
+            var result = _producCategorytService.CreateProductCategory(request);
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+            return result;
         }
 
         // DELETE: api/ProductCategories/5
         [HttpDelete("{id}")]
-        public ActionResult<ProductCategory> DeleteProductCategory(string id)
+        public ActionResult<BaseViewModel<string>> DeleteProductCategory(string id)
         {
-            return Ok(_producCategorytService.DeleteProductCategory(id));
+            if (!Guid.TryParse(id, out Guid guidId))
+            {
+                return NotFound(new BaseViewModel<string>()
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                });
+            };
+            var result = _producCategorytService.DeleteProductCategory(guidId);
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+
+            return result;
         }
 
         //private bool ProductCategoryExists(Guid id)

@@ -12,13 +12,16 @@ namespace CocShop.Core.Constaint
     }
     public class ErrMessageConstants
     {
-        public const string NOTFOUND = "NOTFOUND";
+        public const string NOTFOUND = "NotFound";
+        public const string INVALIDPASSWORD = "InvalidPassword";
+        public const string INVALIDUSERNAME = "InvalidUsername";
+        public const string FAILURE = "Failure";
 
     }
     public class MessageConstants
     {
-        public const string SUCCESS = "SUCCESS";
-        public const string NORECORD = "NORECORD";
+        public const string SUCCESS = "Success";
+        public const string NORECORD = "NoRecord";
 
     }
 }

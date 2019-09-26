@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using CocShop.Core.MessageHandler;
+using CocShop.Core.Constaint;
+using System.Net;
 
 namespace CocShop.WebAPi.Controllers
 {
@@ -36,14 +39,31 @@ namespace CocShop.WebAPi.Controllers
         [HttpGet]
         public ActionResult<BaseViewModel<IEnumerable<ProductViewModel>>> GetProduct()
         {
-            return Ok(_productService.GetAllProducts());
+            var result = _productService.GetAllProducts();
+
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+
+            return result;
         }
 
         // GET: api/Product/5
         [HttpGet("{id}")]
         public ActionResult<BaseViewModel<ProductViewModel>> GetProduct(string id)
         {
-            return Ok(_productService.GetProduct(new Guid(id)));
+            if (!Guid.TryParse(id, out Guid guidId))
+            {
+                return NotFound(new BaseViewModel<string>()
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                });
+            };
+            var result = _productService.GetProduct(guidId);
+
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+
+            return result;
         }
 
         // PUT: api/Product/5
@@ -51,7 +71,19 @@ namespace CocShop.WebAPi.Controllers
         [HttpPut("{id}")]
         public ActionResult<BaseViewModel<ProductViewModel>> PutProduct(string id, [FromBody]UpdateProductRequestViewModel product)
         {
-            return Ok(_productService.UpdateProduct(id, product));
+            if (!Guid.TryParse(id, out Guid guidId))
+            {
+                return NotFound(new BaseViewModel<string>()
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                });
+            };
+            var result = _productService.UpdateProduct(guidId, product);
+
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+            return result;
         }
 
         // POST: api/Product
@@ -59,14 +91,31 @@ namespace CocShop.WebAPi.Controllers
         [HttpPost]
         public ActionResult<BaseViewModel<ProductViewModel>> PostProduct(CreateProductRequestViewModel product)
         {
-            return Ok(_productService.CreateProduct(product));
+            var result = _productService.CreateProduct(product);
+
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+
+            return result;
         }
 
         // DELETE: api/Product/5
         [HttpDelete("{id}")]
         public ActionResult<BaseViewModel<string>> DeleteProduct(string id)
         {
-            return Ok(_productService.DeleteProduct(id));
+            if (!Guid.TryParse(id, out Guid guidId))
+            {
+                return NotFound(new BaseViewModel<string>()
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                });
+            };
+            var result = _productService.DeleteProduct(guidId);
+
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+
+            return result;
         }
 
         //private bool ProductExists(Guid id)

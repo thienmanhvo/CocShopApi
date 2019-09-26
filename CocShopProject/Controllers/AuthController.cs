@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using CocShop.Core.Constaint;
 using CocShop.Core.Data.Entity;
+using CocShop.Core.MessageHandler;
 using CocShop.Core.ViewModel;
 using CocShop.Data.Appsettings;
+using CocShop.WebAPi.Extentions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -52,22 +55,36 @@ namespace CocShop.WebAPi.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         /// <author>thiennb</author>
+        [ValidateModel]
         [HttpPost("Login")]
-        public async Task<ActionResult> GetToken([FromBody]LoginViewModel request)
+        public async Task<ActionResult<BaseViewModel<TokenViewModel>>> GetToken([FromBody]LoginViewModel request)
         {
             var user = await _userManager.FindByNameAsync(request.Username);
             if (user == null)
             {
-                return BadRequest("Invalid Username");
+                return BadRequest(new BaseViewModel<TokenViewModel>
+                {
+                    Code = ErrMessageConstants.INVALIDUSERNAME,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALIDUSERNAME),
+                    StatusCode = HttpStatusCode.BadRequest
+                });
             }
             var result = await _userManager.CheckPasswordAsync(user, request.Password);
             if (!result)
             {
-                return BadRequest("Invalid Password");
+                return BadRequest(new BaseViewModel<TokenViewModel>
+                {
+                    Code = ErrMessageConstants.INVALIDPASSWORD,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALIDPASSWORD),
+                    StatusCode = HttpStatusCode.BadRequest
+                });
             }
 
             await _userManager.UpdateAsync(user);
-            return new OkObjectResult(GenerateToken(user).Result);
+            return Ok(new BaseViewModel<TokenViewModel>
+            {
+                Data = GenerateToken(user).Result,
+            });
         }
 
         #endregion
@@ -80,6 +97,7 @@ namespace CocShop.WebAPi.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         /// <author>thiennb</author>
+        [ValidateModel]
         [HttpPost("Register")]
         public async Task<ActionResult> Register([FromBody]RegisterViewModel request)
         {
@@ -93,7 +111,7 @@ namespace CocShop.WebAPi.Controllers
                 resultRole = await _userManager.AddToRoleAsync(user, AppSettings.Configs.GetValue<string>("Role:User"));
                 if (resultRole.Succeeded)
                 {
-                    return new OkObjectResult(GenerateToken(user).Result);
+                    return Ok(new BaseViewModel<TokenViewModel>(GenerateToken(user).Result));
                 }
                 else
                 {

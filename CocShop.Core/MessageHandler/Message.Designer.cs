@@ -63,18 +63,18 @@ namespace CocShop.Core.MessageHandler {
         /// <summary>
         ///   Looks up a localized string similar to Nothing Found.
         /// </summary>
-        internal static string NORECORD {
+        internal static string NoRecord {
             get {
-                return ResourceManager.GetString("NORECORD", resourceCulture);
+                return ResourceManager.GetString("NoRecord", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Success.
         /// </summary>
-        internal static string SUCCESS {
+        internal static string Success {
             get {
-                return ResourceManager.GetString("SUCCESS", resourceCulture);
+                return ResourceManager.GetString("Success", resourceCulture);
             }
         }
     }
