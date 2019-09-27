@@ -1,26 +1,4 @@
-# ASP.NET Core
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    appType: 'webApp'
-    WebAppName: 'CocShopWebAPi20190925023900'
-    VirtualApplication: 'gg'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'connection'
-    appType: 'webAppLinux'
-    WebAppName: 
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'azureStudentStarter'
-    appType: 'webApp'
-    WebAppName: 'CocShopWebAPi20190925023900'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    RuntimeStack: 'DOTNETCORE|2.2'
+
 # Build and test ASP.NET Core projects targeting .NET Core.
 # Add steps that run tests, create a NuGet package, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
