@@ -2,6 +2,13 @@
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
+    appType: 'webApp'
+    WebAppName: 'CocShopWebAPi20190925023900'
+    VirtualApplication: 'gg'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
     azureSubscription: 'connection'
     appType: 'webAppLinux'
     WebAppName: 
