@@ -18,11 +18,5 @@ namespace CocShop.WebAPi.Controllers
         {
             return typeof(Program).Assembly.GetName().Version.ToString();
         }
-
-        [HttpGet("/TestCICD")]
-        public string GetVersion2()
-        {
-            return typeof(Program).Assembly.GetName().Version.ToString();
-        }
     }
 }
