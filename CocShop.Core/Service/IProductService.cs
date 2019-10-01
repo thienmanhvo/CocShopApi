@@ -7,7 +7,7 @@ namespace CocShop.Core.Service
 {
     public interface IProductService
     {
-        BaseViewModel<IEnumerable<ProductViewModel>> GetAllProducts();
+        BaseViewModel<IEnumerable<ProductViewModel>> GetAllProducts(BasePagingRequestViewModel request);
         BaseViewModel<ProductViewModel> GetProduct(Guid id);
         BaseViewModel<IEnumerable<ProductViewModel>> GetProductByCategoryID(Guid cateId);
         BaseViewModel<ProductViewModel> CreateProduct(CreateProductRequestViewModel product);

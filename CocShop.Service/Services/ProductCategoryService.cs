@@ -102,8 +102,8 @@ namespace CocShop.Service.Services
             {
                 return new BaseViewModel<IEnumerable<ProductCategoryViewModel>>()
                 {
-                    Description = MessageHandler.CustomMessage(MessageConstants.NORECORD),
-                    Code = MessageConstants.NORECORD
+                    Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD),
+                    Code = MessageConstants.NO_RECORD
                 };
             }
 

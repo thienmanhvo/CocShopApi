@@ -37,9 +37,9 @@ namespace CocShop.WebAPi.Controllers
 
         // GET: api/Product
         [HttpGet]
-        public ActionResult<BaseViewModel<IEnumerable<ProductViewModel>>> GetProduct()
+        public ActionResult<BaseViewModel<IEnumerable<ProductViewModel>>> GetProduct([FromQuery]BasePagingRequestViewModel request)
         {
-            var result = _productService.GetAllProducts();
+            var result = _productService.GetAllProducts(request);
 
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 

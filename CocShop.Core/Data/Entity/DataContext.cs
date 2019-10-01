@@ -2,14 +2,23 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace CocShop.Core.Data.Entity
 {
     public class DataContext : IdentityDbContext<MyUser, MyRole, Guid, MyUserClaim, MyUserRole, MyUserLogin, MyRoleClaim, MyUserToken>
     {
+        //public static readonly ILoggerFactory consoleLoggerFactory
+        //    = new LoggerFactory(new[] {
+        //          new ConsoleLoggerProvider((category, level) =>
+        //            category == DbLoggerCategory.Database.Command.Name &&
+        //            level == LogLevel.Information, true)
+        //        });
+
         public DataContext() : base((new DbContextOptionsBuilder())
         //.UseLazyLoadingProxies()
+       // .UseLoggerFactory(loggerFactory)
         .UseSqlServer(AppSettings.Configs.GetConnectionString("DbConnection"))
         .Options)
         {

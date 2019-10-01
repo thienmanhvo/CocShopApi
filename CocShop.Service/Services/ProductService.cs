@@ -94,24 +94,30 @@ namespace CocShop.Service.Services
             };
         }
 
-        public BaseViewModel<IEnumerable<ProductViewModel>> GetAllProducts()
+        public BaseViewModel<IEnumerable<ProductViewModel>> GetAllProducts(BasePagingRequestViewModel request)
         {
-            var data = _repository.GetAll().Where(_ => _.IsDelete == false);
+            var pageSize = request.PageSize ?? Constants.DEFAULT_PAGE_SIZE;
+            var pageIndex = request.PageIndex ?? Constants.DEFAULT_PAGE_INDEX;
 
-            if (data == null || !data.Any())
+            var result = new BaseViewModel<IEnumerable<ProductViewModel>>();
+
+            if (pageSize == 0 && pageIndex == 0)
             {
-                return new BaseViewModel<IEnumerable<ProductViewModel>>()
-                {
-                    Description = MessageHandler.CustomMessage(MessageConstants.NORECORD),
-                    Code = MessageConstants.NORECORD
-                };
+                result.Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD);
+                result.Code = MessageConstants.NO_RECORD;
             }
 
-            return new BaseViewModel<IEnumerable<ProductViewModel>>()
-            {
-                Data = _mapper.Map<IEnumerable<ProductViewModel>>(data)
-            };
+            var data = _repository.GetAll().Where(_ => _.IsDelete == false).Skip(pageSize * pageIndex).Take(pageSize);
 
+            if (data == null || data.Count() == 0)
+            {
+                result.Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD);
+                result.Code = MessageConstants.NO_RECORD;
+            }
+
+            result.Data = _mapper.Map<IEnumerable<ProductViewModel>>(data);
+
+            return result;
         }
         public void Save()
         {
@@ -163,8 +169,8 @@ namespace CocShop.Service.Services
                 return new BaseViewModel<IEnumerable<ProductViewModel>>
                 {
                     StatusCode = HttpStatusCode.OK,
-                    Description = MessageHandler.CustomMessage(MessageConstants.NORECORD),
-                    Code = MessageConstants.NORECORD
+                    Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD),
+                    Code = MessageConstants.NO_RECORD
                 };
             }
             return new BaseViewModel<IEnumerable<ProductViewModel>>(_mapper.Map<IEnumerable<ProductViewModel>>(listProduct));

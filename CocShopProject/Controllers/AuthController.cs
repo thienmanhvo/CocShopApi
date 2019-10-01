@@ -64,8 +64,8 @@ namespace CocShop.WebAPi.Controllers
             {
                 return BadRequest(new BaseViewModel<TokenViewModel>
                 {
-                    Code = ErrMessageConstants.INVALIDUSERNAME,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALIDUSERNAME),
+                    Code = ErrMessageConstants.INVALID_USERNAME,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALID_USERNAME),
                     StatusCode = HttpStatusCode.BadRequest
                 });
             }
@@ -74,8 +74,8 @@ namespace CocShop.WebAPi.Controllers
             {
                 return BadRequest(new BaseViewModel<TokenViewModel>
                 {
-                    Code = ErrMessageConstants.INVALIDPASSWORD,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALIDPASSWORD),
+                    Code = ErrMessageConstants.INVALID_PASSWORD,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALID_PASSWORD),
                     StatusCode = HttpStatusCode.BadRequest
                 });
             }
