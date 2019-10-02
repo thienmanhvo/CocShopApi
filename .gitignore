@@ -5,6 +5,9 @@
 ## ignore appsetting 
 **/appsettings.json
 **/appsettings.Development.json
+## ignore logs
+logs/
+querylogs/
 # User-specific files
 *.rsuser
 *.suo
