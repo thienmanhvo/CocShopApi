@@ -1,18 +1,40 @@
-﻿using CocShop.Data.Appsettings;
+﻿using CocShop.Core.Logger;
+using CocShop.Data.Appsettings;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace CocShop.Core.Data.Entity
 {
     public class DataContext : IdentityDbContext<MyUser, MyRole, Guid, MyUserClaim, MyUserRole, MyUserLogin, MyRoleClaim, MyUserToken>
     {
-        public DataContext() : base((new DbContextOptionsBuilder())
-        //.UseLazyLoadingProxies()
-        .UseSqlServer(AppSettings.Configs.GetConnectionString("DbConnection"))
-        .Options)
+        //public static readonly ILoggerFactory consoleLoggerFactory
+        //    = new LoggerFactory(new[] {
+        //          new ConsoleLoggerProvider((category, level) =>
+        //            category == DbLoggerCategory.Database.Command.Name &&
+        //            level == LogLevel.Information, true)
+        //        });
+
+        // public DataContext() : base((new DbContextOptionsBuilder())
+        // //.UseLazyLoadingProxies()
+        //// .UseLoggerFactory(loggerFactory)
+        // .UseSqlServer(AppSettings.Configs.GetConnectionString("DbConnection"))
+        // .Options)
+        // {
+        // }
+        public DataContext() : base()
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            //ILoggerFactory loggerFactory = new LoggerFactory().AddFile(AppSettings.Configs.GetValue<string>("Logging:QueryLogFilePath"));
+            LoggerFactory loggerFactory = new LoggerFactory();
+            loggerFactory.AddProvider(new TraceLoggerProvider());
+            optionsBuilder.UseLoggerFactory(loggerFactory);
+            optionsBuilder.UseSqlServer(AppSettings.Configs.GetConnectionString("DbConnection"));
         }
 
         public DbSet<HubUserConnection> HubUserConnections { get; set; }

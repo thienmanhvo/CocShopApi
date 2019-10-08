@@ -11,6 +11,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using CocShop.Core.Data.Entity;
+using Microsoft.EntityFrameworkCore.Internal;
+using System.Reflection;
+using CocShop.Core.Data.Query;
+using System.ComponentModel;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using System.Threading.Tasks;
+using CocShop.Core.Extentions;
+using CocShop.Service.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace CocShop.Service.Services
 {
@@ -93,25 +104,74 @@ namespace CocShop.Service.Services
                 Data = _mapper.Map<ProductViewModel>(product),
             };
         }
+        //private Func<Product, bool> GetDynamicQueryWithExpresionTrees(string propertyName, string val)
+        //{
+        //    var param = Expression.Parameter(typeof(Product), "x");
 
-        public BaseViewModel<IEnumerable<ProductViewModel>> GetAllProducts()
+        //    #region Convert to specific data type
+        //    MemberExpression member = Expression.Property(param, propertyName);
+        //    UnaryExpression valueExpression = GetValueExpression(propertyName, val, param);
+        //    #endregion
+
+        //    Expression body = Expression.Equal(member, valueExpression);
+        //    var final = Expression.Lambda<Func<Product, bool>>(body: body, parameters: param);
+        //    return final.Compile();
+        //}
+
+        //private  UnaryExpression GetValueExpression(string propertyName, string val, ParameterExpression param)
+        //{
+        //    var member = Expression.Property(param, propertyName);
+        //    var propertyType = ((PropertyInfo)member.Member).PropertyType;
+        //    var converter = TypeDescriptor.GetConverter(propertyType);
+
+        //    if (!converter.CanConvertFrom(typeof(string)))
+        //        throw new NotSupportedException();
+
+        //    var propertyValue = converter.ConvertFromInvariantString(val);
+        //    var constant = Expression.Constant(propertyValue);
+        //    return Expression.Convert(constant, propertyType);
+        //}
+
+        public async Task<BaseViewModel<PagingResult<ProductViewModel>>> GetAllProducts(BasePagingRequestViewModel request)
         {
-            var data = _repository.GetAll().Where(_ => _.IsDelete == false);
+            var pageSize = request.PageSize;
+            var pageIndex = request.PageIndex;
+            var result = new BaseViewModel<PagingResult<ProductViewModel>>();
 
-            if (data == null || !data.Any())
+            string filter = SearchHelper<Product>.GenerateStringExpression(request.SearchRange);
+       
+            Expression<Func<Product, bool>> FilterExpression = await LinqHelper<Product>.StringToExpression(filter);
+
+            QueryArgs<Product> queryArgs = new QueryArgs<Product>
             {
-                return new BaseViewModel<IEnumerable<ProductViewModel>>()
+                Offset = pageSize * (pageIndex - 1),
+                Limit = pageSize,
+                Filter = FilterExpression,
+                Sort = request.SortBy,
+            };
+
+
+            var data = _repository.Get(queryArgs.Filter, queryArgs.Sort, queryArgs.Offset, queryArgs.Limit);
+
+            var sql = data.ToSql();
+
+            if (data == null || data.Count() == 0)
+            {
+                result.Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD);
+                result.Code = MessageConstants.NO_RECORD;
+            }
+            else
+            {
+                result.Data = new PagingResult<ProductViewModel>
                 {
-                    Description = MessageHandler.CustomMessage(MessageConstants.NORECORD),
-                    Code = MessageConstants.NORECORD
+                    Results = _mapper.Map<IEnumerable<ProductViewModel>>(data),
+                    PageIndex = pageIndex,
+                    PageSize = pageSize,
+                    TotalRecords = _repository.Count(queryArgs.Filter)
                 };
             }
 
-            return new BaseViewModel<IEnumerable<ProductViewModel>>()
-            {
-                Data = _mapper.Map<IEnumerable<ProductViewModel>>(data)
-            };
-
+            return result;
         }
         public void Save()
         {
@@ -163,8 +223,8 @@ namespace CocShop.Service.Services
                 return new BaseViewModel<IEnumerable<ProductViewModel>>
                 {
                     StatusCode = HttpStatusCode.OK,
-                    Description = MessageHandler.CustomMessage(MessageConstants.NORECORD),
-                    Code = MessageConstants.NORECORD
+                    Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD),
+                    Code = MessageConstants.NO_RECORD
                 };
             }
             return new BaseViewModel<IEnumerable<ProductViewModel>>(_mapper.Map<IEnumerable<ProductViewModel>>(listProduct));

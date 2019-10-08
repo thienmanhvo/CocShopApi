@@ -18,10 +18,11 @@ namespace CocShop.Core.ViewModel
     }
     public class TokenViewModel
     {
-        public string[] roles { get; set; }
-        public string fullname { get; set; }
-        public string access_token { get; set; }
-        public DateTime expires_in { get; set; }
+        public string[] Roles { get; set; }
+        public string Fullname { get; set; }
+        public string Email { get; set; }
+        public string Access_token { get; set; }
+        public DateTime Expires_in { get; set; }
     }
 
     public class RegisterViewModel

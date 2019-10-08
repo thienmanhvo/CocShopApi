@@ -45,6 +45,8 @@ namespace CocShop.WebAPi.Extentions
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IProductCategoryService, ProductCategoryService>();
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IOrderDetailService, OrderDetailService>();
         }
 
         public static void AddRepoistoryDI(IServiceCollection services)
@@ -53,6 +55,8 @@ namespace CocShop.WebAPi.Extentions
             services.AddTransient<INotificationRepository, NotificationRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IProductCategoryRepository, ProductCategoryRepository>();
+            services.AddTransient<IOrderDetailRepository, OrderDetailRepository>();
+
         }
 
     }

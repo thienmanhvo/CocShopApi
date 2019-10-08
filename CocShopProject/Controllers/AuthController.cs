@@ -64,8 +64,8 @@ namespace CocShop.WebAPi.Controllers
             {
                 return BadRequest(new BaseViewModel<TokenViewModel>
                 {
-                    Code = ErrMessageConstants.INVALIDUSERNAME,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALIDUSERNAME),
+                    Code = ErrMessageConstants.INVALID_USERNAME,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALID_USERNAME),
                     StatusCode = HttpStatusCode.BadRequest
                 });
             }
@@ -74,8 +74,8 @@ namespace CocShop.WebAPi.Controllers
             {
                 return BadRequest(new BaseViewModel<TokenViewModel>
                 {
-                    Code = ErrMessageConstants.INVALIDPASSWORD,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALIDPASSWORD),
+                    Code = ErrMessageConstants.INVALID_PASSWORD,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALID_PASSWORD),
                     StatusCode = HttpStatusCode.BadRequest
                 });
             }
@@ -155,10 +155,11 @@ namespace CocShop.WebAPi.Controllers
             //return token
             return new TokenViewModel
             {
-                roles = _userManager.GetRolesAsync(user).Result.ToArray(),
-                fullname = user.FullName,
-                access_token = new JwtSecurityTokenHandler().WriteToken(token),
-                expires_in = DateTime.Now.AddMinutes(30),
+                Roles = _userManager.GetRolesAsync(user).Result.ToArray(),
+                Fullname = user.FullName,
+                Email = user.Email,
+                Access_token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expires_in = DateTime.Now.AddMinutes(30),
 
                 //(int)TimeSpan.FromDays(1).TotalSeconds
             };
