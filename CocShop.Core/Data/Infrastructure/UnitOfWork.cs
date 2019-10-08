@@ -21,6 +21,5 @@ namespace CocShop.Core.Data.Infrastructure
         {
             DbContext.Commit();
         }
-
     }
 }

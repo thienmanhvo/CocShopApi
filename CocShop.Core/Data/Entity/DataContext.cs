@@ -26,7 +26,6 @@ namespace CocShop.Core.Data.Entity
         // }
         public DataContext() : base()
         {
-
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

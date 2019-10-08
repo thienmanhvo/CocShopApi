@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using CocShop.Core.Data.Query;
+using CocShop.Core.Extentions;
 
 namespace CocShop.Core.Data.Infrastructure
 {
@@ -89,6 +91,62 @@ namespace CocShop.Core.Data.Infrastructure
         {
             return dbSet.Where(where).FirstOrDefault<T>();
         }
+        public IQueryable<T> Get(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, int? offset = null, int? limit = null, string includeProperties = "")
+        {
+            IQueryable<T> query = dbSet;//.AsNoTracking();
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            if (offset != null && limit != null) //&& (offset >= 0 && limit > 0))
+            {
+                return query.Skip(offset.Value).Take(limit.Value);
+            }
+            else
+            {
+                return query;
+            }
+
+        }
+        public IQueryable<T> Get(Expression<Func<T, bool>> filter = null, string sortBy = null, int? offset = null, int? limit = null, string includeProperties = "")
+        {
+            IQueryable<T> query = dbSet.AsNoTracking();
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            query = query.OrderBy(sortBy);
+
+            if (offset != null && limit != null) //&& (offset >= 0 && limit > 0))
+            {
+                return query.Skip(offset.Value).Take(limit.Value);
+            }
+            else
+            {
+                return query;
+            }
+        }
+
         public string GetUsername()
         {
             try
@@ -100,6 +158,12 @@ namespace CocShop.Core.Data.Infrastructure
             {
                 return "SYSTEM";
             }
+        }
+
+        public int Count(Expression<Func<T, bool>> predicate)
+        {
+            IQueryable<T> query = dbSet;
+            return query.Where(predicate).Count();
         }
         #endregion
     }

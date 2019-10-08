@@ -7,7 +7,6 @@ using System.Text;
 namespace CocShop.Core.Data.Repository
 {
     public interface IProductRepository : IRepository<Product>
-
     {
 
     }

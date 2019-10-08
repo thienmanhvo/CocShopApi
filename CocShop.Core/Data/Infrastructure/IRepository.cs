@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CocShop.Core.Data.Query;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -25,7 +26,6 @@ namespace CocShop.Core.Data.Infrastructure
         IQueryable<T> GetAll();
         // Gets entities using delegate
         IQueryable<T> GetMany(Expression<Func<T, bool>> where);
-
         //IEnumerable<T> GetAll(string order = "", params Expression<Func<T, object>>[] includeProperties);
         //IEnumerable<T> GetAll(string order, int pageIndex, int limit, params Expression<Func<T, object>>[] includeProperties);
         //Task<IEnumerable<T>> GetAllAsync(string order = "", params Expression<Func<T, object>>[] includeProperties);
@@ -80,9 +80,12 @@ namespace CocShop.Core.Data.Infrastructure
         //void Delete(IEnumerable<T> entities);
         //void Update(IEnumerable<T> entities);
 
+        IQueryable<T> Get(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, int? offset = null, int? limit = null, string includeProperties = "");
+        IQueryable<T> Get(Expression<Func<T, bool>> filter = null, string sortBy = null, int? offset = null, int? limit = null, string includeProperties = "");
         string GetUsername();
+        int Count(Expression<Func<T, bool>> predicate);
 
 
-        
+
     }
 }

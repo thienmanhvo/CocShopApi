@@ -27,6 +27,12 @@ namespace CocShop.Core.Constaint
             //"Khách Hàng")
             User = 2,
         }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public enum Order
+        {
+            Asc = 0,
+            Desc = 1,
+        }
 
     }
 }
