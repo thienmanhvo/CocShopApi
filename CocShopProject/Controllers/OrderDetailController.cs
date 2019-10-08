@@ -11,49 +11,33 @@ using System.Collections.Generic;
 using CocShop.Core.MessageHandler;
 using CocShop.Core.Constaint;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace CocShop.WebAPi.Controllers
 {
-   // [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class OrderDetailController : ControllerBase
     {
 
         #region Field
 
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _accessor;
-        private readonly IProductService _productService;
+        private readonly IOrderDetailService _orderDetailService;
 
         #endregion
 
-        public ProductsController(IServiceProvider serviceProvider)
+        public OrderDetailController(IServiceProvider serviceProvider)
         {
-            _productService = serviceProvider.GetRequiredService<IProductService>();
+            _orderDetailService = serviceProvider.GetRequiredService<IOrderDetailService>();
             _mapper = serviceProvider.GetRequiredService<IMapper>();
             _accessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
         }
 
-        // GET: api/Product
-        [HttpGet]
-        public async Task<ActionResult<BaseViewModel<PagingResult<ProductViewModel>>>> GetProduct([FromQuery]BasePagingRequestViewModel request)
-        {
-            request.SetDefaultPage();
-            //var a = request.Filters[0];
-
-
-            var result = await _productService.GetAllProducts(request);
-
-            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
-
-            return result;
-        }
-
-        // GET: api/Product/5
+        // GET: api/OrderDetail/5
         [HttpGet("{id}")]
-        public ActionResult<BaseViewModel<ProductViewModel>> GetProduct(string id)
+        public ActionResult<BaseViewModel<IEnumerable<OrderDetailViewModel>>> GetDetail(string id)
         {
             if (!Guid.TryParse(id, out Guid guidId))
             {
@@ -64,17 +48,17 @@ namespace CocShop.WebAPi.Controllers
                     Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
                 });
             };
-            var result = _productService.GetProduct(guidId);
+            var result = _orderDetailService.GetAllDetail(guidId);
 
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 
             return result;
         }
 
-        // PUT: api/Product/5
+        // PUT: api/OrderDetail/5
         [ValidateModel]
         [HttpPut("{id}")]
-        public ActionResult<BaseViewModel<ProductViewModel>> PutProduct(string id, [FromBody]UpdateProductRequestViewModel product)
+        public ActionResult<BaseViewModel<IEnumerable<OrderDetailViewModel>>> PutOrder(string id, [FromBody]IEnumerable<CreateOrderDetailViewModel> order)
         {
             if (!Guid.TryParse(id, out Guid guidId))
             {
@@ -85,43 +69,24 @@ namespace CocShop.WebAPi.Controllers
                     Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
                 });
             };
-            var result = _productService.UpdateProduct(guidId, product);
+            var result = _orderDetailService.UpdateDetail(guidId, order);
 
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
             return result;
         }
 
-        // POST: api/Product
+        // POST: api/Order
         [ValidateModel]
         [HttpPost]
-        public ActionResult<BaseViewModel<ProductViewModel>> PostProduct(CreateProductRequestViewModel product)
+        public ActionResult<BaseViewModel<IEnumerable<OrderDetailViewModel>>> PostDetail(IEnumerable<CreateOrderDetailViewModel> order)
         {
-            var result = _productService.CreateProduct(product);
+            var result = _orderDetailService.CreateDetail(order);
 
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 
             return result;
         }
 
-        // DELETE: api/Product/5
-        [HttpDelete("{id}")]
-        public ActionResult<BaseViewModel<string>> DeleteProduct(string id)
-        {
-            if (!Guid.TryParse(id, out Guid guidId))
-            {
-                return NotFound(new BaseViewModel<string>()
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Code = ErrMessageConstants.NOTFOUND,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-                });
-            };
-            var result = _productService.DeleteProduct(guidId);
-
-            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
-
-            return result;
-        }
 
         //private bool ProductExists(Guid id)
         //{

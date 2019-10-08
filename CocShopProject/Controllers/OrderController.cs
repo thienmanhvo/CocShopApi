@@ -14,10 +14,10 @@ using System.Net;
 
 namespace CocShop.WebAPi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class OrdersController : ControllerBase
+    public class OrderController : ControllerBase
     {
 
         #region Field
@@ -28,16 +28,16 @@ namespace CocShop.WebAPi.Controllers
 
         #endregion
 
-        public OrdersController(IServiceProvider serviceProvider)
+        public OrderController(IServiceProvider serviceProvider)
         {
             _orderService = serviceProvider.GetRequiredService<IOrderService>();
             _mapper = serviceProvider.GetRequiredService<IMapper>();
             _accessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
         }
 
-        // GET: api/Product
+        // GET: api/Order
         [HttpGet]
-        public ActionResult<BaseViewModel<IEnumerable<ProductViewModel>>> GetOrder()
+        public ActionResult<BaseViewModel<IEnumerable<OrderViewModel>>> GetOrder()
         {
             var result = _orderService.GetAllOrders();
 
@@ -46,9 +46,9 @@ namespace CocShop.WebAPi.Controllers
             return result;
         }
 
-        // GET: api/Product/5
+        // GET: api/Order/5
         [HttpGet("{id}")]
-        public ActionResult<BaseViewModel<ProductViewModel>> GetProduct(string id)
+        public ActionResult<BaseViewModel<OrderViewModel>> GetOrder(string id)
         {
             if (!Guid.TryParse(id, out Guid guidId))
             {
@@ -66,10 +66,10 @@ namespace CocShop.WebAPi.Controllers
             return result;
         }
 
-        // PUT: api/Product/5
+        // PUT: api/Order/5
         [ValidateModel]
         [HttpPut("{id}")]
-        public ActionResult<BaseViewModel<ProductViewModel>> PutProduct(string id, [FromBody]UpdateProductRequestViewModel product)
+        public ActionResult<BaseViewModel<OrderViewModel>> PutOrder(string id, [FromBody]UpdateOrderRequestViewModel order)
         {
             if (!Guid.TryParse(id, out Guid guidId))
             {
@@ -80,27 +80,27 @@ namespace CocShop.WebAPi.Controllers
                     Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
                 });
             };
-            var result = _orderService.UpdateOrder(guidId, product);
+            var result = _orderService.UpdateOrder(guidId, order);
 
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
             return result;
         }
 
-        // POST: api/Product
+        // POST: api/Order
         [ValidateModel]
         [HttpPost]
-        public ActionResult<BaseViewModel<ProductViewModel>> PostProduct(CreateProductRequestViewModel product)
+        public ActionResult<BaseViewModel<OrderViewModel>> PostOrder(CreateOrderRequestViewModel order)
         {
-            var result = _orderService.CreateOrder(product);
+            var result = _orderService.CreateOrder(order);
 
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 
             return result;
         }
 
-        // DELETE: api/Product/5
+        // DELETE: api/Order/5
         [HttpDelete("{id}")]
-        public ActionResult<BaseViewModel<string>> DeleteProduct(string id)
+        public ActionResult<BaseViewModel<string>> DeleteOrder(string id)
         {
             if (!Guid.TryParse(id, out Guid guidId))
             {

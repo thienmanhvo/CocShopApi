@@ -7,11 +7,11 @@ namespace CocShop.Core.Service
 {
     public interface IOrderService
     {
-        BaseViewModel<IEnumerable<ProductViewModel>> GetAllOrders();
-        BaseViewModel<ProductViewModel> GetOrder(Guid id);
-        BaseViewModel<IEnumerable<ProductViewModel>> GetOrderByID(Guid cateId);
-        BaseViewModel<ProductViewModel> CreateOrder(CreateProductRequestViewModel product);
-        BaseViewModel<ProductViewModel> UpdateOrder(Guid id, UpdateProductRequestViewModel product);
+        BaseViewModel<IEnumerable<OrderViewModel>> GetAllOrders();
+        BaseViewModel<OrderViewModel> GetOrder(Guid id);
+        //BaseViewModel<IEnumerable<OrderViewModel>> GetOrderByID(Guid cateId);
+        BaseViewModel<OrderViewModel> CreateOrder(CreateOrderRequestViewModel product);
+        BaseViewModel<OrderViewModel> UpdateOrder(Guid id, UpdateOrderRequestViewModel product);
         BaseViewModel<string> DeleteOrder(Guid id);
         void Save();
     }
