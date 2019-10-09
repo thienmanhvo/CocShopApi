@@ -63,9 +63,9 @@ namespace CocShop.Core.MessageHandler {
         /// <summary>
         ///   Looks up a localized string similar to Nothing Found.
         /// </summary>
-        internal static string NoRecord {
+        internal static string No_Record {
             get {
-                return ResourceManager.GetString("NoRecord", resourceCulture);
+                return ResourceManager.GetString("No_Record", resourceCulture);
             }
         }
         

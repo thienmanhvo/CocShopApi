@@ -4,14 +4,16 @@ using CocShop.Core.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CocShop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191009083034_updateTotalPrice")]
+    partial class updateTotalPrice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -378,8 +380,7 @@ namespace CocShop.Data.Migrations
                         .HasColumnName("Status");
 
                     b.Property<decimal?>("TotalPrice")
-                        .HasColumnName("Total_Price")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnName("Total_Price");
 
                     b.Property<int?>("TotalQuantity")
                         .HasColumnName("Total_Quantity");
@@ -419,8 +420,7 @@ namespace CocShop.Data.Migrations
                         .HasColumnName("Order_Id");
 
                     b.Property<decimal?>("Price")
-                        .HasColumnName("Price")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnName("Price");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnName("Product_Id");
@@ -429,8 +429,7 @@ namespace CocShop.Data.Migrations
                         .HasColumnName("Quantity");
 
                     b.Property<decimal?>("TotalPrice")
-                        .HasColumnName("Total_Price")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnName("Total_Price");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnName("Updated_At");

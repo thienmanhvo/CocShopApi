@@ -56,6 +56,7 @@ namespace CocShop.WebAPi.Extentions
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IProductCategoryRepository, ProductCategoryRepository>();
             services.AddTransient<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
 
         }
 

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CocShop.Core.Data.Entity
 {
-    [Table("OrderDetail")]
+    [Table("Order_Detail")]
     public class OrderDetail : BaseEntity
     {
 
@@ -18,15 +18,19 @@ namespace CocShop.Core.Data.Entity
         public Guid ProductId { get; set; }
 
         [Column("Quantity")]
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
 
-        [Column("Total")]
-        public double? Total { get; set; }
+        [Column("Total_Price", TypeName = "decimal(18,0)")]
+        public decimal? TotalPrice { get; set; }
 
-        [Column("Price")]
+        [Column("Price", TypeName = "decimal(18,0)")]
         public decimal? Price { get; set; }
 
         public virtual Order Order { get; set; }
         public virtual Product Product { get; set; }
+        public override void SetDefaultInsertValue(string username)
+        {
+            base.SetDefaultInsertValue(username);
+        }
     }
 }
