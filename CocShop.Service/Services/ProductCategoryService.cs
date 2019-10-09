@@ -2,15 +2,19 @@
 using CocShop.Core.Constaint;
 using CocShop.Core.Data.Entity;
 using CocShop.Core.Data.Infrastructure;
+using CocShop.Core.Data.Query;
 using CocShop.Core.Data.Repository;
 using CocShop.Core.MessageHandler;
 using CocShop.Core.Service;
 using CocShop.Core.ViewModel;
+using CocShop.Service.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace CocShop.Service.Services
 {
@@ -94,23 +98,47 @@ namespace CocShop.Service.Services
             };
         }
 
-        public BaseViewModel<IEnumerable<ProductCategoryViewModel>> GetAllProductCategories()
+        public async Task<BaseViewModel<PagingResult<ProductCategoryViewModel>>> GetAllProductCategories(BasePagingRequestViewModel request)
         {
-            var data = _repository.GetMany(_ => _.IsDelete == false);//.Include(_ => _.Product);
+            var pageSize = request.PageSize;
+            var pageIndex = request.PageIndex;
+            var result = new BaseViewModel<PagingResult<ProductCategoryViewModel>>();
+            string filter = SearchHelper<ProductCategory>.GenerateStringExpression(request.Filter);
+
+            Expression<Func<ProductCategory, bool>> FilterExpression = await LinqHelper<ProductCategory>.StringToExpression(filter);
+
+            QueryArgs<ProductCategory> queryArgs = new QueryArgs<ProductCategory>
+            {
+                Offset = pageSize * (pageIndex - 1),
+                Limit = pageSize,
+                Filter = FilterExpression,
+                Sort = request.SortBy,
+            };
+
+            var data = _repository.Get(queryArgs.Filter, queryArgs.Sort, queryArgs.Offset, queryArgs.Limit).ToList();
 
             if (data == null || !data.Any())
             {
-                return new BaseViewModel<IEnumerable<ProductCategoryViewModel>>()
+                result.Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD);
+                result.Code = MessageConstants.NO_RECORD;
+            }
+            else
+            {
+                var pageSizeReturn = pageSize;
+                if (data.Count < pageSize)
                 {
-                    Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD),
-                    Code = MessageConstants.NO_RECORD
+                    pageSizeReturn = data.Count;
+                }
+                result.Data = new PagingResult<ProductCategoryViewModel>
+                {
+                    Results = _mapper.Map<IEnumerable<ProductCategoryViewModel>>(data),
+                    PageIndex = pageIndex,
+                    PageSize = pageSizeReturn,
+                    TotalRecords = _repository.Count(queryArgs.Filter)
                 };
             }
 
-            return new BaseViewModel<IEnumerable<ProductCategoryViewModel>>()
-            {
-                Data = _mapper.Map<IEnumerable<ProductCategoryViewModel>>(data),
-            };
+            return result;
         }
 
         public void Save()

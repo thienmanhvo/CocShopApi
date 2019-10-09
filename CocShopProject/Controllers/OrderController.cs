@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using CocShop.Core.MessageHandler;
 using CocShop.Core.Constaint;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace CocShop.WebAPi.Controllers
 {
@@ -37,9 +38,11 @@ namespace CocShop.WebAPi.Controllers
 
         // GET: api/Order
         [HttpGet]
-        public ActionResult<BaseViewModel<IEnumerable<OrderViewModel>>> GetOrder()
+        public async Task<ActionResult<BaseViewModel<PagingResult<OrderViewModel>>>> GetOrder([FromQuery]BasePagingRequestViewModel request)
         {
-            var result = _orderService.GetAllOrders();
+            request.SetDefaultPage();
+
+            var result = await _orderService.GetAllOrders(request);
 
             HttpContext.Response.StatusCode = (int)result.StatusCode;
 

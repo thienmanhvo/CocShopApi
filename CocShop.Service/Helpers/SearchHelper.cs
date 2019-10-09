@@ -92,9 +92,23 @@ namespace CocShop.Service.Helpers
                         {
                             if (opera.Equals("="))
                             {
+                                //bool isNum = true;
+                                foreach (var num in item.Value.ToArray())
+                                {
+                                    if (!Char.IsNumber(num))
+                                    {
+                                        //isNum = false;
+                                        //break;
+                                        throw new Exception($"{item.Value} is not a number.");
+                                    }
+                                }
+                                // search += isNum ? $"|| _.{field.Name} == {item.Value}" : "|| 1 != 1";
                                 search += $"|| _.{field.Name} == {item.Value}";
                             }
-                            searchRangeResult += $"&& _.{field.Name} {opera} {item.Value}";
+                            else
+                            {
+                                searchRangeResult += $"&& _.{field.Name} {opera} {item.Value}";
+                            }
                         }
                     }
                 }
@@ -126,6 +140,10 @@ namespace CocShop.Service.Helpers
                         result = $"{deleteStatus}  && ({searchRangeResult})";
                     }
                 }
+            }
+            else
+            {
+                result = deleteStatus;
             }
             return result;
         }

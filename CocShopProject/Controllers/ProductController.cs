@@ -43,7 +43,6 @@ namespace CocShop.WebAPi.Controllers
             request.SetDefaultPage();
             //var a = request.Filters[0];
 
-
             var result = await _productService.GetAllProducts(request);
 
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;

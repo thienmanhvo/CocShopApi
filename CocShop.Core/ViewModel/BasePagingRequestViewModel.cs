@@ -16,9 +16,7 @@ namespace CocShop.Core.ViewModel
         public int? PageSize { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
         public int? PageIndex { get; set; }
-        public string SearchField { get; set; }
-        public string SearchValue { get; set; }
-        public IDictionary<string, string> SearchRange { get; set; }
+        public IDictionary<string, string> Filter { get; set; }
         public void SetDefaultPage()
         {
             PageSize = PageSize ?? Constants.DEFAULT_PAGE_SIZE;

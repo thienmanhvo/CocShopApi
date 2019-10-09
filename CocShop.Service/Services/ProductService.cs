@@ -138,7 +138,7 @@ namespace CocShop.Service.Services
             var pageIndex = request.PageIndex;
             var result = new BaseViewModel<PagingResult<ProductViewModel>>();
 
-            string filter = SearchHelper<Product>.GenerateStringExpression(request.SearchRange);
+            string filter = SearchHelper<Product>.GenerateStringExpression(request.Filter);
        
             Expression<Func<Product, bool>> FilterExpression = await LinqHelper<Product>.StringToExpression(filter);
 
@@ -151,22 +151,27 @@ namespace CocShop.Service.Services
             };
 
 
-            var data = _repository.Get(queryArgs.Filter, queryArgs.Sort, queryArgs.Offset, queryArgs.Limit);
+            var data = _repository.Get(queryArgs.Filter, queryArgs.Sort, queryArgs.Offset, queryArgs.Limit).ToList();
 
-            var sql = data.ToSql();
+            //var sql = data.ToSql();
 
-            if (data == null || data.Count() == 0)
+            if (data == null || data.Count == 0)
             {
                 result.Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD);
                 result.Code = MessageConstants.NO_RECORD;
             }
             else
             {
+                var pageSizeReturn = pageSize;
+                if (data.Count < pageSize)
+                {
+                    pageSizeReturn = data.Count;
+                }
                 result.Data = new PagingResult<ProductViewModel>
                 {
                     Results = _mapper.Map<IEnumerable<ProductViewModel>>(data),
                     PageIndex = pageIndex,
-                    PageSize = pageSize,
+                    PageSize = pageSizeReturn,
                     TotalRecords = _repository.Count(queryArgs.Filter)
                 };
             }

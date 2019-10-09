@@ -11,6 +11,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using CocShop.Core.Data.Entity;
+using CocShop.Service.Helpers;
+using System.Threading.Tasks;
+using CocShop.Core.Data.Query;
 
 namespace CocShop.Service.Services
 {
@@ -75,7 +78,7 @@ namespace CocShop.Service.Services
         public BaseViewModel<OrderViewModel> GetOrder(Guid id)
         {
             var order = _repository.GetById(id);
-            
+
             if (order == null || order.IsDelete)
             {
                 return new BaseViewModel<OrderViewModel>
@@ -92,23 +95,48 @@ namespace CocShop.Service.Services
             };
         }
 
-        public BaseViewModel<IEnumerable<OrderViewModel>> GetAllOrders()
+        public async Task<BaseViewModel<PagingResult<OrderViewModel>>> GetAllOrders(BasePagingRequestViewModel request)
         {
-            var data = _repository.GetAll().Where(_ => _.IsDelete == false);
+            var pageSize = request.PageSize;
+            var pageIndex = request.PageIndex;
+            var result = new BaseViewModel<PagingResult<OrderViewModel>>();
+            string filter = SearchHelper<Order>.GenerateStringExpression(request.Filter);
 
-            if (data == null || !data.Any())
+            Expression<Func<Order, bool>> FilterExpression = await LinqHelper<Order>.StringToExpression(filter);
+
+
+            QueryArgs<Order> queryArgs = new QueryArgs<Order>
             {
-                return new BaseViewModel<IEnumerable<OrderViewModel>>()
+                Offset = pageSize * (pageIndex - 1),
+                Limit = pageSize,
+                Filter = FilterExpression,
+                Sort = request.SortBy,
+            };
+
+            var data = _repository.Get(queryArgs.Filter, queryArgs.Sort, queryArgs.Offset, queryArgs.Limit).ToList();
+
+            if (data == null || data.Count == 0)
+            {
+                result.Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD);
+                result.Code = MessageConstants.NO_RECORD;
+            }
+            else
+            {
+                var pageSizeReturn = pageSize;
+                if (data.Count < pageSize)
                 {
-                    Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD),
-                    Code = MessageConstants.NO_RECORD
+                    pageSizeReturn = data.Count;
+                }
+                result.Data = new PagingResult<OrderViewModel>
+                {
+                    Results = _mapper.Map<IEnumerable<OrderViewModel>>(data),
+                    PageIndex = pageIndex,
+                    PageSize = pageSizeReturn,
+                    TotalRecords = _repository.Count(queryArgs.Filter)
                 };
             }
 
-            return new BaseViewModel<IEnumerable<OrderViewModel>>()
-            {
-                Data = _mapper.Map<IEnumerable<OrderViewModel>>(data)
-            };
+            return result;
 
         }
         public void Save()
