@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CocShop.Core.Constaint;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CocShop.Core.Data.Entity
 {
     [Table("Order")]
-    public class Order :BaseEntity
+    public class Order : BaseEntity
     {
         //public Order()
         //{
@@ -18,11 +19,8 @@ namespace CocShop.Core.Data.Entity
         [Column("Created_User_Id")]
         public Guid CreatedUserId { get; set; }
 
-        [Column("Total_Price")]
-        public decimal TotalPrice { get; set; }
-
-        [Column("Is_Delete")]
-        public bool IsDelete { get; set; }
+        [Column("Total_Price", TypeName = "decimal(18,0)")]
+        public decimal? TotalPrice { get; set; }
 
         [ForeignKey("Location")]
         [Column("Location_Id")]
@@ -47,5 +45,11 @@ namespace CocShop.Core.Data.Entity
         public virtual Location Location { get; set; }
         public virtual PaymentMethod Payment { get; set; }
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }
+
+        public override void SetDefaultInsertValue(string username)
+        {
+            base.SetDefaultInsertValue(username);
+            Status = MyEnum.OrderStatus.Submitted.ToString();
+        }
     }
 }

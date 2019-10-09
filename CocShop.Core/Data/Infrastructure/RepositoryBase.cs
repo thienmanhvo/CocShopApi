@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using CocShop.Core.Data.Query;
 using CocShop.Core.Extentions;
+using System.Security.Claims;
 
 namespace CocShop.Core.Data.Infrastructure
 {
@@ -164,6 +165,11 @@ namespace CocShop.Core.Data.Infrastructure
         {
             IQueryable<T> query = dbSet;
             return query.Where(predicate).Count();
+        }
+        public string GetCurrentUserId()
+        {
+            var accessor = _serviceProvider.GetRequiredService<IHttpContextAccessor>();
+            return accessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
         #endregion
     }

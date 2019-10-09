@@ -70,24 +70,24 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // PUT: api/Order/5
-        [ValidateModel]
-        [HttpPut("{id}")]
-        public ActionResult<BaseViewModel<OrderViewModel>> PutOrder(string id, [FromBody]UpdateOrderRequestViewModel order)
-        {
-            if (!Guid.TryParse(id, out Guid guidId))
-            {
-                return NotFound(new BaseViewModel<string>()
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Code = ErrMessageConstants.NOTFOUND,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-                });
-            };
-            var result = _orderService.UpdateOrder(guidId, order);
+        //[ValidateModel]
+        //[HttpPut("{id}")]
+        //public ActionResult<BaseViewModel<OrderViewModel>> PutOrder(string id, [FromBody]UpdateOrderRequestViewModel order)
+        //{
+        //    if (!Guid.TryParse(id, out Guid guidId))
+        //    {
+        //        return NotFound(new BaseViewModel<string>()
+        //        {
+        //            StatusCode = HttpStatusCode.NotFound,
+        //            Code = ErrMessageConstants.NOTFOUND,
+        //            Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+        //        });
+        //    };
+        //    var result = _orderService.UpdateOrder(guidId, order);
 
-            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
-            return result;
-        }
+        //    this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+        //    return result;
+        //}
 
         // POST: api/Order
         [ValidateModel]
@@ -102,24 +102,24 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // DELETE: api/Order/5
-        [HttpDelete("{id}")]
-        public ActionResult<BaseViewModel<string>> DeleteOrder(string id)
-        {
-            if (!Guid.TryParse(id, out Guid guidId))
-            {
-                return NotFound(new BaseViewModel<string>()
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Code = ErrMessageConstants.NOTFOUND,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-                });
-            };
-            var result = _orderService.DeleteOrder(guidId);
+        //[HttpDelete("{id}")]
+        //public ActionResult<BaseViewModel<string>> DeleteOrder(string id)
+        //{
+        //    if (!Guid.TryParse(id, out Guid guidId))
+        //    {
+        //        return NotFound(new BaseViewModel<string>()
+        //        {
+        //            StatusCode = HttpStatusCode.NotFound,
+        //            Code = ErrMessageConstants.NOTFOUND,
+        //            Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+        //        });
+        //    };
+        //    var result = _orderService.DeleteOrder(guidId);
 
-            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+        //    this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 
-            return result;
-        }
+        //    return result;
+        //}
 
         //private bool ProductExists(Guid id)
         //{

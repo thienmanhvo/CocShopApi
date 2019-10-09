@@ -4,14 +4,16 @@ using CocShop.Core.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CocShop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191009075806_updateOrderDetail")]
+    partial class updateOrderDetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -368,6 +370,9 @@ namespace CocShop.Data.Migrations
                     b.Property<Guid?>("DeliveryUserId")
                         .HasColumnName("Delivery_User_Id");
 
+                    b.Property<bool>("IsDelete")
+                        .HasColumnName("Is_Delete");
+
                     b.Property<Guid?>("LocationId")
                         .HasColumnName("Location_Id");
 
@@ -377,9 +382,8 @@ namespace CocShop.Data.Migrations
                     b.Property<string>("Status")
                         .HasColumnName("Status");
 
-                    b.Property<decimal?>("TotalPrice")
-                        .HasColumnName("Total_Price")
-                        .HasColumnType("decimal(18,0)");
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnName("Total_Price");
 
                     b.Property<int?>("TotalQuantity")
                         .HasColumnName("Total_Quantity");
@@ -419,18 +423,16 @@ namespace CocShop.Data.Migrations
                         .HasColumnName("Order_Id");
 
                     b.Property<decimal?>("Price")
-                        .HasColumnName("Price")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnName("Price");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnName("Product_Id");
 
-                    b.Property<int?>("Quantity")
+                    b.Property<int>("Quantity")
                         .HasColumnName("Quantity");
 
-                    b.Property<decimal?>("TotalPrice")
-                        .HasColumnName("Total_Price")
-                        .HasColumnType("decimal(18,0)");
+                    b.Property<double?>("Total")
+                        .HasColumnName("Total");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnName("Updated_At");

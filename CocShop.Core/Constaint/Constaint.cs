@@ -26,16 +26,18 @@ namespace CocShop.Core.Constaint
     }
     public class ErrMessageConstants
     {
-        public const string NOTFOUND = "NotFound";
-        public const string INVALID_PASSWORD = "InvalidPassword";
-        public const string INVALID_USERNAME = "InvalidUsername";
+        public const string NOTFOUND = "Not_Found";
+        public const string INVALID_PASSWORD = "Invalid_Password";
+        public const string INVALID_USERNAME = "Invalid_Username";
         public const string FAILURE = "Failure";
+        public const string PRODUCT_NOT_FOUND = "Product_Not_Found";
+        public const string PRODUCT_PRICE_NOT_FOUND = "Product_Price_Not_Found";
 
     }
     public class MessageConstants
     {
         public const string SUCCESS = "Success";
-        public const string NO_RECORD = "NoRecord";
+        public const string NO_RECORD = "No_Record";
 
     }
 }

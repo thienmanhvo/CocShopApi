@@ -14,32 +14,108 @@ using CocShop.Core.Data.Entity;
 using CocShop.Service.Helpers;
 using System.Threading.Tasks;
 using CocShop.Core.Data.Query;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CocShop.Service.Services
 {
     public class OrderService : IOrderService
     {
-        private readonly IOrderRepository _repository;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IOrderDetailRepository _orderDetailRepository;
+        private readonly IProductRepository _productRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public OrderService(IOrderRepository repository, IUnitOfWork unitOfWork, IMapper mapper)
+        public OrderService(IServiceProvider serviceProvider)
         {
-            _repository = repository;
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _orderRepository = serviceProvider.GetRequiredService<IOrderRepository>();
+            _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>(); ;
+            _mapper = serviceProvider.GetRequiredService<IMapper>(); ;
+            _productRepository = serviceProvider.GetRequiredService<IProductRepository>(); ;
+            _orderDetailRepository = serviceProvider.GetRequiredService<IOrderDetailRepository>(); ;
         }
 
-        public BaseViewModel<OrderViewModel> CreateOrder(CreateOrderRequestViewModel Order)
+        public BaseViewModel<OrderViewModel> CreateOrder(CreateOrderRequestViewModel order)
         {
-            var entity = _mapper.Map<Order>(Order);
-            entity.Id = Guid.NewGuid();
-            entity.SetDefaultInsertValue(_repository.GetUsername());
-            _repository.Add(entity);
+            decimal totalPrice = 0;
+            int totalQuantity = 0;
+            var listOrderDetail = new HashSet<OrderDetail>();
+            var username = _orderRepository.GetUsername();
+            var orderEntity = _mapper.Map<Order>(order);
+            orderEntity.SetDefaultInsertValue(_orderRepository.GetUsername());
+            
+            foreach (var product in order.Products)
+            {
+                if (!Guid.TryParse(product.Id, out Guid guidId))
+                {
+                    return new BaseViewModel<OrderViewModel>()
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Code = ErrMessageConstants.PRODUCT_NOT_FOUND,
+                        Description = MessageHandler.CustomErrMessage(ErrMessageConstants.PRODUCT_NOT_FOUND),
+                    };
+                }
+                var productEntity = _productRepository.GetMany(_ => _.IsDelete == false && _.Id.Equals(guidId)).FirstOrDefault();
+                if (productEntity == null)
+                {
+                    return new BaseViewModel<OrderViewModel>()
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Code = ErrMessageConstants.PRODUCT_NOT_FOUND,
+                        Description = MessageHandler.CustomErrMessage(ErrMessageConstants.PRODUCT_NOT_FOUND),
+                    };
+                }
+                if (productEntity?.IsSale ?? false)
+                {
+                    if (productEntity?.PriceSale != product?.Price)
+                    {
+                        return new BaseViewModel<OrderViewModel>()
+                        {
+                            StatusCode = HttpStatusCode.BadRequest,
+                            Code = ErrMessageConstants.PRODUCT_PRICE_NOT_FOUND,
+                            Description = MessageHandler.CustomErrMessage(ErrMessageConstants.PRODUCT_PRICE_NOT_FOUND),
+                        };
+                    }
+                }
+                else
+                {
+                    if (productEntity?.Price != product?.Price)
+                    {
+                        return new BaseViewModel<OrderViewModel>()
+                        {
+                            StatusCode = HttpStatusCode.BadRequest,
+                            Code = ErrMessageConstants.PRODUCT_PRICE_NOT_FOUND,
+                            Description = MessageHandler.CustomErrMessage(ErrMessageConstants.PRODUCT_PRICE_NOT_FOUND),
+                        };
+                    }
+                }
+                var orderDetail = _mapper.Map<OrderDetail>(product);
+                var totalDetailPrice = product.Price * product.Quantity;
+                orderDetail.SetDefaultInsertValue(username);
+                orderDetail.ProductId = guidId;
+                orderDetail.TotalPrice = totalDetailPrice;
+                orderDetail.TotalPrice = totalDetailPrice;
+                orderDetail.OrderId = orderEntity.Id;
+
+                totalPrice += product.Price * product.Quantity;
+                totalQuantity += product.Quantity;
+                listOrderDetail.Add(orderDetail);
+            }
+
+
+
+            orderEntity.TotalPrice = totalPrice;
+            orderEntity.TotalQuantity = totalQuantity;
+            orderEntity.CreatedUserId = new Guid(_orderRepository.GetCurrentUserId());
+            // orderEntity.OrderDetail = listOrderDetail;
+
+            _orderRepository.Add(orderEntity);
+            _orderDetailRepository.Add(listOrderDetail);
+
 
             var result = new BaseViewModel<OrderViewModel>()
             {
-                Data = _mapper.Map<OrderViewModel>(entity),
+                Data = _mapper.Map<OrderViewModel>(orderEntity),
             };
 
             Save();
@@ -47,39 +123,39 @@ namespace CocShop.Service.Services
             return result;
         }
 
-        public BaseViewModel<string> DeleteOrder(Guid id)
-        {
-            //Find product
-            var order = _repository.GetById(id);
-            //result to return
-            BaseViewModel<string> result = null;
-            //check product exist
-            if (order == null || order.IsDelete)
-            {
-                result = new BaseViewModel<string>()
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Code = ErrMessageConstants.NOTFOUND,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND)
-                };
-            }
-            else
-            {
-                //update column isDelete = true
-                order.IsDelete = true;
-                _repository.Update(order);
-                result = new BaseViewModel<string>();
-                //save change
-                Save();
-            }
-            return result;
-        }
+        //public BaseViewModel<string> DeleteOrder(Guid id)
+        //{
+        //    //Find product
+        //    var order = _repository.GetById(id);
+        //    //result to return
+        //    BaseViewModel<string> result = null;
+        //    //check product exist
+        //    if (order == null || order.IsDelete)
+        //    {
+        //        result = new BaseViewModel<string>()
+        //        {
+        //            StatusCode = HttpStatusCode.NotFound,
+        //            Code = ErrMessageConstants.NOTFOUND,
+        //            Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND)
+        //        };
+        //    }
+        //    else
+        //    {
+        //        //update column isDelete = true
+        //        order.IsDelete = true;
+        //        _repository.Update(order);
+        //        result = new BaseViewModel<string>();
+        //        //save change
+        //        Save();
+        //    }
+        //    return result;
+        //}
 
         public BaseViewModel<OrderViewModel> GetOrder(Guid id)
         {
-            var order = _repository.GetById(id);
+            var order = _orderRepository.GetById(id);
 
-            if (order == null || order.IsDelete)
+            if (order == null)
             {
                 return new BaseViewModel<OrderViewModel>
                 {
@@ -113,7 +189,7 @@ namespace CocShop.Service.Services
                 Sort = request.SortBy,
             };
 
-            var data = _repository.Get(queryArgs.Filter, queryArgs.Sort, queryArgs.Offset, queryArgs.Limit).ToList();
+            var data = _orderRepository.Get(queryArgs.Filter, queryArgs.Sort, queryArgs.Offset, queryArgs.Limit).ToList();
 
             if (data == null || data.Count == 0)
             {
@@ -132,7 +208,7 @@ namespace CocShop.Service.Services
                     Results = _mapper.Map<IEnumerable<OrderViewModel>>(data),
                     PageIndex = pageIndex,
                     PageSize = pageSizeReturn,
-                    TotalRecords = _repository.Count(queryArgs.Filter)
+                    TotalRecords = _orderRepository.Count(queryArgs.Filter)
                 };
             }
 
@@ -144,32 +220,32 @@ namespace CocShop.Service.Services
             _unitOfWork.Commit();
         }
 
-        public BaseViewModel<OrderViewModel> UpdateOrder(Guid id, UpdateOrderRequestViewModel order)
-        {
-            var entity = _repository.GetById(id);
-            if (entity == null || entity.IsDelete)
-            {
-                return new BaseViewModel<OrderViewModel>
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-                    Code = ErrMessageConstants.NOTFOUND
-                };
-            }
+        //public BaseViewModel<OrderViewModel> UpdateOrder(Guid id, UpdateOrderRequestViewModel order)
+        //{
+        //    var entity = _repository.GetById(id);
+        //    if (entity == null)
+        //    {
+        //        return new BaseViewModel<OrderViewModel>
+        //        {
+        //            StatusCode = HttpStatusCode.NotFound,
+        //            Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+        //            Code = ErrMessageConstants.NOTFOUND
+        //        };
+        //    }
 
-            entity = _mapper.Map(order, entity);
+        //    entity = _mapper.Map(order, entity);
 
-            entity.SetDefaultUpdateValue(_repository.GetUsername());
-            _repository.Update(entity);
-            var result = new BaseViewModel<OrderViewModel>
-            {
-                Data = _mapper.Map<OrderViewModel>(entity),
-            };
+        //    entity.SetDefaultUpdateValue(_repository.GetUsername());
+        //    _repository.Update(entity);
+        //    var result = new BaseViewModel<OrderViewModel>
+        //    {
+        //        Data = _mapper.Map<OrderViewModel>(entity),
+        //    };
 
-            Save();
+        //    Save();
 
-            return result;
-        }
+        //    return result;
+        //}
 
     }
 }

@@ -12,6 +12,7 @@ namespace CocShop.Core.Data.Infrastructure
     {
         // Marks an entity as new
         void Add(T entity);
+        void Add(ICollection<T> entities);
         // Marks an entity as modified
         void Update(T entity);
         // Marks an entity to be removed
@@ -84,7 +85,7 @@ namespace CocShop.Core.Data.Infrastructure
         IQueryable<T> Get(Expression<Func<T, bool>> filter = null, string sortBy = null, int? offset = null, int? limit = null, string includeProperties = "");
         string GetUsername();
         int Count(Expression<Func<T, bool>> predicate);
-
+        string GetCurrentUserId();
 
 
     }

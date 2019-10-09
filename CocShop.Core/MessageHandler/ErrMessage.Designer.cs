@@ -61,7 +61,7 @@ namespace CocShop.Core.MessageHandler {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failure.
+        ///   Looks up a localized string similar to Failure..
         /// </summary>
         internal static string Failure {
             get {
@@ -72,27 +72,45 @@ namespace CocShop.Core.MessageHandler {
         /// <summary>
         ///   Looks up a localized string similar to The password you entered is incorrect..
         /// </summary>
-        internal static string InvalidPassword {
+        internal static string Invalid_Password {
             get {
-                return ResourceManager.GetString("InvalidPassword", resourceCulture);
+                return ResourceManager.GetString("Invalid_Password", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The username does not exist..
         /// </summary>
-        internal static string InvalidUsername {
+        internal static string Invalid_Username {
             get {
-                return ResourceManager.GetString("InvalidUsername", resourceCulture);
+                return ResourceManager.GetString("Invalid_Username", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The requested URL was not found on this server..
         /// </summary>
-        internal static string NotFound {
+        internal static string Not_Found {
             get {
-                return ResourceManager.GetString("NotFound", resourceCulture);
+                return ResourceManager.GetString("Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Product is not found..
+        /// </summary>
+        internal static string Product_Not_Found {
+            get {
+                return ResourceManager.GetString("Product_Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Product price is not found..
+        /// </summary>
+        internal static string Product_Price_Not_Found {
+            get {
+                return ResourceManager.GetString("Product_Price_Not_Found", resourceCulture);
             }
         }
     }

@@ -33,6 +33,13 @@ namespace CocShop.Core.Constaint
             Asc = 0,
             Desc = 1,
         }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public enum OrderStatus
+        {
+            Submitted = 0,
+            Delivered = 1,
+            Canceled = 2,
+        }
 
     }
 }

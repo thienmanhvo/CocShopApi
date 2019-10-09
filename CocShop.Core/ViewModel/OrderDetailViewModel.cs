@@ -12,7 +12,7 @@ namespace CocShop.Core.ViewModel
 
         public int Quantity { get; set; }
 
-        public double? Total { get; set; }
+        public decimal? TotalPrice { get; set; }
 
         public decimal? Price { get; set; }
     }
@@ -26,7 +26,7 @@ namespace CocShop.Core.ViewModel
 
         public int Quantity { get; set; }
 
-        public double? Total { get; set; }
+        public decimal? TotalPrice { get; set; }
 
         public decimal? Price { get; set; }
     }

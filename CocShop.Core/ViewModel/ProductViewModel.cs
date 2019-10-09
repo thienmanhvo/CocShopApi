@@ -54,4 +54,14 @@ namespace CocShop.Core.ViewModel
        // public string UpdatedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
+    public class ProductToOrderViewModel
+    {
+        public string Id { get; set; }
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
+        public int Quantity { get; set; }
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
+        public decimal Price { get; set; }
+    }
 }
