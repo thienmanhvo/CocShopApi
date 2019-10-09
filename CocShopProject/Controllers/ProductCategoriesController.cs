@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace CocShop.WebAPi.Controllers
 {
@@ -44,9 +45,10 @@ namespace CocShop.WebAPi.Controllers
 
         // GET: api/ProductCategories
         [HttpGet]
-        public ActionResult<BaseViewModel<IEnumerable<ProductCategoryViewModel>>> GetProductCategory()
+        public async Task<ActionResult<BaseViewModel<PagingResult<ProductCategoryViewModel>>>> GetProductCategory([FromQuery]BasePagingRequestViewModel request)
         {
-            var result = _producCategorytService.GetAllProductCategories();
+            request.SetDefaultPage();
+            var result = await _producCategorytService.GetAllProductCategories(request);
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
             return result;
         }

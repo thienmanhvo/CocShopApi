@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CocShop.Core.Service
 {
     public interface IOrderService
     {
-        BaseViewModel<IEnumerable<OrderViewModel>> GetAllOrders();
+        Task<BaseViewModel<PagingResult<OrderViewModel>>> GetAllOrders(BasePagingRequestViewModel request);
         BaseViewModel<OrderViewModel> GetOrder(Guid id);
         //BaseViewModel<IEnumerable<OrderViewModel>> GetOrderByID(Guid cateId);
         BaseViewModel<OrderViewModel> CreateOrder(CreateOrderRequestViewModel product);
