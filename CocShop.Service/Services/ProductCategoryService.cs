@@ -103,7 +103,7 @@ namespace CocShop.Service.Services
             var pageSize = request.PageSize;
             var pageIndex = request.PageIndex;
             var result = new BaseViewModel<PagingResult<ProductCategoryViewModel>>();
-            string filter = SearchHelper<ProductCategory>.GenerateStringExpression(request.Filter);
+            string filter = SearchHelper<ProductCategory>.GenerateStringExpression(request.Filter, Constants.DEAFAULT_DELETE_STATUS_EXPRESSION);
 
             Expression<Func<ProductCategory, bool>> FilterExpression = await LinqHelper<ProductCategory>.StringToExpression(filter);
 

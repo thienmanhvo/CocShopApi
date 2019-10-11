@@ -15,14 +15,14 @@ namespace CocShop.Core.Constaint
         public const string DEAFAULT_SORT_BY = "ASC";
         public const string SORT_BY_ASC = "ASC";
         public const string SORT_BY_DESC = "DESC";
-        public const string DEAFAULT_DELETE_STATUS_EXPRESSION = "_ => _.IsDelete == false";
+        public const string DEAFAULT_DELETE_STATUS_EXPRESSION = "_.IsDelete == false";
         public const string GREATER_THAN = "gt";
         public const string GREATER_THAN_EQUAL = "gte";
         public const string LESSTER_THAN = "lt";
         public const string LESSTER_THAN_EQUAL = "lte";
         public const string EQUAL = "e";
-        
-        
+
+
     }
     public class ErrMessageConstants
     {
@@ -31,6 +31,8 @@ namespace CocShop.Core.Constaint
         public const string INVALID_USERNAME = "Invalid_Username";
         public const string FAILURE = "Failure";
         public const string PRODUCT_NOT_FOUND = "Product_Not_Found";
+        public const string PAYMENT_METHOD_NOT_FOUND = "Payment_Method_Not_Found";
+        public const string LOCATION_NOT_FOUND = "Location_Not_Found";
         public const string PRODUCT_PRICE_NOT_FOUND = "Product_Price_Not_Found";
 
     }
@@ -39,5 +41,10 @@ namespace CocShop.Core.Constaint
         public const string SUCCESS = "Success";
         public const string NO_RECORD = "No_Record";
 
+    }
+    public static class Role
+    {
+        public const string Admin = "Admin";
+        public const string User = "User";
     }
 }

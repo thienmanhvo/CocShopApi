@@ -126,8 +126,14 @@
   <data name="Invalid_Username" xml:space="preserve">
     <value>The username does not exist.</value>
   </data>
+  <data name="Location_Not_Found" xml:space="preserve">
+    <value>Location is not found.</value>
+  </data>
   <data name="Not_Found" xml:space="preserve">
     <value>The requested URL was not found on this server.</value>
+  </data>
+  <data name="Payment_Method_Not_Found" xml:space="preserve">
+    <value>Payment method is not found.</value>
   </data>
   <data name="Product_Not_Found" xml:space="preserve">
     <value>Product is not found.</value>

@@ -88,11 +88,29 @@ namespace CocShop.Core.MessageHandler {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Location is not found..
+        /// </summary>
+        internal static string Location_Not_Found {
+            get {
+                return ResourceManager.GetString("Location_Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The requested URL was not found on this server..
         /// </summary>
         internal static string Not_Found {
             get {
                 return ResourceManager.GetString("Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Payment method is not found..
+        /// </summary>
+        internal static string Payment_Method_Not_Found {
+            get {
+                return ResourceManager.GetString("Payment_Method_Not_Found", resourceCulture);
             }
         }
         

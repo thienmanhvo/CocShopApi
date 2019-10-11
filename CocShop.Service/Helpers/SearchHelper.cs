@@ -11,12 +11,13 @@ namespace CocShop.Service.Helpers
 {
     public static class SearchHelper<T> where T : class
     {
-        public static string GenerateStringExpression(IDictionary<string, string> searchRange)
+        public static string GenerateStringExpression(IDictionary<string, string> searchRange, string defaultCondition = null)
         {
             string search = "";
-            var deleteStatus = Constants.DEAFAULT_DELETE_STATUS_EXPRESSION;
             string result = "";
+            string lamda = "_ => ";
             string searchRangeResult = "";
+            defaultCondition = string.IsNullOrEmpty(defaultCondition) ? "" : defaultCondition + " && ";
             if (searchRange?.Count > 0)
             {
 
@@ -123,27 +124,27 @@ namespace CocShop.Service.Helpers
 
                 if (string.IsNullOrEmpty(search + searchRangeResult))
                 {
-                    result = deleteStatus;
+                    result = defaultCondition;
                 }
                 else
                 {
                     if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(searchRangeResult))
                     {
-                        result = $"{deleteStatus} && ({search}) && ({searchRangeResult})";
+                        result = $"{lamda} {defaultCondition} ({search}) && ({searchRangeResult})";
                     }
                     else if (!string.IsNullOrEmpty(search))
                     {
-                        result = $"{deleteStatus} && ({search})";
+                        result = $"{lamda} {defaultCondition} ({search})";
                     }
                     else
                     {
-                        result = $"{deleteStatus}  && ({searchRangeResult})";
+                        result = $"{lamda} {defaultCondition} ({searchRangeResult})";
                     }
                 }
             }
             else
             {
-                result = deleteStatus;
+                result = string.IsNullOrEmpty(defaultCondition) ? "" : lamda + defaultCondition.Substring(0, defaultCondition.Length - 4);
             }
             return result;
         }

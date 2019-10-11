@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
+using static CocShop.Core.Attribute.CustomValidation;
 
 namespace CocShop.Core.ViewModel
 {
@@ -56,6 +57,7 @@ namespace CocShop.Core.ViewModel
     }
     public class ProductToOrderViewModel
     {
+        [CheckGuid(Property = "Id")]
         public string Id { get; set; }
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]

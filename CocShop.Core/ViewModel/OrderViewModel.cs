@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using CocShop.Core.Data.Entity;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using static CocShop.Core.Attribute.CustomValidation;
 
 namespace CocShop.Core.ViewModel
 {
@@ -21,9 +23,9 @@ namespace CocShop.Core.ViewModel
         //public string Status { get; set; }
 
         //public Guid? DeliveryUserId { get; set; }
-
+        [CheckGuid(Property = "LocationId")]
         public string LocationId { get; set; }
-
+        [CheckGuid(Property = "PaymentId")]
         public string PaymentId { get; set; }
 
         [Required, MinLength(1, ErrorMessage = "At least one item required in order")]
@@ -55,6 +57,15 @@ namespace CocShop.Core.ViewModel
         public string Status { get; set; }
 
         public Guid? DeliveryUserId { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public virtual ICollection<OrderDetailViewModel> OrderDetail { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public virtual UserViewModel CreatedUser { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public virtual UserViewModel DeliveryUser { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public virtual LocationViewModel Location { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public virtual PaymentMethod Payment { get; set; }
     }
 }

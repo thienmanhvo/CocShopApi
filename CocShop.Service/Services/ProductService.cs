@@ -138,7 +138,7 @@ namespace CocShop.Service.Services
             var pageIndex = request.PageIndex;
             var result = new BaseViewModel<PagingResult<ProductViewModel>>();
 
-            string filter = SearchHelper<Product>.GenerateStringExpression(request.Filter);
+            string filter = SearchHelper<Product>.GenerateStringExpression(request.Filter, Constants.DEAFAULT_DELETE_STATUS_EXPRESSION);
        
             Expression<Func<Product, bool>> FilterExpression = await LinqHelper<Product>.StringToExpression(filter);
 

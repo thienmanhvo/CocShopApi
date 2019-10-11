@@ -36,56 +36,56 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // GET: api/OrderDetail/5
-        [HttpGet("{id}")]
-        public ActionResult<BaseViewModel<IEnumerable<OrderDetailViewModel>>> GetDetail(string id)
-        {
-            if (!Guid.TryParse(id, out Guid guidId))
-            {
-                return NotFound(new BaseViewModel<string>()
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Code = ErrMessageConstants.NOTFOUND,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-                });
-            };
-            var result = _orderDetailService.GetAllDetail(guidId);
+        //[HttpGet("{id}")]
+        //public ActionResult<BaseViewModel<IEnumerable<OrderDetailViewModel>>> GetDetail(string id)
+        //{
+        //    if (!Guid.TryParse(id, out Guid guidId))
+        //    {
+        //        return NotFound(new BaseViewModel<string>()
+        //        {
+        //            StatusCode = HttpStatusCode.NotFound,
+        //            Code = ErrMessageConstants.NOTFOUND,
+        //            Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+        //        });
+        //    };
+        //    var result = _orderDetailService.GetAllDetail(guidId);
 
-            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+        //    this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 
-            return result;
-        }
+        //    return result;
+        //}
 
-        // PUT: api/OrderDetail/5
-        [ValidateModel]
-        [HttpPut("{id}")]
-        public ActionResult<BaseViewModel<IEnumerable<OrderDetailViewModel>>> PutOrder(string id, [FromBody]IEnumerable<CreateOrderDetailViewModel> order)
-        {
-            if (!Guid.TryParse(id, out Guid guidId))
-            {
-                return NotFound(new BaseViewModel<string>()
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Code = ErrMessageConstants.NOTFOUND,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-                });
-            };
-            var result = _orderDetailService.UpdateDetail(guidId, order);
+        //// PUT: api/OrderDetail/5
+        //[ValidateModel]
+        //[HttpPut("{id}")]
+        //public ActionResult<BaseViewModel<IEnumerable<OrderDetailViewModel>>> PutOrder(string id, [FromBody]IEnumerable<CreateOrderDetailViewModel> order)
+        //{
+        //    if (!Guid.TryParse(id, out Guid guidId))
+        //    {
+        //        return NotFound(new BaseViewModel<string>()
+        //        {
+        //            StatusCode = HttpStatusCode.NotFound,
+        //            Code = ErrMessageConstants.NOTFOUND,
+        //            Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+        //        });
+        //    };
+        //    var result = _orderDetailService.UpdateDetail(guidId, order);
 
-            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
-            return result;
-        }
+        //    this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+        //    return result;
+        //}
 
-        // POST: api/Order
-        [ValidateModel]
-        [HttpPost]
-        public ActionResult<BaseViewModel<IEnumerable<OrderDetailViewModel>>> PostDetail(IEnumerable<CreateOrderDetailViewModel> order)
-        {
-            var result = _orderDetailService.CreateDetail(order);
+        //// POST: api/Order
+        //[ValidateModel]
+        //[HttpPost]
+        //public ActionResult<BaseViewModel<IEnumerable<OrderDetailViewModel>>> PostDetail(IEnumerable<CreateOrderDetailViewModel> order)
+        //{
+        //    var result = _orderDetailService.CreateDetail(order);
 
-            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+        //    this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 
-            return result;
-        }
+        //    return result;
+        //}
 
 
         //private bool ProductExists(Guid id)

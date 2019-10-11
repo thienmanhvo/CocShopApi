@@ -82,7 +82,7 @@ namespace CocShop.Core.Data.Infrastructure
         //void Update(IEnumerable<T> entities);
 
         IQueryable<T> Get(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, int? offset = null, int? limit = null, string includeProperties = "");
-        IQueryable<T> Get(Expression<Func<T, bool>> filter = null, string sortBy = null, int? offset = null, int? limit = null, string includeProperties = "");
+        IQueryable<T> Get(Expression<Func<T, bool>> filter = null, string sortBy = null, int? offset = null, int? limit = null, IEnumerable<string> includeProperties = null);
         string GetUsername();
         int Count(Expression<Func<T, bool>> predicate);
         string GetCurrentUserId();

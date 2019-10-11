@@ -121,7 +121,7 @@ namespace CocShop.Core.Data.Infrastructure
             }
 
         }
-        public IQueryable<T> Get(Expression<Func<T, bool>> filter = null, string sortBy = null, int? offset = null, int? limit = null, string includeProperties = "")
+        public IQueryable<T> Get(Expression<Func<T, bool>> filter = null, string sortBy = null, int? offset = null, int? limit = null, IEnumerable<string> includeProperties = null)
         {
             IQueryable<T> query = dbSet.AsNoTracking();
 
@@ -130,8 +130,7 @@ namespace CocShop.Core.Data.Infrastructure
                 query = query.Where(filter);
             }
 
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (var includeProperty in includeProperties)
             {
                 query = query.Include(includeProperty);
             }
@@ -161,10 +160,14 @@ namespace CocShop.Core.Data.Infrastructure
             }
         }
 
-        public int Count(Expression<Func<T, bool>> predicate)
+        public int Count(Expression<Func<T, bool>> predicate = null)
         {
             IQueryable<T> query = dbSet;
-            return query.Where(predicate).Count();
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+            return query.Count();
         }
         public string GetCurrentUserId()
         {
