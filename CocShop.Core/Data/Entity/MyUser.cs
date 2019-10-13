@@ -23,6 +23,8 @@ namespace CocShop.Core.Data.Entity
         [Column("Is_Delete")]
         public bool IsDelete { get; set; }
 
+        public ICollection<PaymentMethod> PaymentMethods { get; set; }
+
         public void SetDefaultInsertValue(string username)
         {
             CreatedAt = DateTime.UtcNow;
