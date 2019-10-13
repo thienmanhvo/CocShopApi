@@ -2,13 +2,16 @@
 using CocShop.Core.Constaint;
 using CocShop.Core.Data.Entity;
 using CocShop.Core.MessageHandler;
+using CocShop.Core.Service;
 using CocShop.Core.ViewModel;
 using CocShop.Data.Appsettings;
+using CocShop.Service.Helpers;
 using CocShop.WebAPi.Extentions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -31,6 +34,7 @@ namespace CocShop.WebAPi.Controllers
 
         private readonly UserManager<MyUser> _userManager;
         private readonly RoleManager<MyRole> _roleManager;
+        private readonly IMyUserService _myUserService;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _accessor;
 
@@ -44,6 +48,7 @@ namespace CocShop.WebAPi.Controllers
             _roleManager = serviceProvider.GetRequiredService<RoleManager<MyRole>>();
             _mapper = serviceProvider.GetRequiredService<IMapper>();
             _accessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+            _myUserService = serviceProvider.GetRequiredService<IMyUserService>();
         }
 
         #endregion
@@ -151,6 +156,60 @@ namespace CocShop.WebAPi.Controllers
             {
                 return BadRequest(result.Errors);
             }
+        }
+
+        #endregion
+
+        #region UpdateInfo
+
+        /// <summary>
+        /// Register
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <author>thiennb</author>
+        [Authorize]
+        [ValidateModel]
+        [HttpPut("UpdateInfo")]
+        public async Task<ActionResult> UpdateInfo([FromBody]UpdateMyUserRequestViewModel request)
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var currentUser = await _userManager.FindByIdAsync(userId);
+            currentUser = _mapper.Map(request, currentUser);
+            currentUser.SetDefaultUpdateValue(currentUser.UserName);
+            IdentityResult result = await _userManager.UpdateAsync(currentUser);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+        }
+
+        #endregion
+
+        #region Profile
+
+        /// <summary>
+        /// Register
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <author>thiennb</author>
+        [Authorize]
+        [ValidateModel]
+        [HttpGet("Profile")]
+        public async Task<ActionResult<BaseViewModel<MyUserViewModel>>> Profile(string include)
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var result = _myUserService.GetMyUser(new Guid(userId), include);// _mapper.Map<MyUserViewModel>();
+
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+
+            return result;
         }
 
         #endregion

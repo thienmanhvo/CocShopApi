@@ -8,6 +8,7 @@ using CocShop.Core.MessageHandler;
 using CocShop.Core.Service;
 using CocShop.Core.ViewModel;
 using CocShop.Service.Helpers;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,11 +33,13 @@ namespace CocShop.Service.Services
         }
 
 
-        public BaseViewModel<MyUserViewModel> GetMyUser(Guid id)
+        public BaseViewModel<MyUserViewModel> GetMyUser(Guid id, string include = null)
         {
-            var myUser = _repository.GetById(id);
+            var includeList = IncludeLinqHelper<MyUser>.StringToListInclude(include);
 
-            if (myUser == null || myUser.IsDelete)
+            var myUser = _repository.Get(_ => _.IsDelete == false, includeList).FirstOrDefault();
+
+            if (myUser == null)
             {
                 return new BaseViewModel<MyUserViewModel>
                 {
@@ -98,6 +101,7 @@ namespace CocShop.Service.Services
 
             return result;
         }
+
         public void Save()
         {
             _unitOfWork.Commit();
