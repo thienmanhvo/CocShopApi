@@ -16,7 +16,7 @@ namespace CocShop.Core.Data.Entity
         [Column("Location_Name")]
         public string LocationName { get; set; }
         [Column("Is_Delete")]
-        public bool? IsDelete { get; set; }
+        public bool IsDelete { get; set; }
 
         public virtual ICollection<Order> Order { get; set; }
     }

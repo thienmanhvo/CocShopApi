@@ -12,10 +12,13 @@ using CocShop.Core.MessageHandler;
 using CocShop.Core.Constaint;
 using System.Net;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using System.Linq;
+using CocShop.Core.Attribute;
 
 namespace CocShop.WebAPi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
@@ -40,60 +43,48 @@ namespace CocShop.WebAPi.Controllers
         [HttpGet]
         public async Task<ActionResult<BaseViewModel<PagingResult<OrderViewModel>>>> GetOrder([FromQuery]BasePagingRequestViewModel request)
         {
+            var listRole = HttpContext.User.FindAll(ClaimTypes.Role);
             request.SetDefaultPage();
-
-            var result = await _orderService.GetAllOrders(request);
+            BaseViewModel<PagingResult<OrderViewModel>> result = null;
+            if (listRole.Any(_ => Role.Admin.Equals(_.Value)))
+            {
+                result = await _orderService.GetAllOrdersByAdmin(request);
+            }
+            else
+            {
+                result = await _orderService.GetAllOrdersByUser(request);
+            }
 
             HttpContext.Response.StatusCode = (int)result.StatusCode;
-
             return result;
         }
 
         // GET: api/Order/5
         [HttpGet("{id}")]
-        public ActionResult<BaseViewModel<OrderViewModel>> GetOrder(string id)
+        public ActionResult<BaseViewModel<OrderViewModel>> GetOrder([CheckGuid]string id,[FromQuery] string include)
         {
-            if (!Guid.TryParse(id, out Guid guidId))
+            var listRole = HttpContext.User.FindAll(ClaimTypes.Role);
+            BaseViewModel<OrderViewModel> result = null;
+            if (listRole.Any(_ => Role.Admin.Equals(_.Value)))
             {
-                return NotFound(new BaseViewModel<string>()
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Code = ErrMessageConstants.NOTFOUND,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-                });
-            };
-            var result = _orderService.GetOrder(guidId);
-
+                result = _orderService.GetOrderByAdmin(new Guid(id), include);
+            }
+            else
+            {
+                result = _orderService.GetOrderByUser(new Guid(id), include);
+            }
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 
             return result;
         }
 
-        // PUT: api/Order/5
-        //[ValidateModel]
-        //[HttpPut("{id}")]
-        //public ActionResult<BaseViewModel<OrderViewModel>> PutOrder(string id, [FromBody]UpdateOrderRequestViewModel order)
-        //{
-        //    if (!Guid.TryParse(id, out Guid guidId))
-        //    {
-        //        return NotFound(new BaseViewModel<string>()
-        //        {
-        //            StatusCode = HttpStatusCode.NotFound,
-        //            Code = ErrMessageConstants.NOTFOUND,
-        //            Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-        //        });
-        //    };
-        //    var result = _orderService.UpdateOrder(guidId, order);
 
-        //    this.HttpContext.Response.StatusCode = (int)result.StatusCode;
-        //    return result;
-        //}
-
-        // POST: api/Order
         [ValidateModel]
         [HttpPost]
         public ActionResult<BaseViewModel<OrderViewModel>> PostOrder(CreateOrderRequestViewModel order)
         {
+
+
             var result = _orderService.CreateOrder(order);
 
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
@@ -101,29 +92,5 @@ namespace CocShop.WebAPi.Controllers
             return result;
         }
 
-        // DELETE: api/Order/5
-        //[HttpDelete("{id}")]
-        //public ActionResult<BaseViewModel<string>> DeleteOrder(string id)
-        //{
-        //    if (!Guid.TryParse(id, out Guid guidId))
-        //    {
-        //        return NotFound(new BaseViewModel<string>()
-        //        {
-        //            StatusCode = HttpStatusCode.NotFound,
-        //            Code = ErrMessageConstants.NOTFOUND,
-        //            Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-        //        });
-        //    };
-        //    var result = _orderService.DeleteOrder(guidId);
-
-        //    this.HttpContext.Response.StatusCode = (int)result.StatusCode;
-
-        //    return result;
-        //}
-
-        //private bool ProductExists(Guid id)
-        //{
-        //    return _context.Product.Any(e => e.Id == id);
-        //}
     }
 }

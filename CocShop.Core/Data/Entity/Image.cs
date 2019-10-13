@@ -5,16 +5,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CocShop.Core.Data.Entity
 {
-    [Table("Image")]
-    public class Image : BaseEntity
-    {
+    //[Table("Image")]
+    //public class Image : BaseEntity
+    //{
 
-        [ForeignKey("Path")]
-        public string Path { get; set; }
-        [ForeignKey("Product")]
-        [Column("Product_Id")]
-        public Guid ProductId { get; set; }
+    //    [ForeignKey("Path")]
+    //    public string Path { get; set; }
+    //    [ForeignKey("Product")]
+    //    [Column("Product_Id")]
+    //    public Guid ProductId { get; set; }
 
-        public virtual Product Product { get; set; }
-    }
+    //    public virtual Product Product { get; set; }
+    //}
 }

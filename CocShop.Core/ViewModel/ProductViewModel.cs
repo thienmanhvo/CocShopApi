@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CocShop.Core.Attribute;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -18,6 +19,8 @@ namespace CocShop.Core.ViewModel
         public bool? IsBest { get; set; }
         [Required]
         public string CateId { get; set; }
+        [CheckUrl]
+        public string ImagePath { get; set; }
     }
     public class UpdateProductRequestViewModel
     {
@@ -36,6 +39,8 @@ namespace CocShop.Core.ViewModel
         public bool? IsSale { get; set; }
         public bool? IsBest { get; set; }
         public string CateId { get; set; }
+        [CheckUrl]
+        public string ImagePath { get; set; }
     }
     public class ProductViewModel
     {
@@ -51,11 +56,13 @@ namespace CocShop.Core.ViewModel
         public string CateId { get; set; }
         //public string CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
-       // public string UpdatedBy { get; set; }
+        // public string UpdatedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public string ImagePath { get; set; }
     }
     public class ProductToOrderViewModel
     {
+        [CheckGuid(Property = "Id")]
         public string Id { get; set; }
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]

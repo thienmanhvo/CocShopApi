@@ -20,8 +20,9 @@ namespace CocShop.WebAPi
             Configuration = configuration;
             AppSettings.Configs = Configuration;
             AppSettings.Instance = configuration.GetSection("AppSettings").Get<AppSettings>();
+            StaticConfig = configuration;
         }
-
+        public static IConfiguration StaticConfig { get; private set; }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.

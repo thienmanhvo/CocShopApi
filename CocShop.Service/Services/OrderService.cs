@@ -15,12 +15,15 @@ using CocShop.Service.Helpers;
 using System.Threading.Tasks;
 using CocShop.Core.Data.Query;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace CocShop.Service.Services
 {
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly ILocationRepository _locationRepository;
+        private readonly IPaymentMethodRepository _paymentMethodRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IProductRepository _productRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -29,10 +32,12 @@ namespace CocShop.Service.Services
         public OrderService(IServiceProvider serviceProvider)
         {
             _orderRepository = serviceProvider.GetRequiredService<IOrderRepository>();
-            _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>(); ;
-            _mapper = serviceProvider.GetRequiredService<IMapper>(); ;
-            _productRepository = serviceProvider.GetRequiredService<IProductRepository>(); ;
-            _orderDetailRepository = serviceProvider.GetRequiredService<IOrderDetailRepository>(); ;
+            _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
+            _mapper = serviceProvider.GetRequiredService<IMapper>();
+            _productRepository = serviceProvider.GetRequiredService<IProductRepository>();
+            _orderDetailRepository = serviceProvider.GetRequiredService<IOrderDetailRepository>();
+            _locationRepository = serviceProvider.GetRequiredService<ILocationRepository>();
+            _paymentMethodRepository = serviceProvider.GetRequiredService<IPaymentMethodRepository>();
         }
 
         public BaseViewModel<OrderViewModel> CreateOrder(CreateOrderRequestViewModel order)
@@ -43,19 +48,33 @@ namespace CocShop.Service.Services
             var username = _orderRepository.GetUsername();
             var orderEntity = _mapper.Map<Order>(order);
             orderEntity.SetDefaultInsertValue(_orderRepository.GetUsername());
-            
+
+            var paymentMethod = _paymentMethodRepository.GetMany(_ => _.IsDelete == false && _.Id.Equals(new Guid(order.PaymentId)));
+            if (paymentMethod == null)
+            {
+                return new BaseViewModel<OrderViewModel>()
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Code = ErrMessageConstants.PAYMENT_METHOD_NOT_FOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.PAYMENT_METHOD_NOT_FOUND),
+                };
+            }
+
+            var location = _locationRepository.GetMany(_ => _.IsDelete == false && _.Id.Equals(new Guid(order.LocationId)));
+            if (location == null)
+            {
+                return new BaseViewModel<OrderViewModel>()
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Code = ErrMessageConstants.PAYMENT_METHOD_NOT_FOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.PAYMENT_METHOD_NOT_FOUND),
+                };
+            }
+
             foreach (var product in order.Products)
             {
-                if (!Guid.TryParse(product.Id, out Guid guidId))
-                {
-                    return new BaseViewModel<OrderViewModel>()
-                    {
-                        StatusCode = HttpStatusCode.BadRequest,
-                        Code = ErrMessageConstants.PRODUCT_NOT_FOUND,
-                        Description = MessageHandler.CustomErrMessage(ErrMessageConstants.PRODUCT_NOT_FOUND),
-                    };
-                }
-                var productEntity = _productRepository.GetMany(_ => _.IsDelete == false && _.Id.Equals(guidId)).FirstOrDefault();
+                var productId = new Guid(product.Id);
+                var productEntity = _productRepository.GetMany(_ => _.IsDelete == false && _.Id.Equals(productId)).FirstOrDefault();
                 if (productEntity == null)
                 {
                     return new BaseViewModel<OrderViewModel>()
@@ -92,7 +111,7 @@ namespace CocShop.Service.Services
                 var orderDetail = _mapper.Map<OrderDetail>(product);
                 var totalDetailPrice = product.Price * product.Quantity;
                 orderDetail.SetDefaultInsertValue(username);
-                orderDetail.ProductId = guidId;
+                orderDetail.ProductId = productId;
                 orderDetail.TotalPrice = totalDetailPrice;
                 orderDetail.TotalPrice = totalDetailPrice;
                 orderDetail.OrderId = orderEntity.Id;
@@ -151,9 +170,11 @@ namespace CocShop.Service.Services
         //    return result;
         //}
 
-        public BaseViewModel<OrderViewModel> GetOrder(Guid id)
+        private BaseViewModel<OrderViewModel> GetOrder(Expression<Func<Order, bool>> filter, string include = null)
         {
-            var order = _orderRepository.GetById(id);
+            var includeList = IncludeLinqHelper<Order>.StringToListInclude(include);
+
+            var order = _orderRepository.Get(filter, includeList).FirstOrDefault();
 
             if (order == null)
             {
@@ -170,16 +191,35 @@ namespace CocShop.Service.Services
                 Data = _mapper.Map<OrderViewModel>(order),
             };
         }
+        public BaseViewModel<OrderViewModel> GetOrderByAdmin(Guid id, string include = null)
+        {
+            var currentUserID = new Guid(_orderRepository.GetCurrentUserId());
+            Expression<Func<Order, bool>> filter = _ => _.Id == id;
+            return GetOrder(filter, include);
+        }
+        public BaseViewModel<OrderViewModel> GetOrderByUser(Guid id, string include = null)
+        {
+            var currentUserID = new Guid(_orderRepository.GetCurrentUserId());
+            Expression<Func<Order, bool>> filter = _ => _.Id == id && _.CreatedUserId == currentUserID;
+            return GetOrder(filter,include);
+        }
 
-        public async Task<BaseViewModel<PagingResult<OrderViewModel>>> GetAllOrders(BasePagingRequestViewModel request)
+        public async Task<BaseViewModel<PagingResult<OrderViewModel>>> GetAllOrdersByUser(BasePagingRequestViewModel request)
+        {
+            var currentUser = _orderRepository.GetUsername();
+            return await GetAllOrder(request, $"_.CreatedBy == \"{currentUser}\"");
+
+        }
+        private async Task<BaseViewModel<PagingResult<OrderViewModel>>> GetAllOrder(BasePagingRequestViewModel request, string defaultCondition = null)
         {
             var pageSize = request.PageSize;
             var pageIndex = request.PageIndex;
             var result = new BaseViewModel<PagingResult<OrderViewModel>>();
-            string filter = SearchHelper<Order>.GenerateStringExpression(request.Filter);
+            string filter = SearchHelper<Order>.GenerateStringExpression(request.Filter, defaultCondition);
 
             Expression<Func<Order, bool>> FilterExpression = await LinqHelper<Order>.StringToExpression(filter);
 
+            var includeList = IncludeLinqHelper<Order>.StringToListInclude(request?.Include);
 
             QueryArgs<Order> queryArgs = new QueryArgs<Order>
             {
@@ -187,9 +227,10 @@ namespace CocShop.Service.Services
                 Limit = pageSize,
                 Filter = FilterExpression,
                 Sort = request.SortBy,
+                Include = includeList
             };
 
-            var data = _orderRepository.Get(queryArgs.Filter, queryArgs.Sort, queryArgs.Offset, queryArgs.Limit).ToList();
+            var data = _orderRepository.Get(queryArgs.Filter, queryArgs.Sort, queryArgs.Offset, queryArgs.Limit, queryArgs.Include).ToList();
 
             if (data == null || data.Count == 0)
             {
@@ -213,7 +254,10 @@ namespace CocShop.Service.Services
             }
 
             return result;
-
+        }
+        public async Task<BaseViewModel<PagingResult<OrderViewModel>>> GetAllOrdersByAdmin(BasePagingRequestViewModel request)
+        {
+            return await GetAllOrder(request);
         }
         public void Save()
         {

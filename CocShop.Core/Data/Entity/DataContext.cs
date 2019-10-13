@@ -39,7 +39,7 @@ namespace CocShop.Core.Data.Entity
 
         public DbSet<HubUserConnection> HubUserConnections { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-        public virtual DbSet<Image> Image { get; set; }
+        //public virtual DbSet<Image> Image { get; set; }
         public virtual DbSet<Location> Location { get; set; }
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderDetail> OrderDetail { get; set; }

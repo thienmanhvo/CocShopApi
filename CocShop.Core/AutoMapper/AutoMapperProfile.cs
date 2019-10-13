@@ -12,35 +12,41 @@ namespace CocShop.Core.AutoMapper
             //AllowNullCollections = true;
 
             CreateMap<LoginViewModel, MyUser>().ReverseMap();
-
             CreateMap<RegisterViewModel, MyUser>().ReverseMap();
 
             CreateMap<Product, CreateProductRequestViewModel>().ReverseMap();
-
             CreateMap<ProductViewModel, Product>().ReverseMap();
-
-            CreateMap<ProductCategoryViewModel, ProductCategory>().ReverseMap();
-
-            CreateMap<CreateProductCategoryRequestViewModel, ProductCategory>().ReverseMap();
-
             CreateMap<UpdateProductRequestViewModel, Product>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
             CreateMap<Product, UpdateProductRequestViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
 
+            CreateMap<ProductCategoryViewModel, ProductCategory>().ReverseMap();
+            CreateMap<CreateProductCategoryRequestViewModel, ProductCategory>().ReverseMap();
             CreateMap<ProductCategory, UpdateProductCategoryViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
             CreateMap<UpdateProductCategoryViewModel, ProductCategory>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
 
             CreateMap<OrderViewModel, Order>().ReverseMap();
-
             CreateMap<Order, CreateOrderRequestViewModel>().ReverseMap();
-
             //CreateMap<Order, UpdateOrderRequestViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
             //CreateMap<UpdateOrderRequestViewModel, Order>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
 
             CreateMap<OrderDetailViewModel, OrderDetail>().ReverseMap();
-
             CreateMap<OrderDetail, CreateOrderDetailViewModel>().ReverseMap();
 
-            CreateMap<OrderDetail, ProductToOrderViewModel>().ReverseMap();
+            CreateMap<Location, LocationViewModel>().ReverseMap();
+            CreateMap<Location, CreateLocationRequestViewModel>().ReverseMap();
+            CreateMap<UpdateLocationRequestViewModel, Location>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+            CreateMap<Location, UpdateLocationRequestViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+
+            CreateMap<PaymentMethod, PaymentMethodViewModel>().ReverseMap();
+            CreateMap<PaymentMethod, CreatePaymentMethodRequestViewModel>().ReverseMap();
+            CreateMap<UpdatePaymentMethodRequestViewModel, PaymentMethod>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+            CreateMap<PaymentMethod, UpdatePaymentMethodRequestViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+
+            CreateMap<MyUser, MyUserViewModel>().ReverseMap();
+            //CreateMap<PaymentMethod, CreatePaymentMethodRequestViewModel>().ReverseMap();
+            CreateMap<UpdateMyUserRequestViewModel, MyUser>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+            CreateMap<MyUser, UpdateMyUserRequestViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+
 
     //        CreateMap<OrderDetail, UpdateOrderDetailViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
     //        CreateMap<UpdateOrderDetailViewModel, OrderDetail>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));

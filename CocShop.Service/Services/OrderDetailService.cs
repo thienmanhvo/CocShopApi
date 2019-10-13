@@ -29,7 +29,7 @@ namespace CocShop.Service.Services
         public BaseViewModel<IEnumerable<OrderDetailViewModel>> CreateDetail(IEnumerable<CreateOrderDetailViewModel> details)
         {
             var entities = _mapper.Map<IEnumerable<OrderDetail>>(details);
-            foreach(var entity in entities)
+            foreach (var entity in entities)
             {
                 entity.Id = Guid.NewGuid();
                 entity.SetDefaultInsertValue(_repository.GetUsername());
@@ -76,8 +76,9 @@ namespace CocShop.Service.Services
 
         public BaseViewModel<IEnumerable<OrderDetailViewModel>> GetAllDetail(Guid id)
         {
-            var detail = _repository.GetAll().Where(x => x.OrderId == id);
-            
+            var currentUser = _repository.GetUsername();
+            var detail = _repository.GetAll().Where(x => x.OrderId == id && x.CreatedBy == currentUser);
+
             if (detail == null)
             {
                 return new BaseViewModel<IEnumerable<OrderDetailViewModel>>()

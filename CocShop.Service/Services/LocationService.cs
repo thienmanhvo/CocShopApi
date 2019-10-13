@@ -8,40 +8,39 @@ using CocShop.Core.MessageHandler;
 using CocShop.Core.Service;
 using CocShop.Core.ViewModel;
 using CocShop.Service.Helpers;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CocShop.Service.Services
 {
-    public class ProductCategoryService : IProductCategoryService
+    public class LocationService : ILocationService
     {
-        private readonly IProductCategoryRepository _repository;
+        private readonly ILocationRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ProductCategoryService(IServiceProvider serviceProvider)
+        public LocationService(ILocationRepository repository, IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _repository = serviceProvider.GetRequiredService<IProductCategoryRepository>();
-            _mapper = serviceProvider.GetRequiredService<IMapper>();
-            _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
+            _repository = repository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public BaseViewModel<ProductCategoryViewModel> CreateProductCategory(CreateProductCategoryRequestViewModel request)
+        public BaseViewModel<LocationViewModel> CreateLocation(CreateLocationRequestViewModel location)
         {
-            var entity = _mapper.Map<ProductCategory>(request);
+            var entity = _mapper.Map<Location>(location);
             entity.Id = Guid.NewGuid();
             entity.SetDefaultInsertValue(_repository.GetUsername());
             _repository.Add(entity);
 
-            var result = new BaseViewModel<ProductCategoryViewModel>()
+            var result = new BaseViewModel<LocationViewModel>()
             {
-                Data = _mapper.Map<ProductCategoryViewModel>(entity),
-                StatusCode = HttpStatusCode.OK
+                Data = _mapper.Map<LocationViewModel>(entity),
             };
 
             Save();
@@ -49,14 +48,14 @@ namespace CocShop.Service.Services
             return result;
         }
 
-        public BaseViewModel<string> DeleteProductCategory(Guid id)
+        public BaseViewModel<string> DeleteLocation(Guid id)
         {
-            //Find product
-            var product = _repository.GetById(id);
+            //Find Location
+            var location = _repository.GetById(id);
             //result to return
             BaseViewModel<string> result = null;
-            //check product exist
-            if (product == null || product.IsDelete)
+            //check Location exist
+            if (location == null || location.IsDelete)
             {
                 result = new BaseViewModel<string>()
                 {
@@ -68,23 +67,22 @@ namespace CocShop.Service.Services
             else
             {
                 //update column isDelete = true
-                product.IsDelete = true;
-                _repository.Update(product);
+                location.IsDelete = true;
+                _repository.Update(location);
                 result = new BaseViewModel<string>();
                 //save change
                 Save();
             }
-
             return result;
         }
 
-        public BaseViewModel<ProductCategoryViewModel> GetProductCategory(Guid id)
+        public BaseViewModel<LocationViewModel> GetLocation(Guid id)
         {
-            var productCategory = _repository.GetById(id);
+            var location = _repository.GetById(id);
 
-            if (productCategory == null || productCategory.IsDelete)
+            if (location == null || location.IsDelete)
             {
-                return new BaseViewModel<ProductCategoryViewModel>
+                return new BaseViewModel<LocationViewModel>
                 {
                     StatusCode = HttpStatusCode.NotFound,
                     Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
@@ -92,22 +90,23 @@ namespace CocShop.Service.Services
                 };
             }
 
-            return new BaseViewModel<ProductCategoryViewModel>
+            return new BaseViewModel<LocationViewModel>
             {
-                Data = _mapper.Map<ProductCategoryViewModel>(productCategory),
+                Data = _mapper.Map<LocationViewModel>(location),
             };
         }
 
-        public async Task<BaseViewModel<PagingResult<ProductCategoryViewModel>>> GetAllProductCategories(BasePagingRequestViewModel request)
+        public async Task<BaseViewModel<PagingResult<LocationViewModel>>> GetAllLocations(BasePagingRequestViewModel request)
         {
             var pageSize = request.PageSize;
             var pageIndex = request.PageIndex;
-            var result = new BaseViewModel<PagingResult<ProductCategoryViewModel>>();
-            string filter = SearchHelper<ProductCategory>.GenerateStringExpression(request.Filter, Constants.DEAFAULT_DELETE_STATUS_EXPRESSION);
+            var result = new BaseViewModel<PagingResult<LocationViewModel>>();
 
-            Expression<Func<ProductCategory, bool>> FilterExpression = await LinqHelper<ProductCategory>.StringToExpression(filter);
+            string filter = SearchHelper<Location>.GenerateStringExpression(request.Filter, Constants.DEAFAULT_DELETE_STATUS_EXPRESSION);
 
-            QueryArgs<ProductCategory> queryArgs = new QueryArgs<ProductCategory>
+            Expression<Func<Location, bool>> FilterExpression = await LinqHelper<Location>.StringToExpression(filter);
+
+            QueryArgs<Location> queryArgs = new QueryArgs<Location>
             {
                 Offset = pageSize * (pageIndex - 1),
                 Limit = pageSize,
@@ -115,9 +114,12 @@ namespace CocShop.Service.Services
                 Sort = request.SortBy,
             };
 
+
             var data = _repository.Get(queryArgs.Filter, queryArgs.Sort, queryArgs.Offset, queryArgs.Limit).ToList();
 
-            if (data == null || !data.Any())
+            //var sql = data.ToSql();
+
+            if (data == null || data.Count == 0)
             {
                 result.Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD);
                 result.Code = MessageConstants.NO_RECORD;
@@ -129,9 +131,9 @@ namespace CocShop.Service.Services
                 {
                     pageSizeReturn = data.Count;
                 }
-                result.Data = new PagingResult<ProductCategoryViewModel>
+                result.Data = new PagingResult<LocationViewModel>
                 {
-                    Results = _mapper.Map<IEnumerable<ProductCategoryViewModel>>(data),
+                    Results = _mapper.Map<IEnumerable<LocationViewModel>>(data),
                     PageIndex = pageIndex,
                     PageSize = pageSizeReturn,
                     TotalRecords = _repository.Count(queryArgs.Filter)
@@ -140,18 +142,17 @@ namespace CocShop.Service.Services
 
             return result;
         }
-
         public void Save()
         {
             _unitOfWork.Commit();
         }
 
-        public BaseViewModel<ProductCategoryViewModel> UpdateProductCategory(UpdateProductCategoryViewModel productCategory)
+        public BaseViewModel<LocationViewModel> UpdateLocation(UpdateLocationRequestViewModel location)
         {
-            var entity = _repository.GetById(productCategory.Id);
+            var entity = _repository.GetById(location.Id);
             if (entity == null || entity.IsDelete)
             {
-                return new BaseViewModel<ProductCategoryViewModel>
+                return new BaseViewModel<LocationViewModel>
                 {
                     StatusCode = HttpStatusCode.NotFound,
                     Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
@@ -159,13 +160,13 @@ namespace CocShop.Service.Services
                 };
             }
 
-            entity = _mapper.Map(productCategory, entity);
+            entity = _mapper.Map(location, entity);
 
             entity.SetDefaultUpdateValue(_repository.GetUsername());
             _repository.Update(entity);
-            var result = new BaseViewModel<ProductCategoryViewModel>
+            var result = new BaseViewModel<LocationViewModel>
             {
-                Data = _mapper.Map<ProductCategoryViewModel>(entity),
+                Data = _mapper.Map<LocationViewModel>(entity),
             };
 
             Save();
@@ -174,3 +175,4 @@ namespace CocShop.Service.Services
         }
     }
 }
+

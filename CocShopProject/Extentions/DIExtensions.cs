@@ -47,6 +47,8 @@ namespace CocShop.WebAPi.Extentions
             services.AddTransient<IProductCategoryService, ProductCategoryService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IOrderDetailService, OrderDetailService>();
+            services.AddTransient<ILocationService, LocationService>();
+            services.AddTransient<IPaymentMethodService, PaymentMethodService>();
         }
 
         public static void AddRepoistoryDI(IServiceCollection services)
@@ -57,6 +59,9 @@ namespace CocShop.WebAPi.Extentions
             services.AddTransient<IProductCategoryRepository, ProductCategoryRepository>();
             services.AddTransient<IOrderDetailRepository, OrderDetailRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<IPaymentMethodRepository, PaymentMethodRepository>();
+            services.AddTransient<ILocationRepository, LocationRepository>();
+            services.AddTransient<IPaymentMethodRepository, PaymentMethodRepository>();
 
         }
 

@@ -46,8 +46,10 @@ namespace CocShop.Core.Data.Entity
         [Column("Cate_Id")]
         public Guid? CateId { get; set; }
 
+        [Column("Image_Path")]
+        public string ImagePath { get; set; }
         public virtual ProductCategory Category { get; set; }
-        public virtual ICollection<Image> Image { get; set; }
+        //public virtual ICollection<Image> Image { get; set; }
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }
 
         public override void SetDefaultInsertValue(string username)

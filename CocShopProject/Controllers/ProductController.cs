@@ -12,10 +12,11 @@ using CocShop.Core.MessageHandler;
 using CocShop.Core.Constaint;
 using System.Net;
 using System.Threading.Tasks;
+using CocShop.Core.Attribute;
 
 namespace CocShop.WebAPi.Controllers
 {
-   // [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
@@ -73,18 +74,11 @@ namespace CocShop.WebAPi.Controllers
         // PUT: api/Product/5
         [ValidateModel]
         [HttpPut("{id}")]
-        public ActionResult<BaseViewModel<ProductViewModel>> PutProduct(string id, [FromBody]UpdateProductRequestViewModel product)
+        public ActionResult<BaseViewModel<ProductViewModel>> PutProduct([CheckGuid(Property = "LocationId")]string id, [FromBody]UpdateProductRequestViewModel product)
         {
-            if (!Guid.TryParse(id, out Guid guidId))
-            {
-                return NotFound(new BaseViewModel<string>()
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Code = ErrMessageConstants.NOTFOUND,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-                });
-            };
-            var result = _productService.UpdateProduct(guidId, product);
+            var guidID = new Guid(id);
+            product.Id = guidID;
+            var result = _productService.UpdateProduct(guidID, product);
 
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
             return result;

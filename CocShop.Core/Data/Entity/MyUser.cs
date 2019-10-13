@@ -10,6 +10,8 @@ namespace CocShop.Core.Data.Entity
     {
         [Column("Full_Name")]
         public string FullName { get; set; }
+        [Column("Avatar_Path")]
+        public string AvatarPath { get; set; }
         [Column("Created_By")]
         public string CreatedBy { get; set; }
         [Column("Created_At")]
@@ -18,6 +20,8 @@ namespace CocShop.Core.Data.Entity
         public string UpdatedBy { get; set; }
         [Column("Updated_At")]
         public DateTime? UpdatedAt { get; set; }
+        [Column("Is_Delete")]
+        public bool IsDelete { get; set; }
 
         public void SetDefaultInsertValue(string username)
         {

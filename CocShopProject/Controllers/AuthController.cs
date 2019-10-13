@@ -5,6 +5,7 @@ using CocShop.Core.MessageHandler;
 using CocShop.Core.ViewModel;
 using CocShop.Data.Appsettings;
 using CocShop.WebAPi.Extentions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -121,6 +122,34 @@ namespace CocShop.WebAPi.Controllers
             else
             {
                 return BadRequest(resultUser.Errors);
+            }
+        }
+
+        #endregion
+
+        #region ChangePass
+
+        /// <summary>
+        /// Register
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <author>thiennb</author>
+        [Authorize]
+        [ValidateModel]
+        [HttpPost("ChangePassword")]
+        public async Task<ActionResult> ChangePassword([FromBody]ChangePasswordViewModel request)
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var currentUser = await _userManager.FindByIdAsync(userId);
+            IdentityResult result = await _userManager.ChangePasswordAsync(currentUser, request.OldPassword, request.NewPassword);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(result.Errors);
             }
         }
 
