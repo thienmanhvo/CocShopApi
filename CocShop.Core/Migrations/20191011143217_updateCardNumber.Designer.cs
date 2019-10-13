@@ -4,14 +4,16 @@ using CocShop.Core.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CocShop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191011143217_updateCardNumber")]
+    partial class updateCardNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,6 +53,36 @@ namespace CocShop.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Hub_User_Connection");
+                });
+
+            modelBuilder.Entity("CocShop.Core.Data.Entity.Image", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnName("Created_At");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnName("Created_By");
+
+                    b.Property<string>("Path");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnName("Product_Id");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnName("Updated_At");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnName("Updated_By");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("CocShop.Core.Data.Entity.Location", b =>
@@ -143,9 +175,6 @@ namespace CocShop.Data.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
-
-                    b.Property<string>("AvatarPath")
-                        .HasColumnName("Avatar_Path");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -482,9 +511,6 @@ namespace CocShop.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnName("Description");
 
-                    b.Property<string>("ImagePath")
-                        .HasColumnName("Image_Path");
-
                     b.Property<bool?>("IsBest")
                         .HasColumnName("Is_Best");
 
@@ -561,6 +587,14 @@ namespace CocShop.Data.Migrations
                     b.HasOne("CocShop.Core.Data.Entity.MyUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("CocShop.Core.Data.Entity.Image", b =>
+                {
+                    b.HasOne("CocShop.Core.Data.Entity.Product", "Product")
+                        .WithMany("Image")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CocShop.Core.Data.Entity.MyRoleClaim", b =>

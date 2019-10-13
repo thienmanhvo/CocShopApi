@@ -170,9 +170,11 @@ namespace CocShop.Service.Services
         //    return result;
         //}
 
-        public BaseViewModel<OrderViewModel> GetOrder(Guid id)
+        private BaseViewModel<OrderViewModel> GetOrder(Expression<Func<Order, bool>> filter, string include = null)
         {
-            var order = _orderRepository.GetById(id);
+            var includeList = IncludeLinqHelper<Order>.StringToListInclude(include);
+
+            var order = _orderRepository.Get(filter, includeList).FirstOrDefault();
 
             if (order == null)
             {
@@ -188,6 +190,18 @@ namespace CocShop.Service.Services
             {
                 Data = _mapper.Map<OrderViewModel>(order),
             };
+        }
+        public BaseViewModel<OrderViewModel> GetOrderByAdmin(Guid id, string include = null)
+        {
+            var currentUserID = new Guid(_orderRepository.GetCurrentUserId());
+            Expression<Func<Order, bool>> filter = _ => _.Id == id;
+            return GetOrder(filter, include);
+        }
+        public BaseViewModel<OrderViewModel> GetOrderByUser(Guid id, string include = null)
+        {
+            var currentUserID = new Guid(_orderRepository.GetCurrentUserId());
+            Expression<Func<Order, bool>> filter = _ => _.Id == id && _.CreatedUserId == currentUserID;
+            return GetOrder(filter,include);
         }
 
         public async Task<BaseViewModel<PagingResult<OrderViewModel>>> GetAllOrdersByUser(BasePagingRequestViewModel request)
@@ -205,17 +219,8 @@ namespace CocShop.Service.Services
 
             Expression<Func<Order, bool>> FilterExpression = await LinqHelper<Order>.StringToExpression(filter);
 
-            IList<string> includeList = new List<string>();
+            var includeList = IncludeLinqHelper<Order>.StringToListInclude(request?.Include);
 
-            foreach (var includeProperty in (request?.Include ?? "").Split
-               (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                var field = typeof(Order).GetProperty(includeProperty, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-                if (!string.IsNullOrEmpty(field?.Name))
-                {
-                    includeList.Add(field.Name);
-                }
-            }
             QueryArgs<Order> queryArgs = new QueryArgs<Order>
             {
                 Offset = pageSize * (pageIndex - 1),

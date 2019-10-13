@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CocShop.Core.Attribute;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -36,5 +37,17 @@ namespace CocShop.Core.ViewModel
         public string Password { get; set; }
         public string Email { get; set; }
         public string Fullname { get; set; }
+        [CheckUrl]
+        public string AvatarPath { get; set; }
+    }
+    public class ChangePasswordViewModel
+    {
+
+        [Required]
+        public string OldPassword { get; set; }
+
+        [Required]
+        public string NewPassword { get; set; }
+
     }
 }

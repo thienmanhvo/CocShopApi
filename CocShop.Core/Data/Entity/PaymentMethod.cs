@@ -17,8 +17,9 @@ namespace CocShop.Core.Data.Entity
         [Column("User_Id")]
         public Guid UserId { get; set; }
 
+        [MaxLength(30)]
         [Column("Card_Number")]
-        public int? CardNumber { get; set; }
+        public string CardNumber { get; set; }
 
 
         [Column("Date_From")]
@@ -33,7 +34,7 @@ namespace CocShop.Core.Data.Entity
         public string OtherDetail { get; set; }
 
         [Column("Is_Delete")]
-        public bool? IsDelete { get; set; }
+        public bool IsDelete { get; set; }
 
         public virtual MyUser User { get; set; }
         public virtual ICollection<Order> Order { get; set; }

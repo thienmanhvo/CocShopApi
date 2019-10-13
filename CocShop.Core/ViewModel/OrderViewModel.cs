@@ -1,10 +1,10 @@
-﻿using CocShop.Core.Data.Entity;
+﻿using CocShop.Core.Attribute;
+using CocShop.Core.Data.Entity;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using static CocShop.Core.Attribute.CustomValidation;
 
 namespace CocShop.Core.ViewModel
 {
@@ -44,28 +44,33 @@ namespace CocShop.Core.ViewModel
     public class OrderViewModel
     {
         public string Id { get; set; }
+
         public Guid CreatedUserId { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public virtual MyUserViewModel CreatedUser { get; set; }
 
         public decimal TotalPrice { get; set; }
 
         public Guid? LocationId { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public virtual LocationViewModel Location { get; set; }
+
         public Guid? PaymentId { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public virtual PaymentMethod Payment { get; set; }
 
         public int? TotalQuantity { get; set; }
 
         public string Status { get; set; }
 
         public Guid? DeliveryUserId { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public virtual MyUserViewModel DeliveryUser { get; set; }
+
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public virtual ICollection<OrderDetailViewModel> OrderDetail { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public virtual UserViewModel CreatedUser { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public virtual UserViewModel DeliveryUser { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public virtual LocationViewModel Location { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public virtual PaymentMethod Payment { get; set; }
     }
 }

@@ -139,7 +139,7 @@ namespace CocShop.Service.Services
             var result = new BaseViewModel<PagingResult<ProductViewModel>>();
 
             string filter = SearchHelper<Product>.GenerateStringExpression(request.Filter, Constants.DEAFAULT_DELETE_STATUS_EXPRESSION);
-       
+
             Expression<Func<Product, bool>> FilterExpression = await LinqHelper<Product>.StringToExpression(filter);
 
             QueryArgs<Product> queryArgs = new QueryArgs<Product>
@@ -197,7 +197,6 @@ namespace CocShop.Service.Services
             }
 
             entity = _mapper.Map(product, entity);
-
             entity.SetDefaultUpdateValue(_repository.GetUsername());
             _repository.Update(entity);
             var result = new BaseViewModel<ProductViewModel>

@@ -1,4 +1,5 @@
-﻿using CocShop.Core.Constaint;
+﻿using CocShop.Core.Attribute;
+using CocShop.Core.Constaint;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,8 +17,8 @@ namespace CocShop.Core.ViewModel
         public int? PageSize { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
         public int? PageIndex { get; set; }
-        public IDictionary<string, string> Filter { get; set; }
         public string Include { get; set; }
+        public IDictionary<string, string> Filter { get; set; }
         public void SetDefaultPage()
         {
             PageSize = PageSize ?? Constants.DEFAULT_PAGE_SIZE;
@@ -25,6 +26,12 @@ namespace CocShop.Core.ViewModel
             PageSize = PageSize > Constants.MAX_PAGE_SIZE ? Constants.MAX_PAGE_SIZE : PageSize;
         }
 
+    }
+    public class BaseRequestViewModel
+    {
+        [CheckGuid]
+        public string Id { get; set; }
+        public string Include { get; set; }
     }
     public class Paging
     {

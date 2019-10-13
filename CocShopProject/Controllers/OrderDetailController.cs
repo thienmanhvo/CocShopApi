@@ -14,7 +14,7 @@ using System.Net;
 
 namespace CocShop.WebAPi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderDetailController : ControllerBase
@@ -36,24 +36,24 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // GET: api/OrderDetail/5
-        //[HttpGet("{id}")]
-        //public ActionResult<BaseViewModel<IEnumerable<OrderDetailViewModel>>> GetDetail(string id)
-        //{
-        //    if (!Guid.TryParse(id, out Guid guidId))
-        //    {
-        //        return NotFound(new BaseViewModel<string>()
-        //        {
-        //            StatusCode = HttpStatusCode.NotFound,
-        //            Code = ErrMessageConstants.NOTFOUND,
-        //            Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-        //        });
-        //    };
-        //    var result = _orderDetailService.GetAllDetail(guidId);
+        [HttpGet("{id}")]
+        public ActionResult<BaseViewModel<IEnumerable<OrderDetailViewModel>>> GetDetail(string id)
+        {
+            if (!Guid.TryParse(id, out Guid guidId))
+            {
+                return NotFound(new BaseViewModel<string>()
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                });
+            };
+            var result = _orderDetailService.GetAllDetail(guidId);
 
-        //    this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 
-        //    return result;
-        //}
+            return result;
+        }
 
         //// PUT: api/OrderDetail/5
         //[ValidateModel]

@@ -10,7 +10,8 @@ namespace CocShop.Core.Service
     {
         Task<BaseViewModel<PagingResult<OrderViewModel>>> GetAllOrdersByUser(BasePagingRequestViewModel request);
         Task<BaseViewModel<PagingResult<OrderViewModel>>> GetAllOrdersByAdmin(BasePagingRequestViewModel request);
-        BaseViewModel<OrderViewModel> GetOrder(Guid id);
+        BaseViewModel<OrderViewModel> GetOrderByAdmin(Guid id, string include = null);
+        BaseViewModel<OrderViewModel> GetOrderByUser(Guid id, string include = null);
         //BaseViewModel<IEnumerable<OrderViewModel>> GetOrderByID(Guid cateId);
         BaseViewModel<OrderViewModel> CreateOrder(CreateOrderRequestViewModel product);
         //BaseViewModel<OrderViewModel> UpdateOrder(Guid id, UpdateOrderRequestViewModel product);

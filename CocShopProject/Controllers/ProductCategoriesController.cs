@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CocShop.Core.Attribute;
 using CocShop.Core.Constaint;
 using CocShop.Core.Data.Entity;
 using CocShop.Core.MessageHandler;
@@ -93,17 +94,9 @@ namespace CocShop.WebAPi.Controllers
         // PUT: api/ProductCategories/5
         [ValidateModel]
         [HttpPut("{id}")]
-        public ActionResult<BaseViewModel<ProductCategoryViewModel>> PutProductCategory(string id, UpdateProductCategoryViewModel productCategory)
+        public ActionResult<BaseViewModel<ProductCategoryViewModel>> PutProductCategory([CheckGuid(Property = "LocationId")]string id, UpdateProductCategoryViewModel productCategory)
         {
-            if (!Guid.TryParse(id, out Guid guidId))
-            {
-                return NotFound(new BaseViewModel<string>()
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Code = ErrMessageConstants.NOTFOUND,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-                });
-            };
+            var guidId = new Guid(id);
             productCategory.Id = guidId;
             var result = _producCategorytService.UpdateProductCategory(productCategory);
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;

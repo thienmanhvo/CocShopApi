@@ -14,6 +14,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using System.Linq;
+using CocShop.Core.Attribute;
 
 namespace CocShop.WebAPi.Controllers
 {
@@ -60,19 +61,18 @@ namespace CocShop.WebAPi.Controllers
 
         // GET: api/Order/5
         [HttpGet("{id}")]
-        public ActionResult<BaseViewModel<OrderViewModel>> GetOrder(string id)
+        public ActionResult<BaseViewModel<OrderViewModel>> GetOrder([CheckGuid]string id,[FromQuery] string include)
         {
-            if (!Guid.TryParse(id, out Guid guidId))
+            var listRole = HttpContext.User.FindAll(ClaimTypes.Role);
+            BaseViewModel<OrderViewModel> result = null;
+            if (listRole.Any(_ => Role.Admin.Equals(_.Value)))
             {
-                return NotFound(new BaseViewModel<string>()
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Code = ErrMessageConstants.NOTFOUND,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-                });
-            };
-            var result = _orderService.GetOrder(guidId);
-
+                result = _orderService.GetOrderByAdmin(new Guid(id), include);
+            }
+            else
+            {
+                result = _orderService.GetOrderByUser(new Guid(id), include);
+            }
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 
             return result;

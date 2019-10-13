@@ -129,12 +129,13 @@ namespace CocShop.Core.Data.Infrastructure
             {
                 query = query.Where(filter);
             }
-
-            foreach (var includeProperty in includeProperties)
+            if (includeProperties != null)
             {
-                query = query.Include(includeProperty);
+                foreach (var includeProperty in includeProperties)
+                {
+                    query = query.Include(includeProperty);
+                }
             }
-
             query = query.OrderBy(sortBy);
 
             if (offset != null && limit != null) //&& (offset >= 0 && limit > 0))
@@ -145,6 +146,23 @@ namespace CocShop.Core.Data.Infrastructure
             {
                 return query;
             }
+        }
+        public IQueryable<T> Get(Expression<Func<T, bool>> filter = null, IEnumerable<string> includeProperties = null)
+        {
+            IQueryable<T> query = dbSet.AsNoTracking();
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties)
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+            return query;
         }
 
         public string GetUsername()
