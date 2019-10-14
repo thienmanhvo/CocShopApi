@@ -36,6 +36,9 @@ namespace CocShop.Core.Data.Entity
         [Column("Status")]
         public string Status { get; set; }
 
+        [Column("Is_Cash")]
+        public bool? IsCash { get; set; }
+
         [ForeignKey("DeliveryUser")]
         [Column("Delivery_User_Id")]
         public Guid? DeliveryUserId { get; set; }

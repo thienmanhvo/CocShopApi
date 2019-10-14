@@ -23,9 +23,10 @@ namespace CocShop.Core.ViewModel
         //public string Status { get; set; }
 
         //public Guid? DeliveryUserId { get; set; }
+        [Required]
         [CheckGuid(Property = "LocationId")]
         public string LocationId { get; set; }
-        [CheckGuid(Property = "PaymentId")]
+        [CheckGuidOrNull(Property = "PaymentId")]
         public string PaymentId { get; set; }
 
         [Required, MinLength(1, ErrorMessage = "At least one item required in order")]
@@ -56,6 +57,8 @@ namespace CocShop.Core.ViewModel
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public virtual LocationViewModel Location { get; set; }
+
+        public virtual bool? IsCash { get; set; }
 
         public Guid? PaymentId { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

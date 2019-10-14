@@ -34,7 +34,7 @@ namespace CocShop.WebAPi.Extentions
                 // User settings.
                 o.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                o.User.RequireUniqueEmail = false;
+                o.User.RequireUniqueEmail = true;
             });
             authBuilder = new IdentityBuilder(authBuilder.UserType, typeof(MyRole), authBuilder.Services);
             authBuilder.AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();

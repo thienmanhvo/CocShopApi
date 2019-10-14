@@ -72,6 +72,7 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // POST: api/PaymentMethods
+        [Authorize(Roles = Role.User)]
         [ValidateModel]
         [HttpPost]
         public ActionResult<BaseViewModel<PaymentMethodViewModel>> PostPaymentMethod(CreatePaymentMethodRequestViewModel location)

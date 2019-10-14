@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using CocShop.Core.Constaint;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,6 +23,10 @@ namespace CocShop.Core.Data.Entity
         public DateTime? UpdatedAt { get; set; }
         [Column("Is_Delete")]
         public bool IsDelete { get; set; }
+        [Column("Birthday")]
+        public DateTime? Birthday { get; set; }
+        [Column("Gender")]
+        public MyEnum.Gender Gender { get; set; }
 
         public ICollection<PaymentMethod> PaymentMethods { get; set; }
 

@@ -48,18 +48,23 @@ namespace CocShop.Service.Services
             var username = _orderRepository.GetUsername();
             var orderEntity = _mapper.Map<Order>(order);
             orderEntity.SetDefaultInsertValue(_orderRepository.GetUsername());
-
-            var paymentMethod = _paymentMethodRepository.GetMany(_ => _.IsDelete == false && _.Id.Equals(new Guid(order.PaymentId)));
-            if (paymentMethod == null)
+            if (order.PaymentId != null)
             {
-                return new BaseViewModel<OrderViewModel>()
+                var paymentMethod = _paymentMethodRepository.GetMany(_ => _.IsDelete == false && _.Id.Equals(new Guid(order.PaymentId)));
+                if (paymentMethod == null)
                 {
-                    StatusCode = HttpStatusCode.BadRequest,
-                    Code = ErrMessageConstants.PAYMENT_METHOD_NOT_FOUND,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.PAYMENT_METHOD_NOT_FOUND),
-                };
+                    return new BaseViewModel<OrderViewModel>()
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Code = ErrMessageConstants.PAYMENT_METHOD_NOT_FOUND,
+                        Description = MessageHandler.CustomErrMessage(ErrMessageConstants.PAYMENT_METHOD_NOT_FOUND),
+                    };
+                }
             }
-
+            else
+            {
+                orderEntity.IsCash = true;
+            }
             var location = _locationRepository.GetMany(_ => _.IsDelete == false && _.Id.Equals(new Guid(order.LocationId)));
             if (location == null)
             {
@@ -201,7 +206,7 @@ namespace CocShop.Service.Services
         {
             var currentUserID = new Guid(_orderRepository.GetCurrentUserId());
             Expression<Func<Order, bool>> filter = _ => _.Id == id && _.CreatedUserId == currentUserID;
-            return GetOrder(filter,include);
+            return GetOrder(filter, include);
         }
 
         public async Task<BaseViewModel<PagingResult<OrderViewModel>>> GetAllOrdersByUser(BasePagingRequestViewModel request)

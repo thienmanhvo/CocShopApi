@@ -2,6 +2,7 @@
 using CocShop.Core.Data.Entity;
 using CocShop.Core.ViewModel;
 using System;
+using System.Globalization;
 
 namespace CocShop.Core.AutoMapper
 {
@@ -13,6 +14,9 @@ namespace CocShop.Core.AutoMapper
 
             CreateMap<LoginViewModel, MyUser>().ReverseMap();
             CreateMap<RegisterViewModel, MyUser>().ReverseMap();
+
+            CreateMap<DateTime, string>().ConvertUsing(new DatetimeToStringConverter());
+            CreateMap<string, DateTime>().ConvertUsing(new StringToDatetimeConverter());
 
             CreateMap<Product, CreateProductRequestViewModel>().ReverseMap();
             CreateMap<ProductViewModel, Product>().ReverseMap();
@@ -31,6 +35,7 @@ namespace CocShop.Core.AutoMapper
 
             CreateMap<OrderDetailViewModel, OrderDetail>().ReverseMap();
             CreateMap<OrderDetail, CreateOrderDetailViewModel>().ReverseMap();
+            CreateMap<ProductToOrderViewModel, OrderDetail>().ReverseMap();
 
             CreateMap<Location, LocationViewModel>().ReverseMap();
             CreateMap<Location, CreateLocationRequestViewModel>().ReverseMap();
@@ -48,8 +53,8 @@ namespace CocShop.Core.AutoMapper
             CreateMap<MyUser, UpdateMyUserRequestViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
 
 
-    //        CreateMap<OrderDetail, UpdateOrderDetailViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
-    //        CreateMap<UpdateOrderDetailViewModel, OrderDetail>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+            //        CreateMap<OrderDetail, UpdateOrderDetailViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+            //        CreateMap<UpdateOrderDetailViewModel, OrderDetail>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
 
             //CreateMap<string, Guid>().ConvertUsing(new StringToGuidConverter());
             //CreateMap<Guid, string>().ConvertUsing(new GuidToStringConverter());
@@ -67,6 +72,20 @@ namespace CocShop.Core.AutoMapper
         public Guid Convert(string source, Guid destination, ResolutionContext context)
         {
             return Guid.Parse(source);
+        }
+    }
+    public class DatetimeToStringConverter : ITypeConverter<DateTime, string>
+    {
+        public string Convert(DateTime source, string destination, ResolutionContext context)
+        {
+            return source.ToString("yyyyMMdd");
+        }
+    }
+    public class StringToDatetimeConverter : ITypeConverter<string, DateTime>
+    {
+        public DateTime Convert(string source, DateTime destination, ResolutionContext context)
+        {
+            return DateTime.ParseExact(source, "yyyyMMdd", CultureInfo.InvariantCulture);
         }
     }
 }
