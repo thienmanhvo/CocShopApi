@@ -1,4 +1,5 @@
 ﻿using CocShop.Core.Attribute;
+using CocShop.Core.Constaint;
 using CocShop.Core.Data.Entity;
 using Newtonsoft.Json;
 using System;
@@ -13,7 +14,8 @@ namespace CocShop.Core.ViewModel
         public string Email { get; set; }
         public string Username { get; set; }
         public string AvatarPath { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public MyEnum.Gender Gender { get; set; }
+        public DateTime? Birthday { get; set; }
         public ICollection<PaymentMethodViewModel> PaymentMethods { get; set; }
     }
     public class UpdateMyUserRequestViewModel
@@ -22,5 +24,8 @@ namespace CocShop.Core.ViewModel
         public string Email { get; set; }
         [CheckUrl]
         public string AvatarPath { get; set; }
+        public MyEnum.Gender Gender { get; set; }
+        [CheckDate]
+        public string Birthday { get; set; }
     }   
 }

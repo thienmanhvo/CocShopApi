@@ -14,7 +14,7 @@ using System.Net;
 
 namespace CocShop.WebAPi.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = Role.User)]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderDetailController : ControllerBase

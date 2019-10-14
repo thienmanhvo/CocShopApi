@@ -37,7 +37,7 @@ namespace CocShop.Service.Services
         {
             var includeList = IncludeLinqHelper<MyUser>.StringToListInclude(include);
 
-            var myUser = _repository.Get(_ => _.IsDelete == false, includeList).FirstOrDefault();
+            var myUser = _repository.Get(_ => _.IsDelete == false && _.Id == id, includeList).FirstOrDefault();
 
             if (myUser == null)
             {

@@ -72,6 +72,7 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // PUT: api/Product/5
+        [Authorize(Roles =Role.Admin)]
         [ValidateModel]
         [HttpPut("{id}")]
         public ActionResult<BaseViewModel<ProductViewModel>> PutProduct([CheckGuid(Property = "LocationId")]string id, [FromBody]UpdateProductRequestViewModel product)
@@ -85,6 +86,7 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // POST: api/Product
+        [Authorize(Roles = Role.Admin)]
         [ValidateModel]
         [HttpPost]
         public ActionResult<BaseViewModel<ProductViewModel>> PostProduct(CreateProductRequestViewModel product)
@@ -97,6 +99,7 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // DELETE: api/Product/5
+        [Authorize(Roles = Role.Admin)]
         [HttpDelete("{id}")]
         public ActionResult<BaseViewModel<string>> DeleteProduct(string id)
         {

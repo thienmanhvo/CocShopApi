@@ -68,6 +68,7 @@ namespace CocShop.WebAPi.Controllers
 
         // PUT: api/Locations/5
         [ValidateModel]
+        [Authorize(Roles = Role.Admin)]
         [HttpPut("{id}")]
         public ActionResult<BaseViewModel<LocationViewModel>> PutLocation([CheckGuid(Property = "LocationId")]string id, [FromBody]UpdateLocationRequestViewModel location)
         {
@@ -81,6 +82,7 @@ namespace CocShop.WebAPi.Controllers
 
         // POST: api/Locations
         [ValidateModel]
+        [Authorize(Roles = Role.Admin)]
         [HttpPost]
         public ActionResult<BaseViewModel<LocationViewModel>> PostLocation(CreateLocationRequestViewModel location)
         {
@@ -92,6 +94,7 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // DELETE: api/Locations/5
+        [Authorize(Roles = Role.Admin)]
         [HttpDelete("{id}")]
         public ActionResult<BaseViewModel<string>> DeleteLocation([CheckGuid(Property = "LocationId")] string id)
         {

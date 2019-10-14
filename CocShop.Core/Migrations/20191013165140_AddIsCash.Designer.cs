@@ -4,14 +4,16 @@ using CocShop.Core.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CocShop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191013165140_AddIsCash")]
+    partial class AddIsCash
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,9 +149,6 @@ namespace CocShop.Data.Migrations
                     b.Property<string>("AvatarPath")
                         .HasColumnName("Avatar_Path");
 
-                    b.Property<DateTime?>("Birthday")
-                        .HasColumnName("Birthday");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -166,9 +165,6 @@ namespace CocShop.Data.Migrations
 
                     b.Property<string>("FullName")
                         .HasColumnName("Full_Name");
-
-                    b.Property<int>("Gender")
-                        .HasColumnName("Gender");
 
                     b.Property<bool>("IsDelete")
                         .HasColumnName("Is_Delete");
@@ -350,7 +346,7 @@ namespace CocShop.Data.Migrations
                     b.Property<Guid?>("DeliveryUserId")
                         .HasColumnName("Delivery_User_Id");
 
-                    b.Property<bool?>("IsCash")
+                    b.Property<string>("IsCash")
                         .HasColumnName("Is_Cash");
 
                     b.Property<Guid?>("LocationId")
