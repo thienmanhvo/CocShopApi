@@ -62,7 +62,11 @@ namespace CocShop.Core.Data.Entity
         }
         public void Commit()
         {
-            base.SaveChanges();
+            SaveChanges();
+        }
+        public void BulkUpdate()
+        {
+            BulkUpdate();
         }
     }
 }

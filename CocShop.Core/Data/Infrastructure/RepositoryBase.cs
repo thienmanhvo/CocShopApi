@@ -51,7 +51,6 @@ namespace CocShop.Core.Data.Infrastructure
 
         public virtual void Update(T entity)
         {
-
             dbSet.Attach(entity);
             dataContext.Entry(entity).State = EntityState.Modified;
         }
@@ -95,7 +94,6 @@ namespace CocShop.Core.Data.Infrastructure
         public IQueryable<T> Get(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, int? offset = null, int? limit = null, string includeProperties = "")
         {
             IQueryable<T> query = dbSet;//.AsNoTracking();
-
             if (filter != null)
             {
                 query = query.Where(filter);

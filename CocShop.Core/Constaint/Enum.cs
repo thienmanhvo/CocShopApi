@@ -39,6 +39,7 @@ namespace CocShop.Core.Constaint
             Submitted = 0,
             Delivered = 1,
             Canceled = 2,
+            Delivering = 3,
         }
         [JsonConverter(typeof(StringEnumConverter))]
         public enum Gender

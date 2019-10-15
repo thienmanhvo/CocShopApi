@@ -70,6 +70,24 @@ namespace CocShop.Core.MessageHandler {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The status of the order is not delivering..
+        /// </summary>
+        internal static string Invalid_Order_Status_Delivering {
+            get {
+                return ResourceManager.GetString("Invalid_Order_Status_Delivering", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The status of the order is not submitted..
+        /// </summary>
+        internal static string Invalid_Order_Status_Submitted {
+            get {
+                return ResourceManager.GetString("Invalid_Order_Status_Submitted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The password you entered is incorrect..
         /// </summary>
         internal static string Invalid_Password {
@@ -102,6 +120,15 @@ namespace CocShop.Core.MessageHandler {
         internal static string Not_Found {
             get {
                 return ResourceManager.GetString("Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Product is out of stock..
+        /// </summary>
+        internal static string Out_Of_Stock {
+            get {
+                return ResourceManager.GetString("Out_Of_Stock", resourceCulture);
             }
         }
         

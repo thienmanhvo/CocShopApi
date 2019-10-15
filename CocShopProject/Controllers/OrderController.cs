@@ -61,7 +61,7 @@ namespace CocShop.WebAPi.Controllers
 
         // GET: api/Order/5
         [HttpGet("{id}")]
-        public ActionResult<BaseViewModel<OrderViewModel>> GetOrder([CheckGuid]string id,[FromQuery] string include)
+        public ActionResult<BaseViewModel<OrderViewModel>> GetOrder([CheckGuid]string id, [FromQuery] string include)
         {
             var listRole = HttpContext.User.FindAll(ClaimTypes.Role);
             BaseViewModel<OrderViewModel> result = null;
@@ -75,6 +75,42 @@ namespace CocShop.WebAPi.Controllers
             }
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 
+            return result;
+        }
+
+        // PUT: api/Order/Cancel/5
+        [Authorize(Roles = Role.User)]
+        [HttpPut("Cancel/{id}")]
+        public ActionResult<BaseViewModel<string>> Cancel([CheckGuid]string id)
+        {
+            var listRole = HttpContext.User.FindAll(ClaimTypes.Role);
+            BaseViewModel<string> result = null;
+            result = _orderService.CancelOrder(new Guid(id));
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+            return result;
+        }
+        
+        // PUT: api/Order/Pick/5
+        [Authorize(Roles = Role.Staff)]
+        [HttpPut("Pick/{id}")]
+        public ActionResult<BaseViewModel<string>> Pick([CheckGuid]string id)
+        {
+            var listRole = HttpContext.User.FindAll(ClaimTypes.Role);
+            BaseViewModel<string> result = null;
+            result = _orderService.PickOrder(new Guid(id));
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+            return result;
+        }
+        
+        // PUT: api/Order/Complete/5
+        [Authorize(Roles = Role.Staff)]
+        [HttpPut("Complete/{id}")]
+        public ActionResult<BaseViewModel<string>> Complete([CheckGuid]string id)
+        {
+            var listRole = HttpContext.User.FindAll(ClaimTypes.Role);
+            BaseViewModel<string> result = null;
+            result = _orderService.CompleteOrder(new Guid(id));
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
             return result;
         }
 

@@ -34,6 +34,9 @@ namespace CocShop.Core.Constaint
         public const string PAYMENT_METHOD_NOT_FOUND = "Payment_Method_Not_Found";
         public const string LOCATION_NOT_FOUND = "Location_Not_Found";
         public const string PRODUCT_PRICE_NOT_FOUND = "Product_Price_Not_Found";
+        public const string OUT_OF_STOCK = "Out_Of_Stock";
+        public const string INVALID_ORDER_STATUS_SUBMITTED = "Invalid_Order_Status_Submitted";
+        public const string INVALID_ORDER_STATUS_DELIVERING = "Invalid_Order_Status_Delivering";
 
     }
     public class MessageConstants
@@ -46,5 +49,6 @@ namespace CocShop.Core.Constaint
     {
         public const string Admin = "Admin";
         public const string User = "User";
+        public const string Staff = "Staff";
     }
 }

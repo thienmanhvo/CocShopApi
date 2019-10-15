@@ -120,6 +120,12 @@
   <data name="Failure" xml:space="preserve">
     <value>Failure.</value>
   </data>
+  <data name="Invalid_Order_Status_Delivering" xml:space="preserve">
+    <value>The status of the order is not delivering.</value>
+  </data>
+  <data name="Invalid_Order_Status_Submitted" xml:space="preserve">
+    <value>The status of the order is not submitted.</value>
+  </data>
   <data name="Invalid_Password" xml:space="preserve">
     <value>The password you entered is incorrect.</value>
   </data>
@@ -131,6 +137,9 @@
   </data>
   <data name="Not_Found" xml:space="preserve">
     <value>The requested URL was not found on this server.</value>
+  </data>
+  <data name="Out_Of_Stock" xml:space="preserve">
+    <value>Product is out of stock.</value>
   </data>
   <data name="Payment_Method_Not_Found" xml:space="preserve">
     <value>Payment method is not found.</value>
