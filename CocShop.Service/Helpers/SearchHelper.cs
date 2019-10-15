@@ -46,18 +46,21 @@ namespace CocShop.Service.Helpers
                             case Constants.EQUAL:
                                 opera = "=";
                                 break;
-
                             default:
-                                continue;
+                                throw new Exception("Operation not support");
+                                //continue;
                         }
                         if (field.PropertyType.Equals(typeof(string)))
                         {
                             if (opera.Equals("="))
                             {
-                                var value = item.Value.ToLower();
+                                var value = item.Value?.ToLower();
                                 search += $"|| _.{field.Name}.ToLower().Contains(\"{value}\")";
                             }
-                            continue;
+                            else
+                            {
+                                throw new Exception("Only support Equal operation for string");
+                            }                            
                         }
                         else if (field.PropertyType.Equals(typeof(bool?)) || field.PropertyType.Equals(typeof(bool)))
                         {
@@ -79,10 +82,14 @@ namespace CocShop.Service.Helpers
                                         search += $"|| _.{field.Name} == false";
                                         break;
                                     default:
-                                        break;
+                                        throw new Exception("Value of boolean type is Invalid");
+                                        //break;
                                 }
                             }
-                            continue;
+                            else
+                            {
+                                throw new Exception("Only support Equal operation for boolean");
+                            }
                         }
                         else if (field.PropertyType.Equals(typeof(DateTime?)) || field.PropertyType.Equals(typeof(DateTime)))
                         {
@@ -124,7 +131,7 @@ namespace CocShop.Service.Helpers
 
                 if (string.IsNullOrEmpty(search + searchRangeResult))
                 {
-                    result = defaultCondition;
+                    result = lamda + defaultCondition.Substring(0, defaultCondition.Length - 4);
                 }
                 else
                 {

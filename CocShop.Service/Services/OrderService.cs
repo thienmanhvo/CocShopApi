@@ -71,8 +71,8 @@ namespace CocShop.Service.Services
                 return new BaseViewModel<OrderViewModel>()
                 {
                     StatusCode = HttpStatusCode.BadRequest,
-                    Code = ErrMessageConstants.PAYMENT_METHOD_NOT_FOUND,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.PAYMENT_METHOD_NOT_FOUND),
+                    Code = ErrMessageConstants.LOCATION_NOT_FOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.LOCATION_NOT_FOUND),
                 };
             }
 
@@ -80,6 +80,7 @@ namespace CocShop.Service.Services
             {
                 var productId = new Guid(product.Id);
                 var productEntity = _productRepository.GetMany(_ => _.IsDelete == false && _.Id.Equals(productId)).FirstOrDefault();
+
                 if (productEntity == null)
                 {
                     return new BaseViewModel<OrderViewModel>()
@@ -113,6 +114,18 @@ namespace CocShop.Service.Services
                         };
                     }
                 }
+                if (productEntity.Quantity < product.Quantity)
+                {
+                    return new BaseViewModel<OrderViewModel>()
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Code = ErrMessageConstants.OUT_OF_STOCK,
+                        Description = MessageHandler.CustomErrMessage(ErrMessageConstants.OUT_OF_STOCK),
+                    };
+                }
+                productEntity.Quantity = productEntity.Quantity - product.Quantity;
+                _productRepository.Update(productEntity);
+
                 var orderDetail = _mapper.Map<OrderDetail>(product);
                 var totalDetailPrice = product.Price * product.Quantity;
                 orderDetail.SetDefaultInsertValue(username);
@@ -268,33 +281,128 @@ namespace CocShop.Service.Services
         {
             _unitOfWork.Commit();
         }
+        public BaseViewModel<string> CancelOrder(Guid id)
+        {
+            var currentUserId = new Guid(_orderRepository.GetCurrentUserId());
+            var entity = _orderRepository.Get(_ => _.Id == id && _.CreatedUserId == currentUserId);
+            BaseViewModel<string> result = null;
 
-        //public BaseViewModel<OrderViewModel> UpdateOrder(Guid id, UpdateOrderRequestViewModel order)
-        //{
-        //    var entity = _repository.GetById(id);
-        //    if (entity == null)
-        //    {
-        //        return new BaseViewModel<OrderViewModel>
-        //        {
-        //            StatusCode = HttpStatusCode.NotFound,
-        //            Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-        //            Code = ErrMessageConstants.NOTFOUND
-        //        };
-        //    }
+            if (entity == null)
+            {
+                result = new BaseViewModel<string>()
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND)
+                };
+            }
+            else
+            {
+                if (entity.Status != MyEnum.OrderStatus.Submitted.ToString())
+                {
+                    result = new BaseViewModel<string>()
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Code = ErrMessageConstants.INVALID_ORDER_STATUS_SUBMITTED,
+                        Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALID_ORDER_STATUS_SUBMITTED)
+                    };
+                }
+                else
+                {
+                    entity.Status = MyEnum.OrderStatus.Canceled.ToString();
 
-        //    entity = _mapper.Map(order, entity);
+                    entity.SetDefaultUpdateValue(_orderRepository.GetUsername());
+                    _orderRepository.Update(entity);
+                    result = new BaseViewModel<string>();
 
-        //    entity.SetDefaultUpdateValue(_repository.GetUsername());
-        //    _repository.Update(entity);
-        //    var result = new BaseViewModel<OrderViewModel>
-        //    {
-        //        Data = _mapper.Map<OrderViewModel>(entity),
-        //    };
+                    Save();
+                }
 
-        //    Save();
+            }
+            return result;
+        }
 
-        //    return result;
-        //}
+        public BaseViewModel<string> PickOrder(Guid id)
+        {
+            var currentUserId = new Guid(_orderRepository.GetCurrentUserId());
+            var entity = _orderRepository.Get(_ => _.Id == id);
+            BaseViewModel<string> result = null;
+
+            if (entity == null)
+            {
+                result = new BaseViewModel<string>()
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND)
+                };
+            }
+            else
+            {
+                if (entity.Status != MyEnum.OrderStatus.Submitted.ToString())
+                {
+                    result = new BaseViewModel<string>()
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Code = ErrMessageConstants.INVALID_ORDER_STATUS_SUBMITTED,
+                        Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALID_ORDER_STATUS_SUBMITTED)
+                    };
+                }
+                else
+                {
+                    entity.Status = MyEnum.OrderStatus.Delivering.ToString();
+                    entity.DeliveryUserId = currentUserId;
+
+                    entity.SetDefaultUpdateValue(_orderRepository.GetUsername());
+                    _orderRepository.Update(entity);
+                    result = new BaseViewModel<string>();
+                }
+
+                Save();
+            }
+
+            return result;
+        }
+
+        public BaseViewModel<string> CompleteOrder(Guid id)
+        {
+            var currentUserId = new Guid(_orderRepository.GetCurrentUserId());
+            var entity = _orderRepository.Get(_ => _.Id == id && _.DeliveryUserId == currentUserId);
+            BaseViewModel<string> result = null;
+
+            if (entity == null)
+            {
+                result = new BaseViewModel<string>()
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Code = ErrMessageConstants.NOTFOUND,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND)
+                };
+            }
+            else
+            {
+                if (entity.Status != MyEnum.OrderStatus.Delivering.ToString())
+                {
+                    result = new BaseViewModel<string>()
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Code = ErrMessageConstants.INVALID_ORDER_STATUS_DELIVERING,
+                        Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALID_ORDER_STATUS_DELIVERING)
+                    };
+                }
+                else
+                {
+                    entity.Status = MyEnum.OrderStatus.Delivered.ToString();
+
+                    entity.SetDefaultUpdateValue(_orderRepository.GetUsername());
+                    _orderRepository.Update(entity);
+                    result = new BaseViewModel<string>();
+                    Save();
+                }
+            }
+
+            return result;
+        }
 
     }
 }
