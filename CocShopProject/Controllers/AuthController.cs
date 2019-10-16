@@ -246,6 +246,7 @@ namespace CocShop.WebAPi.Controllers
                 Roles = _userManager.GetRolesAsync(user).Result.ToArray(),
                 Fullname = user.FullName,
                 Email = user.Email,
+                AvatarPath = user.AvatarPath,
                 Access_token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expires_in = DateTime.Now.AddMinutes(30),
 

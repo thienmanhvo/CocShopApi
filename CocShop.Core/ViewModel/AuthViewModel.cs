@@ -22,6 +22,7 @@ namespace CocShop.Core.ViewModel
     {
         public string[] Roles { get; set; }
         public string Fullname { get; set; }
+        public string AvatarPath { get; set; }
         public string Email { get; set; }
         public string Access_token { get; set; }
         public DateTime Expires_in { get; set; }
