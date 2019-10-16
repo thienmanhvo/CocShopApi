@@ -159,16 +159,19 @@ namespace CocShop.Service.Services
 
             Expression<Func<Product, bool>> FilterExpression = await LinqHelper<Product>.StringToExpression(filter);
 
+            var includeList = IncludeLinqHelper<Product>.StringToListInclude(request?.Include);
+
             QueryArgs<Product> queryArgs = new QueryArgs<Product>
             {
                 Offset = pageSize * (pageIndex - 1),
                 Limit = pageSize,
                 Filter = FilterExpression,
                 Sort = request.SortBy,
+                Include = includeList
             };
 
 
-            var data = _repository.Get(queryArgs.Filter, queryArgs.Sort, queryArgs.Offset, queryArgs.Limit).ToList();
+            var data = _repository.Get(queryArgs.Filter, queryArgs.Sort, queryArgs.Offset, queryArgs.Limit, queryArgs.Include).ToList();
 
             //var sql = data.ToSql();
 
