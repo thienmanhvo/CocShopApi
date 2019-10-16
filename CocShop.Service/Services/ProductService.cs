@@ -134,11 +134,17 @@ namespace CocShop.Service.Services
 
         public async Task<BaseViewModel<PagingResult<ProductViewModel>>> GetAllProducts(BasePagingRequestViewModel request)
         {
+            return await GetAll(request, Constants.DEAFAULT_DELETE_STATUS_EXPRESSION);
+        }
+
+
+        private async Task<BaseViewModel<PagingResult<ProductViewModel>>> GetAll(BasePagingRequestViewModel request, string defaultCondition = null)
+        {
             var pageSize = request.PageSize;
             var pageIndex = request.PageIndex;
             var result = new BaseViewModel<PagingResult<ProductViewModel>>();
 
-            string filter = SearchHelper<Product>.GenerateStringExpression(request.Filter, Constants.DEAFAULT_DELETE_STATUS_EXPRESSION);
+            string filter = SearchHelper<Product>.GenerateStringExpression(request.Filter, defaultCondition);
 
             Expression<Func<Product, bool>> FilterExpression = await LinqHelper<Product>.StringToExpression(filter);
 
@@ -209,29 +215,12 @@ namespace CocShop.Service.Services
             return result;
         }
 
-        public BaseViewModel<IEnumerable<ProductViewModel>> GetProductByCategoryID(Guid cateId)
+        public async Task<BaseViewModel<PagingResult<ProductViewModel>>> GetProductByCategoryID(Guid cateId, BasePagingRequestViewModel request)
         {
             var cate = _productCategoryRepository.GetById(cateId);
-            if (cate == null || cate.IsDelete)
-            {
-                return new BaseViewModel<IEnumerable<ProductViewModel>>
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-                    Code = ErrMessageConstants.NOTFOUND
-                };
-            }
             var listProduct = _repository.GetMany(_ => _.IsDelete == false && _.CateId == cateId);
-            if (listProduct == null || !listProduct.Any())
-            {
-                return new BaseViewModel<IEnumerable<ProductViewModel>>
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD),
-                    Code = MessageConstants.NO_RECORD
-                };
-            }
-            return new BaseViewModel<IEnumerable<ProductViewModel>>(_mapper.Map<IEnumerable<ProductViewModel>>(listProduct));
+            
+            return await GetAll(request, $"{Constants.DEAFAULT_DELETE_STATUS_EXPRESSION} && _.CateId == new System.Guid(\"{cateId}\")");
         }
     }
 }

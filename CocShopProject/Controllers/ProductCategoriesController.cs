@@ -75,7 +75,7 @@ namespace CocShop.WebAPi.Controllers
         // GET: api/ProductCategories/5/Products
         [HttpGet]
         [Route("{id}/Products")]
-        public ActionResult<BaseViewModel<IEnumerable<ProductViewModel>>> GetProductByCategoryID(string id)
+        public async Task<ActionResult<BaseViewModel<PagingResult<ProductViewModel>>>> GetProductByCategoryID(string id, [FromQuery] BasePagingRequestViewModel request)
         {
             if (!Guid.TryParse(id, out Guid guidId))
             {
@@ -86,7 +86,8 @@ namespace CocShop.WebAPi.Controllers
                     Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
                 });
             };
-            var result = _productService.GetProductByCategoryID(guidId);
+            request.SetDefaultPage();
+            var result = await _productService.GetProductByCategoryID(guidId, request);
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
             return result;
         }
