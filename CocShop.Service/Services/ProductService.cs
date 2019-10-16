@@ -137,6 +137,17 @@ namespace CocShop.Service.Services
             return await GetAll(request, Constants.DEAFAULT_DELETE_STATUS_EXPRESSION);
         }
 
+        public async Task<BaseViewModel<PagingResult<ProductViewModel>>> GetAllProductsNoPaging(BaseRequestViewModel request)
+        {
+            return await GetAll(new BasePagingRequestViewModel {
+                PageIndex = null,
+                PageSize = null,
+                Filter = request.Filter,
+                Include = request.Include,
+                SortBy = request.SortBy
+            }, Constants.DEAFAULT_DELETE_STATUS_EXPRESSION);
+        }
+
 
         private async Task<BaseViewModel<PagingResult<ProductViewModel>>> GetAll(BasePagingRequestViewModel request, string defaultCondition = null)
         {

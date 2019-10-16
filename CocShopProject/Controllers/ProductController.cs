@@ -51,6 +51,20 @@ namespace CocShop.WebAPi.Controllers
             return result;
         }
 
+        // GET: api/Product
+        [Route("GetAll")]
+        [HttpGet]
+        public async Task<ActionResult<BaseViewModel<PagingResult<ProductViewModel>>>> GetAllProduct([FromQuery]BaseRequestViewModel request)
+        {
+            //var a = request.Filters[0];
+
+            var result = await _productService.GetAllProductsNoPaging(request);
+
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+
+            return result;
+        }
+
         // GET: api/Product/5
         [HttpGet("{id}")]
         public ActionResult<BaseViewModel<ProductViewModel>> GetProduct(string id)

@@ -29,9 +29,9 @@ namespace CocShop.Core.ViewModel
     }
     public class BaseRequestViewModel
     {
-        [CheckGuid]
-        public string Id { get; set; }
+        public string SortBy { get; set; }
         public string Include { get; set; }
+        public IDictionary<string, string> Filter { get; set; }
     }
     public class Paging
     {
