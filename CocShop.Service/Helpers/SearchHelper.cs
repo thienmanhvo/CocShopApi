@@ -60,7 +60,7 @@ namespace CocShop.Service.Helpers
                             else
                             {
                                 throw new Exception("Only support Equal operation for string");
-                            }                            
+                            }
                         }
                         else if (field.PropertyType.Equals(typeof(bool?)) || field.PropertyType.Equals(typeof(bool)))
                         {
@@ -95,6 +95,17 @@ namespace CocShop.Service.Helpers
                         {
                             var date = DateTime.ParseExact(item.Value, "yyyyMMdd", CultureInfo.InvariantCulture);
                             searchRangeResult += $"&&  _.{field.Name} {opera} System.DateTime.ParseExact(\"{item.Value}\", \"yyyyMMdd\",  System.Globalization.CultureInfo.InvariantCulture)";
+                        }
+                        else if (field.PropertyType.Equals(typeof(Guid?)) || field.PropertyType.Equals(typeof(Guid)))
+                        {
+                            if (opera.Equals("="))
+                            {
+                                search += $"|| _.{field.Name} == new System.Guid(\"{item.Value}\")";
+                            }
+                            else
+                            {
+                                throw new Exception("Only support Equal operation for Guid");
+                            }
                         }
                         else
                         {
