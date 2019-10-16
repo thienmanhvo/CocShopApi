@@ -59,6 +59,8 @@ namespace CocShop.Core.ViewModel
         // public string UpdatedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public string ImagePath { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public ProductCategoryViewModel Category { get; set; }
     }
     public class ProductToOrderViewModel
     {
