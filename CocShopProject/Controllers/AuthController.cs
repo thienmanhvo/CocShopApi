@@ -121,12 +121,23 @@ namespace CocShop.WebAPi.Controllers
                 }
                 else
                 {
-                    return BadRequest(resultRole.Errors);
+
+                    return BadRequest(new BaseViewModel<TokenViewModel>
+                    {
+                        Code = resultRole.Errors.ElementAtOrDefault(0).Code,
+                        Description = resultRole.Errors.ElementAtOrDefault(0).Description,
+                        StatusCode = HttpStatusCode.BadRequest
+                    });
                 }
             }
             else
             {
-                return BadRequest(resultUser.Errors);
+                return BadRequest(new BaseViewModel<TokenViewModel>
+                {
+                    Code = resultUser.Errors.ElementAtOrDefault(0).Code,
+                    Description = resultUser.Errors.ElementAtOrDefault(0).Description,
+                    StatusCode = HttpStatusCode.BadRequest
+                });
             }
         }
 
@@ -184,7 +195,12 @@ namespace CocShop.WebAPi.Controllers
             }
             else
             {
-                return BadRequest(result.Errors);
+                return BadRequest(new BaseViewModel<TokenViewModel>
+                {
+                    Code = result.Errors.ElementAtOrDefault(0).Code,
+                    Description = result.Errors.ElementAtOrDefault(0).Description,
+                    StatusCode = HttpStatusCode.BadRequest
+                });
             }
         }
 
