@@ -85,11 +85,13 @@ namespace CocShop.Service.Services
             return result;
         }
 
-        public BaseViewModel<ProductViewModel> GetProduct(Guid id)
+        public BaseViewModel<ProductViewModel> GetProduct(Guid id, string include = null)
         {
-            var product = _repository.GetById(id);
+            var includeList = IncludeLinqHelper<Product>.StringToListInclude(include);
 
-            if (product == null || product.IsDelete)
+            var product = _repository.Get(_ => _.Id == id && _.IsDelete == false, includeList).FirstOrDefault();
+
+            if (product == null)
             {
                 return new BaseViewModel<ProductViewModel>
                 {
@@ -139,7 +141,8 @@ namespace CocShop.Service.Services
 
         public async Task<BaseViewModel<PagingResult<ProductViewModel>>> GetAllProductsNoPaging(BaseRequestViewModel request)
         {
-            return await GetAll(new BasePagingRequestViewModel {
+            return await GetAll(new BasePagingRequestViewModel
+            {
                 PageIndex = null,
                 PageSize = null,
                 Filter = request.Filter,
@@ -233,7 +236,7 @@ namespace CocShop.Service.Services
         {
             var cate = _productCategoryRepository.GetById(cateId);
             var listProduct = _repository.GetMany(_ => _.IsDelete == false && _.CateId == cateId);
-            
+
             return await GetAll(request, $"{Constants.DEAFAULT_DELETE_STATUS_EXPRESSION} && _.CateId == new System.Guid(\"{cateId}\")");
         }
     }
