@@ -198,7 +198,12 @@ namespace CocShop.WebAPi.Controllers
             }
             else
             {
-                return BadRequest(result.Errors);
+                return BadRequest(new BaseViewModel<TokenViewModel>
+                {
+                    Code = result.Errors.ElementAtOrDefault(0).Code,
+                    Description = result.Errors.ElementAtOrDefault(0).Description,
+                    StatusCode = HttpStatusCode.BadRequest
+                });
             }
         }
 
