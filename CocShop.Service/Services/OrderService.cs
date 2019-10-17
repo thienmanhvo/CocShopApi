@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using CocShop.Core.Data.Query;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 namespace CocShop.Service.Services
 {
@@ -284,7 +285,7 @@ namespace CocShop.Service.Services
         public BaseViewModel<string> CancelOrder(Guid id)
         {
             var currentUserId = new Guid(_orderRepository.GetCurrentUserId());
-            var entity = _orderRepository.Get(_ => _.Id == id && _.CreatedUserId == currentUserId);
+            var entity = _orderRepository.GetMany(_ => _.Id == id && _.CreatedUserId == currentUserId).Include(_ => _.OrderDetail).FirstOrDefault();
             BaseViewModel<string> result = null;
 
             if (entity == null)
@@ -313,6 +314,13 @@ namespace CocShop.Service.Services
 
                     entity.SetDefaultUpdateValue(_orderRepository.GetUsername());
                     _orderRepository.Update(entity);
+                    foreach (var item in entity.OrderDetail)
+                    {
+                        var product = _productRepository.GetById(item.ProductId);
+                        product.Quantity = item.Quantity + product.Quantity;
+                        _productRepository.Update(product);
+                    }
+
                     result = new BaseViewModel<string>();
 
                     Save();
