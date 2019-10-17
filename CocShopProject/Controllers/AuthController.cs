@@ -63,7 +63,7 @@ namespace CocShop.WebAPi.Controllers
         /// <author>thiennb</author>
         [ValidateModel]
         [HttpPost("Login")]
-        public async Task<ActionResult<BaseViewModel<TokenViewModel>>> GetToken([FromBody]LoginViewModel request)
+        public async Task<ActionResult<BaseViewModel<TokenViewModel>>> Login([FromBody]LoginViewModel request)
         {
             var user = await _userManager.FindByNameAsync(request.Username);
             if (user == null)
@@ -86,7 +86,40 @@ namespace CocShop.WebAPi.Controllers
                 });
             }
 
-            await _userManager.UpdateAsync(user);
+            //await _userManager.UpdateAsync(user);
+            return Ok(new BaseViewModel<TokenViewModel>
+            {
+                Data = GenerateToken(user).Result,
+            });
+        }
+
+        #endregion
+
+        #region Login
+
+        /// <summary>
+        /// Login
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <author>thiennb</author>   
+        [Authorize]
+        [ValidateModel]
+        [HttpGet("GetToken")]
+        public async Task<ActionResult<BaseViewModel<TokenViewModel>>> GetToken()
+        {
+            var userId = GetCurrentUserId();
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return BadRequest(new BaseViewModel<TokenViewModel>
+                {
+                    Code = ErrMessageConstants.INVALID_USERNAME,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.INVALID_USERNAME),
+                    StatusCode = HttpStatusCode.BadRequest
+                });
+            }
+            // await _userManager.UpdateAsync(user);
             return Ok(new BaseViewModel<TokenViewModel>
             {
                 Data = GenerateToken(user).Result,
@@ -310,6 +343,17 @@ namespace CocShop.WebAPi.Controllers
             //try
             //{
             return _accessor.HttpContext.User?.FindFirst("username")?.Value ?? "SYSTEM";
+            //}
+            //catch
+            //{
+            //    return "SYSTEM";
+            //}
+        }
+        private string GetCurrentUserId()
+        {
+            //try
+            //{
+            return _accessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             //}
             //catch
             //{
