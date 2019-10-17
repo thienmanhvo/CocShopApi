@@ -67,18 +67,9 @@ namespace CocShop.WebAPi.Controllers
 
         // GET: api/Product/5
         [HttpGet("{id}")]
-        public ActionResult<BaseViewModel<ProductViewModel>> GetProduct(string id)
+        public ActionResult<BaseViewModel<ProductViewModel>> GetProduct([CheckGuid]string id, [FromQuery] string include)
         {
-            if (!Guid.TryParse(id, out Guid guidId))
-            {
-                return NotFound(new BaseViewModel<string>()
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Code = ErrMessageConstants.NOTFOUND,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-                });
-            };
-            var result = _productService.GetProduct(guidId);
+            var result = _productService.GetProduct(new Guid(id), include);
 
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 

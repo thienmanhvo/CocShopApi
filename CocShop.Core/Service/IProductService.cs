@@ -10,7 +10,7 @@ namespace CocShop.Core.Service
     {
         Task<BaseViewModel<PagingResult<ProductViewModel>>> GetAllProducts(BasePagingRequestViewModel request);
         Task<BaseViewModel<PagingResult<ProductViewModel>>> GetAllProductsNoPaging(BaseRequestViewModel request);
-        BaseViewModel<ProductViewModel> GetProduct(Guid id);
+        BaseViewModel<ProductViewModel> GetProduct(Guid id,string include = null);
         Task<BaseViewModel<PagingResult<ProductViewModel>>> GetProductByCategoryID(Guid cateId, BasePagingRequestViewModel request);
         BaseViewModel<ProductViewModel> CreateProduct(CreateProductRequestViewModel product);
         BaseViewModel<ProductViewModel> UpdateProduct(Guid id, UpdateProductRequestViewModel product);
