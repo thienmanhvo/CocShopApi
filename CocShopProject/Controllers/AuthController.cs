@@ -268,6 +268,10 @@ namespace CocShop.WebAPi.Controllers
 
         #endregion
 
+
+
+
+
         private async Task<TokenViewModel> GenerateToken(MyUser user)
         {
 
