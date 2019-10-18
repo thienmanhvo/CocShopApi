@@ -58,6 +58,16 @@ namespace CocShop.WebAPi.Controllers
             HttpContext.Response.StatusCode = (int)result.StatusCode;
             return result;
         }
+        [Authorize(Roles = Role.Admin)]
+        [Route("GetAll")]
+        [HttpGet]
+        public async Task<ActionResult<BaseViewModel<PagingResult<OrderViewModel>>>> GetAllOrder([FromQuery]BaseRequestViewModel request)
+        {
+
+            var result = await _orderService.GetAllOrdersByAdminNoPaging(request);
+            HttpContext.Response.StatusCode = (int)result.StatusCode;
+            return result;
+        }
 
         // GET: api/Order/5
         [HttpGet("{id}")]
@@ -89,7 +99,7 @@ namespace CocShop.WebAPi.Controllers
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
             return result;
         }
-        
+
         // PUT: api/Order/Pick/5
         [Authorize(Roles = Role.Staff)]
         [HttpPut("Pick/{id}")]
@@ -101,7 +111,7 @@ namespace CocShop.WebAPi.Controllers
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
             return result;
         }
-        
+
         // PUT: api/Order/Complete/5
         [Authorize(Roles = Role.Staff)]
         [HttpPut("Complete/{id}")]

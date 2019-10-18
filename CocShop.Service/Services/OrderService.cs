@@ -278,6 +278,15 @@ namespace CocShop.Service.Services
         {
             return await GetAllOrder(request);
         }
+        public async Task<BaseViewModel<PagingResult<OrderViewModel>>> GetAllOrdersByAdminNoPaging(BaseRequestViewModel request)
+        {
+            return await GetAllOrder(new BasePagingRequestViewModel
+            {
+                Filter = request.Filter,
+                Include = request.Include,
+                SortBy = request.SortBy
+            });
+        }
         public void Save()
         {
             _unitOfWork.Commit();
