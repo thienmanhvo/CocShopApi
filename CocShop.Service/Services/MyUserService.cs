@@ -60,8 +60,8 @@ namespace CocShop.Service.Services
             var pageSize = request.PageSize;
             var pageIndex = request.PageIndex;
             var result = new BaseViewModel<PagingResult<MyUserViewModel>>();
-
-            string filter = SearchHelper<MyUser>.GenerateStringExpression(request.Filter, Constants.DEAFAULT_DELETE_STATUS_EXPRESSION);
+            var currentId = _repository.GetCurrentUserId();
+            string filter = SearchHelper<MyUser>.GenerateStringExpression(request.Filter, $"{Constants.DEAFAULT_DELETE_STATUS_EXPRESSION} && _.Id != new System.Guid(\"{currentId}\")");
 
             Expression<Func<MyUser, bool>> FilterExpression = await LinqHelper<MyUser>.StringToExpression(filter);
 
