@@ -9,6 +9,7 @@ namespace CocShop.Core.Service
     public interface ILocationService
     {
         Task<BaseViewModel<PagingResult<LocationViewModel>>> GetAllLocations(BasePagingRequestViewModel request);
+        Task<BaseViewModel<PagingResult<LocationViewModel>>> GetAllLoctionsNoPaging(BaseRequestViewModel request);
         BaseViewModel<LocationViewModel> GetLocation(Guid id);
         BaseViewModel<LocationViewModel> CreateLocation(CreateLocationRequestViewModel location);
         BaseViewModel<LocationViewModel> UpdateLocation(UpdateLocationRequestViewModel location);
