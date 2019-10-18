@@ -142,6 +142,42 @@ namespace CocShop.Service.Services
 
             return result;
         }
+        public async Task<BaseViewModel<PagingResult<LocationViewModel>>> GetAllLoctionsNoPaging(BaseRequestViewModel request)
+        {
+            var result = new BaseViewModel<PagingResult<LocationViewModel>>();
+
+            string filter = SearchHelper<Location>.GenerateStringExpression(request.Filter, Constants.DEAFAULT_DELETE_STATUS_EXPRESSION);
+
+            Expression<Func<Location, bool>> FilterExpression = await LinqHelper<Location>.StringToExpression(filter);
+
+            QueryArgs<Location> queryArgs = new QueryArgs<Location>
+            {
+                Filter = FilterExpression,
+                Sort = request.SortBy,
+            };
+
+
+            var data = _repository.Get(queryArgs.Filter, queryArgs.Sort).ToList();
+
+            //var sql = data.ToSql();
+
+            if (data == null || data.Count == 0)
+            {
+                result.Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD);
+                result.Code = MessageConstants.NO_RECORD;
+            }
+            else
+            {
+
+                result.Data = new PagingResult<LocationViewModel>
+                {
+                    Results = _mapper.Map<IEnumerable<LocationViewModel>>(data),
+                    TotalRecords = _repository.Count(queryArgs.Filter)
+                };
+            }
+
+            return result;
+        }
         public void Save()
         {
             _unitOfWork.Commit();

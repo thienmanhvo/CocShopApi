@@ -65,7 +65,20 @@ namespace CocShop.WebAPi.Controllers
 
             return result;
         }
+        // GET: api/Product
+        [Authorize(Roles = Role.Admin)]
+        [Route("GetAll")]
+        [HttpGet]
+        public async Task<ActionResult<BaseViewModel<PagingResult<LocationViewModel>>>> GetAllLocation([FromQuery]BaseRequestViewModel request)
+        {
+            //var a = request.Filters[0];
 
+            var result = await _locationService.GetAllLoctionsNoPaging(request);
+
+            this.HttpContext.Response.StatusCode = (int)result.StatusCode;
+
+            return result;
+        }
         // PUT: api/Locations/5
         [ValidateModel]
         [Authorize(Roles = Role.Admin)]

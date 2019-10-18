@@ -52,6 +52,7 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // GET: api/Product
+        [Authorize(Roles = Role.Admin)]
         [Route("GetAll")]
         [HttpGet]
         public async Task<ActionResult<BaseViewModel<PagingResult<ProductViewModel>>>> GetAllProduct([FromQuery]BaseRequestViewModel request)
@@ -77,7 +78,7 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // PUT: api/Product/5
-        [Authorize(Roles =Role.Admin)]
+        [Authorize(Roles = Role.Admin)]
         [ValidateModel]
         [HttpPut("{id}")]
         public ActionResult<BaseViewModel<ProductViewModel>> PutProduct([CheckGuid(Property = "LocationId")]string id, [FromBody]UpdateProductRequestViewModel product)
