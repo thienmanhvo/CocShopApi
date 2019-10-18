@@ -52,7 +52,8 @@ namespace CocShop.Core.AutoMapper
             CreateMap<UpdateMyUserRequestViewModel, MyUser>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
             CreateMap<MyUser, UpdateMyUserRequestViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
 
-
+            CreateMap<MyRole, RoleViewModel>().ReverseMap();
+            CreateMap<MyRole, CreateRoleRequestViewModel>().ReverseMap();
             //        CreateMap<OrderDetail, UpdateOrderDetailViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
             //        CreateMap<UpdateOrderDetailViewModel, OrderDetail>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
 
