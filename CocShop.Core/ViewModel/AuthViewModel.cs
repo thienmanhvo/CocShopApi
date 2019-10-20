@@ -56,4 +56,14 @@ namespace CocShop.Core.ViewModel
         public string NewPassword { get; set; }
 
     }
+    public class EditRoleViewModel
+    {
+        [CheckGuid]
+        [Required]
+        public string UserId { get; set; }
+
+        [Required]
+        public IEnumerable<string> Roles { get; set; }
+
+    }
 }
