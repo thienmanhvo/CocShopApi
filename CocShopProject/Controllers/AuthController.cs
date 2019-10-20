@@ -95,7 +95,7 @@ namespace CocShop.WebAPi.Controllers
 
         #endregion
 
-        #region Login
+        #region GetToken
 
         /// <summary>
         /// Login
@@ -240,6 +240,67 @@ namespace CocShop.WebAPi.Controllers
                     StatusCode = HttpStatusCode.BadRequest
                 });
             }
+        }
+
+        #endregion
+
+        #region EditRole
+
+        /// <summary>
+        /// Register
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <author>thiennb</author>
+        [ValidateModel]
+        [HttpPost("EditRole")]
+        public async Task<ActionResult> EditRole([FromBody]EditRoleViewModel request)
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId);
+            if (user == null)
+            {
+                return BadRequest(new BaseViewModel<ProductViewModel>
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                    Code = ErrMessageConstants.NOTFOUND
+                });
+            }
+            var oldRole = await _userManager.GetRolesAsync(user);
+            var listRemove = oldRole.Except(request.Roles);
+            var listAdd = request.Roles.Except(oldRole);
+
+            var removeResult = await _userManager.RemoveFromRolesAsync(user, listRemove);
+
+
+            if (removeResult.Succeeded)
+            {
+                var addResult = await _userManager.AddToRolesAsync(user, listAdd);
+                if (addResult.Succeeded)
+                {
+                    return Ok(new BaseViewModel<TokenViewModel>(GenerateToken(user).Result));
+                }
+                else
+                {
+
+                    return BadRequest(new BaseViewModel<TokenViewModel>
+                    {
+                        Code = addResult.Errors.ElementAtOrDefault(0).Code,
+                        Description = addResult.Errors.ElementAtOrDefault(0).Description,
+                        StatusCode = HttpStatusCode.BadRequest
+                    });
+                }
+            }
+            else
+            {
+                return BadRequest(new BaseViewModel<TokenViewModel>
+                {
+                    Code = removeResult.Errors.ElementAtOrDefault(0).Code,
+                    Description = removeResult.Errors.ElementAtOrDefault(0).Description,
+                    StatusCode = HttpStatusCode.BadRequest
+                });
+            }
+
         }
 
         #endregion
