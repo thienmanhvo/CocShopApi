@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CocShop.Core.Constaint;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -37,6 +38,7 @@ namespace CocShop.Core.ViewModel
     {
         public int ToTalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
+        public string OrderStatus { get; set; }
         public IEnumerable<OrderDetailViewModel> OrderDetail { get; set; }
     }
 }
