@@ -17,15 +17,17 @@ namespace CocShop.Service.Services
 {
     public class OrderDetailService : IOrderDetailService
     {
-        private readonly IOrderDetailRepository _repository;
+        private readonly IOrderDetailRepository _orderDetaiRrepository;
+        private readonly IOrderRepository _orderRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public OrderDetailService(IOrderDetailRepository repository, IUnitOfWork unitOfWork, IMapper mapper)
+        public OrderDetailService(IOrderDetailRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IOrderRepository orderRepository)
         {
-            _repository = repository;
+            _orderDetaiRrepository = repository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _orderRepository = orderRepository;
         }
         public BaseViewModel<IEnumerable<OrderDetailViewModel>> CreateDetail(IEnumerable<CreateOrderDetailViewModel> details)
         {
@@ -33,8 +35,8 @@ namespace CocShop.Service.Services
             foreach (var entity in entities)
             {
                 entity.Id = Guid.NewGuid();
-                entity.SetDefaultInsertValue(_repository.GetUsername());
-                _repository.Add(entity);
+                entity.SetDefaultInsertValue(_orderDetaiRrepository.GetUsername());
+                _orderDetaiRrepository.Add(entity);
             }
 
             var result = new BaseViewModel<IEnumerable<OrderDetailViewModel>>()
@@ -50,7 +52,7 @@ namespace CocShop.Service.Services
         //public BaseViewModel<string> DeleteOrder(Guid id)
         //{
         //    //Find product
-        //    var order = _repository.GetById(id);
+        //    var order = _orderDetaiRrepository.GetById(id);
         //    //result to return
         //    BaseViewModel<string> result = null;
         //    //check product exist
@@ -67,7 +69,7 @@ namespace CocShop.Service.Services
         //    {
         //        //update column isDelete = true
         //        order.IsDelete = true;
-        //        _repository.Update(order);
+        //        _orderDetaiRrepository.Update(order);
         //        result = new BaseViewModel<string>();
         //        //save change
         //        Save();
@@ -75,13 +77,13 @@ namespace CocShop.Service.Services
         //    return result;
         //}
 
-        public BaseViewModel<OrderWithOrderDetailViewModel> GetOrderDetail(Expression<Func<OrderDetail, bool>> filter, string include = null)
+        public BaseViewModel<OrderWithOrderDetailViewModel> GetOrderDetail(Guid id,Expression<Func<OrderDetail, bool>> filter, string include = null)
         {
             var includeList = IncludeLinqHelper<OrderDetail>.StringToListInclude(include);
 
-            var order = _repository.Get(filter, includeList).ToList();
+            var orderDetail = _orderDetaiRrepository.Get(filter, includeList).ToList();
 
-            if (order == null || order.Count == 0)
+            if (orderDetail == null || orderDetail.Count == 0)
             {
                 return new BaseViewModel<OrderWithOrderDetailViewModel>
                 {
@@ -90,15 +92,15 @@ namespace CocShop.Service.Services
                     Code = ErrMessageConstants.NOTFOUND
                 };
             }
-            var totalPrice = order.Sum(_ => _.TotalPrice).Value;
-            var totalQuantity = order.Sum(_ => _.Quantity).Value;
+            var order = _orderRepository.Get(_ => _.Id == id);
             return new BaseViewModel<OrderWithOrderDetailViewModel>
             {
                 Data = new OrderWithOrderDetailViewModel()
                 {
-                    TotalPrice = totalPrice,
-                    ToTalQuantity = totalQuantity,
+                    TotalPrice = order.TotalPrice ?? 0,
+                    ToTalQuantity = order.TotalQuantity ?? 0,
                     OrderDetail = _mapper.Map<IEnumerable<OrderDetailViewModel>>(order),
+                    OrderStatus = order.Status
                 }
             };
         }
@@ -106,17 +108,17 @@ namespace CocShop.Service.Services
         public BaseViewModel<OrderWithOrderDetailViewModel> GetAllDetailByAdmin(Guid id, string include = null)
         {
 
-            var currentUserID = new Guid(_repository.GetCurrentUserId());
+            var currentUserID = new Guid(_orderDetaiRrepository.GetCurrentUserId());
             Expression<Func<OrderDetail, bool>> filter = _ => _.OrderId == id;
-            return GetOrderDetail(filter, include);
+            return GetOrderDetail(id,filter, include);
         }
 
         public BaseViewModel<OrderWithOrderDetailViewModel> GetAllDetailByUser(Guid id, string include = null)
         {
 
-            var currentUser = _repository.GetUsername();
+            var currentUser = _orderDetaiRrepository.GetUsername();
             Expression<Func<OrderDetail, bool>> filter = _ => _.OrderId == id && _.CreatedBy == currentUser;
-            return GetOrderDetail(filter, include);
+            return GetOrderDetail(id,filter, include);
         }
 
         public void Save()
@@ -129,18 +131,18 @@ namespace CocShop.Service.Services
             var result = new BaseViewModel<IEnumerable<OrderDetailViewModel>>();
             if (details != null)
             {
-                var listDetail = _repository.GetAll().Where(x => x.OrderId == id);
+                var listDetail = _orderDetaiRrepository.GetAll().Where(x => x.OrderId == id);
 
                 foreach (var detail in listDetail)
                 {
-                    _repository.Delete(detail);
+                    _orderDetaiRrepository.Delete(detail);
                 }
                 var entities = _mapper.Map<IEnumerable<OrderDetail>>(details);
                 foreach (var entity in entities)
                 {
                     entity.Id = Guid.NewGuid();
-                    entity.SetDefaultInsertValue(_repository.GetUsername());
-                    _repository.Add(entity);
+                    entity.SetDefaultInsertValue(_orderDetaiRrepository.GetUsername());
+                    _orderDetaiRrepository.Add(entity);
                 }
 
                 if (entities == null)
