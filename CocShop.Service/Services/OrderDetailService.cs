@@ -99,7 +99,7 @@ namespace CocShop.Service.Services
                 {
                     TotalPrice = order.TotalPrice ?? 0,
                     ToTalQuantity = order.TotalQuantity ?? 0,
-                    OrderDetail = _mapper.Map<IEnumerable<OrderDetailViewModel>>(order),
+                    OrderDetail = _mapper.Map<IEnumerable<OrderDetailViewModel>>(orderDetail),
                     OrderStatus = order.Status
                 }
             };
