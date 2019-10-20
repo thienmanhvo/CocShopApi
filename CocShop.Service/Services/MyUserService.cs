@@ -24,12 +24,14 @@ namespace CocShop.Service.Services
         private readonly IMyUserRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly UserManager<MyUser> _userManager;
 
-        public MyUserService(IMyUserRepository repository, IUnitOfWork unitOfWork, IMapper mapper)
+        public MyUserService(IMyUserRepository repository, IUnitOfWork unitOfWork, IMapper mapper, UserManager<MyUser> userManager)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
 
@@ -48,10 +50,12 @@ namespace CocShop.Service.Services
                     Code = ErrMessageConstants.NOTFOUND
                 };
             }
-
+            var role = _userManager.GetRolesAsync(myUser).Result;
+            var data = _mapper.Map<MyUserViewModel>(myUser);
+            data.RoleName = role;
             return new BaseViewModel<MyUserViewModel>
             {
-                Data = _mapper.Map<MyUserViewModel>(myUser),
+                Data = data,
             };
         }
 
