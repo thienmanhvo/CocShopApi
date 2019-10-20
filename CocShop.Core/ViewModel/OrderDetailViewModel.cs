@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace CocShop.Core.ViewModel
@@ -34,8 +35,8 @@ namespace CocShop.Core.ViewModel
     }
     public class OrderWithOrderDetailViewModel
     {
-        public IEnumerable OrderDetail { get; set; }
-        public int  ToTalQuantity { get; set; }
+        public int ToTalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
+        public IEnumerable<OrderDetailViewModel> OrderDetail { get; set; }
     }
 }

@@ -90,7 +90,7 @@ namespace CocShop.Service.Services
                     Code = ErrMessageConstants.NOTFOUND
                 };
             }
-            var totalPrice = order.Sum(_ => _.Price).Value;
+            var totalPrice = order.Sum(_ => _.TotalPrice).Value;
             var totalQuantity = order.Sum(_ => _.Quantity).Value;
             return new BaseViewModel<OrderWithOrderDetailViewModel>
             {
