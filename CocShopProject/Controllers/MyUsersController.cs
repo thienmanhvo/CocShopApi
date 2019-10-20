@@ -55,10 +55,10 @@ namespace CocShop.WebAPi.Controllers
 
         // GET: api/MyUser/5
         [HttpGet("{id}")]
-        public ActionResult<BaseViewModel<MyUserViewModel>> GetMyUser([CheckGuid]string id)
+        public ActionResult<BaseViewModel<MyUserViewModel>> GetMyUser([CheckGuid]string id, string include = null)
         {
 
-            var result = _productService.GetMyUser(new Guid(id));
+            var result = _productService.GetMyUser(new Guid(id), include);
 
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 
