@@ -278,7 +278,7 @@ namespace CocShop.WebAPi.Controllers
                 var addResult = await _userManager.AddToRolesAsync(user, listAdd);
                 if (addResult.Succeeded)
                 {
-                    return Ok(new BaseViewModel<TokenViewModel>(GenerateToken(user).Result));
+                    return Ok();
                 }
                 else
                 {
