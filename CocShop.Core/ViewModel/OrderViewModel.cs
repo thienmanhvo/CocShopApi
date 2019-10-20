@@ -75,5 +75,6 @@ namespace CocShop.Core.ViewModel
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public virtual ICollection<OrderDetailViewModel> OrderDetail { get; set; }
+        public DateTime? CreatedAt { get; set; }
     }
 }
