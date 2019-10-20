@@ -11,6 +11,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using CocShop.Core.Data.Entity;
+using CocShop.Service.Helpers;
 
 namespace CocShop.Service.Services
 {
@@ -74,24 +75,48 @@ namespace CocShop.Service.Services
         //    return result;
         //}
 
-        public BaseViewModel<IEnumerable<OrderDetailViewModel>> GetAllDetail(Guid id)
+        public BaseViewModel<OrderWithOrderDetailViewModel> GetOrderDetail(Expression<Func<OrderDetail, bool>> filter, string include = null)
         {
-            var currentUser = _repository.GetUsername();
-            var detail = _repository.GetAll().Where(x => x.OrderId == id && x.CreatedBy == currentUser);
+            var includeList = IncludeLinqHelper<OrderDetail>.StringToListInclude(include);
 
-            if (detail == null)
+            var order = _repository.Get(filter, includeList).ToList();
+
+            if (order == null || order.Count == 0)
             {
-                return new BaseViewModel<IEnumerable<OrderDetailViewModel>>()
+                return new BaseViewModel<OrderWithOrderDetailViewModel>
                 {
-                    Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD),
-                    Code = MessageConstants.NO_RECORD
+                    StatusCode = HttpStatusCode.NotFound,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                    Code = ErrMessageConstants.NOTFOUND
                 };
             }
-
-            return new BaseViewModel<IEnumerable<OrderDetailViewModel>>
+            var totalPrice = order.Sum(_ => _.Price).Value;
+            var totalQuantity = order.Sum(_ => _.Quantity).Value;
+            return new BaseViewModel<OrderWithOrderDetailViewModel>
             {
-                Data = _mapper.Map<IEnumerable<OrderDetailViewModel>>(detail),
+                Data = new OrderWithOrderDetailViewModel()
+                {
+                    TotalPrice = totalPrice,
+                    ToTalQuantity = totalQuantity,
+                    OrderDetail = _mapper.Map<IEnumerable<OrderDetailViewModel>>(order),
+                }
             };
+        }
+
+        public BaseViewModel<OrderWithOrderDetailViewModel> GetAllDetailByAdmin(Guid id, string include = null)
+        {
+
+            var currentUserID = new Guid(_repository.GetCurrentUserId());
+            Expression<Func<OrderDetail, bool>> filter = _ => _.OrderId == id;
+            return GetOrderDetail(filter, include);
+        }
+
+        public BaseViewModel<OrderWithOrderDetailViewModel> GetAllDetailByUser(Guid id, string include = null)
+        {
+
+            var currentUser = _repository.GetUsername();
+            Expression<Func<OrderDetail, bool>> filter = _ => _.OrderId == id && _.CreatedBy == currentUser;
+            return GetOrderDetail(filter, include);
         }
 
         public void Save()
