@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using CocShop.Core.MessageHandler;
 using CocShop.Core.Constaint;
 using System.Net;
+using CocShop.Core.Attribute;
+using System.Linq;
+using System.Security.Claims;
 
 namespace CocShop.WebAPi.Controllers
 {
@@ -36,20 +39,21 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // GET: api/OrderDetail/5
-        [HttpGet("{id}")]
-        public ActionResult<BaseViewModel<IEnumerable<OrderDetailViewModel>>> GetDetail(string id)
+        [ValidateModel]
+        [HttpGet("{orderId}")]
+        public ActionResult<BaseViewModel<OrderWithOrderDetailViewModel>> GetDetail([CheckGuid]string orderId, [FromQuery] string include)
         {
-            if (!Guid.TryParse(id, out Guid guidId))
-            {
-                return NotFound(new BaseViewModel<string>()
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Code = ErrMessageConstants.NOTFOUND,
-                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
-                });
-            };
-            var result = _orderDetailService.GetAllDetail(guidId);
 
+            var listRole = HttpContext.User.FindAll(ClaimTypes.Role);
+            BaseViewModel<OrderWithOrderDetailViewModel > result = null;
+            if (listRole.Any(_ => Role.Admin.Equals(_.Value)))
+            {
+                result = _orderDetailService.GetAllDetailByAdmin(new Guid(orderId), include);
+            }
+            else
+            {
+                result = _orderDetailService.GetAllDetailByUser(new Guid(orderId), include);
+            }
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 
             return result;

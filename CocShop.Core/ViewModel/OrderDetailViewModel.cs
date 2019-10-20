@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
 
 namespace CocShop.Core.ViewModel
@@ -29,5 +30,12 @@ namespace CocShop.Core.ViewModel
         public decimal? TotalPrice { get; set; }
 
         public decimal? Price { get; set; }
+        public virtual ProductViewModel Product { get; set; }
+    }
+    public class OrderWithOrderDetailViewModel
+    {
+        public IEnumerable OrderDetail { get; set; }
+        public int  ToTalQuantity { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 }
