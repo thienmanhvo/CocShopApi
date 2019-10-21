@@ -46,7 +46,7 @@ namespace CocShop.WebAPi.Controllers
             var listRole = HttpContext.User.FindAll(ClaimTypes.Role);
             request.SetDefaultPage();
             BaseViewModel<PagingResult<OrderViewModel>> result = null;
-            if (listRole.Any(_ => Role.Admin.Equals(_.Value)))
+            if (listRole.Any(_ => Role.Admin.Equals(_.Value)) || listRole.Any(_ => Role.Staff.Equals(_.Value)))
             {
                 result = await _orderService.GetAllOrdersByAdmin(request);
             }
