@@ -58,7 +58,7 @@ namespace CocShop.WebAPi.Controllers
             HttpContext.Response.StatusCode = (int)result.StatusCode;
             return result;
         }
-        [Authorize(Roles = Role.Admin)]
+        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
         [Route("GetAll")]
         [HttpGet]
         public async Task<ActionResult<BaseViewModel<PagingResult<OrderViewModel>>>> GetAllOrder([FromQuery]BaseRequestViewModel request)
@@ -101,7 +101,7 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // PUT: api/Order/Pick/5
-        [Authorize(Roles = Role.Staff)]
+        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
         [HttpPut("Pick/{id}")]
         public ActionResult<BaseViewModel<string>> Pick([CheckGuid]string id)
         {
@@ -113,7 +113,7 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // PUT: api/Order/Complete/5
-        [Authorize(Roles = Role.Staff)]
+        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
         [HttpPut("Complete/{id}")]
         public ActionResult<BaseViewModel<string>> Complete([CheckGuid]string id)
         {
@@ -126,7 +126,7 @@ namespace CocShop.WebAPi.Controllers
 
 
         [ValidateModel]
-        [Authorize(Roles = Role.User)]
+        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
         [HttpPost]
         public ActionResult<BaseViewModel<OrderViewModel>> PostOrder(CreateOrderRequestViewModel order)
         {

@@ -66,7 +66,7 @@ namespace CocShop.WebAPi.Controllers
             return result;
         }
         // GET: api/Product
-        [Authorize(Roles = Role.Admin)]
+        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
         [Route("GetAll")]
         [HttpGet]
         public async Task<ActionResult<BaseViewModel<PagingResult<LocationViewModel>>>> GetAllLocation([FromQuery]BaseRequestViewModel request)
@@ -81,7 +81,7 @@ namespace CocShop.WebAPi.Controllers
         }
         // PUT: api/Locations/5
         [ValidateModel]
-        [Authorize(Roles = Role.Admin)]
+        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
         [HttpPut("{id}")]
         public ActionResult<BaseViewModel<LocationViewModel>> PutLocation([CheckGuid(Property = "LocationId")]string id, [FromBody]UpdateLocationRequestViewModel location)
         {
@@ -95,7 +95,7 @@ namespace CocShop.WebAPi.Controllers
 
         // POST: api/Locations
         [ValidateModel]
-        [Authorize(Roles = Role.Admin)]
+        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
         [HttpPost]
         public ActionResult<BaseViewModel<LocationViewModel>> PostLocation(CreateLocationRequestViewModel location)
         {
@@ -107,7 +107,7 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // DELETE: api/Locations/5
-        [Authorize(Roles = Role.Admin)]
+        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
         [HttpDelete("{id}")]
         public ActionResult<BaseViewModel<string>> DeleteLocation([CheckGuid(Property = "LocationId")] string id)
         {

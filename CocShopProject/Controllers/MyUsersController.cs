@@ -18,7 +18,7 @@ using CocShop.Core.Attribute;
 
 namespace CocShop.WebAPi.Controllers
 {
-    [Authorize(Roles = Role.Admin)]
+    [Authorize(Roles = Role.Admin + "," + Role.Staff)]
     [Route("api/[controller]")]
     [ApiController]
     public class MyUsersController : ControllerBase
