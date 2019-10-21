@@ -17,7 +17,7 @@ using System.Security.Claims;
 
 namespace CocShop.WebAPi.Controllers
 {
-    [Authorize(Roles = Role.User)]
+    [Authorize(Roles = Role.Admin + "," + Role.Staff)]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderDetailController : ControllerBase

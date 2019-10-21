@@ -52,7 +52,7 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // GET: api/Product
-        [Authorize(Roles = Role.Admin)]
+        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
         [Route("GetAll")]
         [HttpGet]
         public async Task<ActionResult<BaseViewModel<PagingResult<ProductViewModel>>>> GetAllProduct([FromQuery]BaseRequestViewModel request)
@@ -78,7 +78,7 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // PUT: api/Product/5
-        [Authorize(Roles = Role.Admin)]
+        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
         [ValidateModel]
         [HttpPut("{id}")]
         public ActionResult<BaseViewModel<ProductViewModel>> PutProduct([CheckGuid(Property = "LocationId")]string id, [FromBody]UpdateProductRequestViewModel product)
@@ -92,7 +92,7 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // POST: api/Product
-        [Authorize(Roles = Role.Admin)]
+        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
         [ValidateModel]
         [HttpPost]
         public ActionResult<BaseViewModel<ProductViewModel>> PostProduct(CreateProductRequestViewModel product)
@@ -105,7 +105,7 @@ namespace CocShop.WebAPi.Controllers
         }
 
         // DELETE: api/Product/5
-        [Authorize(Roles = Role.Admin)]
+        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
         [HttpDelete("{id}")]
         public ActionResult<BaseViewModel<string>> DeleteProduct(string id)
         {

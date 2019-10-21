@@ -252,6 +252,7 @@ namespace CocShop.WebAPi.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         /// <author>thiennb</author>
+        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
         [ValidateModel]
         [HttpPost("EditRole")]
         public async Task<ActionResult> EditRole([FromBody]EditRoleViewModel request)

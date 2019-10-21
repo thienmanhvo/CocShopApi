@@ -52,7 +52,7 @@ namespace CocShop.WebAPi.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         /// <author>thiennb</author>
-        [Authorize(Roles = Role.Admin)]
+        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
         [ValidateModel]
         [HttpPost()]
         public async Task<ActionResult<BaseViewModel<MyUserRole>>> CreateRole(CreateRoleRequestViewModel request)
@@ -63,7 +63,7 @@ namespace CocShop.WebAPi.Controllers
             if (!roleExist)
             {
                 //create the roles and seed them to the database:
-                MyRole role = new MyRole() { Name = request.Name};
+                MyRole role = new MyRole() { Name = request.Name };
                 role.SetDefaultInsertValue(GetCurrentUser());
                 roleResult = await _roleManager.CreateAsync(role);
                 if (roleResult.Succeeded)
@@ -95,7 +95,7 @@ namespace CocShop.WebAPi.Controllers
         #endregion
 
         // GET: api/Product
-        [Authorize(Roles = Role.Admin)]
+        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
         [HttpGet]
         public ActionResult<BaseViewModel<PagingResult<RoleViewModel>>> GetAll([FromQuery]BaseRequestViewModel request)
         {
