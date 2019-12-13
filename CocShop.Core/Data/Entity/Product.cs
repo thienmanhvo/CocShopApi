@@ -48,7 +48,15 @@ namespace CocShop.Core.Data.Entity
 
         [Column("Image_Path")]
         public string ImagePath { get; set; }
+
+        [ForeignKey("MenuDish")]
+        [Column("Menu_Id")]
+
+        public Guid? Menu_Id { get; set; }
+
         public virtual ProductCategory Category { get; set; }
+        public virtual MenuDish MenuDish { get; set; }
+
         //public virtual ICollection<Image> Image { get; set; }
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }
 

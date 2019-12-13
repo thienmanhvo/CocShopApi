@@ -4,14 +4,16 @@ using CocShop.Core.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CocShop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191213165500_StoreCate")]
+    partial class StoreCate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,9 +137,6 @@ namespace CocShop.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnName("Name");
 
-                    b.Property<Guid?>("Store_Id")
-                        .HasColumnName("Store_Id");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnName("Updated_At");
 
@@ -145,8 +144,6 @@ namespace CocShop.Data.Migrations
                         .HasColumnName("Updated_By");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Store_Id");
 
                     b.ToTable("MenuDish");
                 });
@@ -652,7 +649,7 @@ namespace CocShop.Data.Migrations
                         .HasColumnName("Brand_Id");
 
                     b.Property<Guid?>("Cate_Id")
-                        .HasColumnName("Cate_Id");
+                        .HasColumnName("Brand_Id");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnName("Created_At");
@@ -730,13 +727,6 @@ namespace CocShop.Data.Migrations
                     b.HasOne("CocShop.Core.Data.Entity.MyUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("CocShop.Core.Data.Entity.MenuDish", b =>
-                {
-                    b.HasOne("CocShop.Core.Data.Entity.Store", "Store")
-                        .WithMany()
-                        .HasForeignKey("Store_Id");
                 });
 
             modelBuilder.Entity("CocShop.Core.Data.Entity.MyRoleClaim", b =>
