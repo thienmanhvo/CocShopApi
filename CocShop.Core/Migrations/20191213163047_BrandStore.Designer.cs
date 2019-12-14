@@ -4,14 +4,16 @@ using CocShop.Core.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CocShop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191213163047_BrandStore")]
+    partial class BrandStore
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,40 +117,6 @@ namespace CocShop.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Location");
-                });
-
-            modelBuilder.Entity("CocShop.Core.Data.Entity.MenuDish", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Id");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnName("Created_At");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnName("Created_By");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnName("Is_Delete");
-
-                    b.Property<string>("Name")
-                        .HasColumnName("Name");
-
-                    b.Property<Guid?>("Store_Id")
-                        .HasColumnName("Store_Id");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnName("Updated_At");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnName("Updated_By");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Store_Id");
-
-                    b.ToTable("MenuDish");
                 });
 
             modelBuilder.Entity("CocShop.Core.Data.Entity.MyRole", b =>
@@ -578,9 +546,6 @@ namespace CocShop.Data.Migrations
                     b.Property<bool?>("IsSale")
                         .HasColumnName("Is_Sale");
 
-                    b.Property<Guid?>("Menu_Id")
-                        .HasColumnName("Menu_Id");
-
                     b.Property<decimal?>("Price")
                         .HasColumnName("Price")
                         .HasColumnType("decimal(18,0)");
@@ -604,8 +569,6 @@ namespace CocShop.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CateId");
-
-                    b.HasIndex("Menu_Id");
 
                     b.ToTable("Product");
                 });
@@ -651,9 +614,6 @@ namespace CocShop.Data.Migrations
                     b.Property<Guid?>("BrandId")
                         .HasColumnName("Brand_Id");
 
-                    b.Property<Guid?>("Cate_Id")
-                        .HasColumnName("Cate_Id");
-
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnName("Created_At");
 
@@ -675,10 +635,7 @@ namespace CocShop.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnName("Name");
 
-                    b.Property<long>("NumberOfRating")
-                        .HasColumnName("Number_Of_Rating");
-
-                    b.Property<long>("Rating")
+                    b.Property<double>("Rating")
                         .HasColumnName("Rating");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -691,41 +648,7 @@ namespace CocShop.Data.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.HasIndex("Cate_Id");
-
                     b.ToTable("Store");
-                });
-
-            modelBuilder.Entity("CocShop.Core.Data.Entity.StoreCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Id");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnName("Created_At");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnName("Created_By");
-
-                    b.Property<string>("Description")
-                        .HasColumnName("Description");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnName("Is_Delete");
-
-                    b.Property<string>("Name")
-                        .HasColumnName("Name");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnName("Updated_At");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnName("Updated_By");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Store_Category");
                 });
 
             modelBuilder.Entity("CocShop.Core.Data.Entity.HubUserConnection", b =>
@@ -733,13 +656,6 @@ namespace CocShop.Data.Migrations
                     b.HasOne("CocShop.Core.Data.Entity.MyUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("CocShop.Core.Data.Entity.MenuDish", b =>
-                {
-                    b.HasOne("CocShop.Core.Data.Entity.Store", "Store")
-                        .WithMany()
-                        .HasForeignKey("Store_Id");
                 });
 
             modelBuilder.Entity("CocShop.Core.Data.Entity.MyRoleClaim", b =>
@@ -841,10 +757,6 @@ namespace CocShop.Data.Migrations
                     b.HasOne("CocShop.Core.Data.Entity.ProductCategory", "Category")
                         .WithMany("Product")
                         .HasForeignKey("CateId");
-
-                    b.HasOne("CocShop.Core.Data.Entity.MenuDish", "MenuDish")
-                        .WithMany("Products")
-                        .HasForeignKey("Menu_Id");
                 });
 
             modelBuilder.Entity("CocShop.Core.Data.Entity.Store", b =>
@@ -852,10 +764,6 @@ namespace CocShop.Data.Migrations
                     b.HasOne("CocShop.Core.Data.Entity.Brand", "Brand")
                         .WithMany("Store")
                         .HasForeignKey("BrandId");
-
-                    b.HasOne("CocShop.Core.Data.Entity.StoreCategory", "StoreCategory")
-                        .WithMany("Stores")
-                        .HasForeignKey("Cate_Id");
                 });
 #pragma warning restore 612, 618
         }

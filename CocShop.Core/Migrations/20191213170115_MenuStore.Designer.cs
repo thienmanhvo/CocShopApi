@@ -4,14 +4,16 @@ using CocShop.Core.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CocShop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191213170115_MenuStore")]
+    partial class MenuStore
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -675,10 +677,7 @@ namespace CocShop.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnName("Name");
 
-                    b.Property<long>("NumberOfRating")
-                        .HasColumnName("Number_Of_Rating");
-
-                    b.Property<long>("Rating")
+                    b.Property<double>("Rating")
                         .HasColumnName("Rating");
 
                     b.Property<DateTime?>("UpdatedAt")
