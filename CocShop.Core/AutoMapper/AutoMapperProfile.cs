@@ -59,6 +59,23 @@ namespace CocShop.Core.AutoMapper
 
             //CreateMap<string, Guid>().ConvertUsing(new StringToGuidConverter());
             //CreateMap<Guid, string>().ConvertUsing(new GuidToStringConverter());
+
+
+            CreateMap<StoreViewModel, Store>().ReverseMap();
+            //CreateMap<CreateProductCategoryRequestViewModel, ProductCategory>().ReverseMap();
+            //CreateMap<ProductCategory, UpdateProductCategoryViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+            //CreateMap<UpdateProductCategoryViewModel, ProductCategory>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));  
+
+            CreateMap<BrandViewModel, Brand>().ReverseMap();
+            //CreateMap<CreateProductCategoryRequestViewModel, ProductCategory>().ReverseMap();
+            //CreateMap<ProductCategory, UpdateProductCategoryViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+            //CreateMap<UpdateProductCategoryViewModel, ProductCategory>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));  
+
+            CreateMap<StoreCategoryViewModel, StoreCategory>().ReverseMap();
+            //CreateMap<CreateProductCategoryRequestViewModel, ProductCategory>().ReverseMap();
+            //CreateMap<ProductCategory, UpdateProductCategoryViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+            //CreateMap<UpdateProductCategoryViewModel, ProductCategory>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+
         }
     }
     public class GuidToStringConverter : ITypeConverter<Guid, string>

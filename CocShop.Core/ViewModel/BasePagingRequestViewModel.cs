@@ -33,6 +33,7 @@ namespace CocShop.Core.ViewModel
         public string Include { get; set; }
         public IDictionary<string, string> Filter { get; set; }
     }
+
     public class Paging
     {
 

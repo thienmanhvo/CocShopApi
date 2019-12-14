@@ -15,7 +15,9 @@ namespace CocShop.Core.Data.Entity
         [Column("Image_Path")]
         public string ImagePath { get; set; }
         [Column("Rating")]
-        public double Rating { get; set; }
+        public long Rating { get; set; }
+        [Column("Number_Of_Rating")]
+        public long NumberOfRating { get; set; }
         [Column("Is_Delete")]
         public bool IsDelete { get; set; }
         [Column("Longitude")]
@@ -29,6 +31,9 @@ namespace CocShop.Core.Data.Entity
         [ForeignKey("StoreCategory")]
         [Column("Cate_Id")]
         public Guid? Cate_Id { get; set; }
+
+        [Column("Total_Store")]
+        public int? TotalStore { get; set; }
 
 
         public virtual Brand Brand { get; set; }
