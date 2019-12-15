@@ -26,8 +26,22 @@ namespace CocShop.Repository.Repositories
             var p5 = new SqlParameter("@limit", limit);
 
             string sql = $@"SELECT
-                                g.*, 
-                                (SELECT Count(*) FROM dbo.Store s WHERE s.Brand_Id = g.Brand_Id) AS Total_Store
+                                 g.[Id]
+							    ,g.[Created_By]
+							    ,g.[Created_At]
+							    ,g.[Updated_By]
+							    ,g.[Updated_At]
+							    ,g.[Name]
+							    ,g.[Image_Path]
+							    ,g.[Rating]
+							    ,g.[Is_Delete]
+							    ,g.[Longitude]
+							    ,g.[Latitude]
+							    ,g.[Brand_Id]
+							    ,g.[Cate_Id]
+							    ,g.[Number_Of_Rating]
+							    ,g.[Location_Name] 
+                                ,(SELECT Count(*) FROM dbo.Store s WHERE s.Brand_Id = g.Brand_Id) AS Total_Store
                                 
                             FROM(
                                 select f.*,
@@ -60,7 +74,8 @@ namespace CocShop.Repository.Repositories
                              ORDER BY g.distance
                              OFFSET @offset ROWS 
                              FETCH NEXT @limit ROWS ONLY";
-            return await DbContext.Store.FromSql(sql, p1, p2, p3,p4,p5).ToListAsync();
+            var a =  DbContext.Store.FromSql(sql, p1, p2, p3, p4, p5);
+            return await a.ToListAsync(); 
         }
     }
 }

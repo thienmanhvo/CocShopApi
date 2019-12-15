@@ -35,8 +35,12 @@ namespace CocShop.Core.Data.Entity
         [Column("Total_Store")]
         public int? TotalStore { get; set; }
 
+        [Column("Location_Name")]
+        public string LocationName { get; set; }
+
 
         public virtual Brand Brand { get; set; }
+        public virtual ICollection<MenuDish> MenuDishes { get; set; }
         public virtual StoreCategory StoreCategory { get; set; }
 
         public override void SetDefaultInsertValue(string username)

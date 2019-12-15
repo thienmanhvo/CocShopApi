@@ -23,6 +23,7 @@ namespace CocShop.Core.ViewModel
         public Guid? Cate_Id { get; set; }
 
         public int? TotalStore { get; set; }
+        public string LocationName { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public virtual BrandViewModel Brand { get; set; }
