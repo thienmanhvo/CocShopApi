@@ -6,9 +6,11 @@ namespace CocShop.Core.ViewModel
 {
     public class BrandViewModel
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string ImagePath { get; set; }
         public double Rating { get; set; }
+        public int? Location { get; set; }
 
     }
 }
