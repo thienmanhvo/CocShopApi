@@ -66,25 +66,27 @@ namespace CocShop.Service.Services
         }
 
 
-        public async Task<BaseViewModel<PagingResult<StoreViewModel>>> GetAllStores(BasePagingRequestViewModel request)
+        public async Task<BaseViewModel<PagingResult<StoreViewModel>>> GetAllStores(GetStoreWithGPSRequestViewmovel request)
         {
             return await GetAll(request, Constants.DEAFAULT_DELETE_STATUS_EXPRESSION);
         }
 
-        public async Task<BaseViewModel<PagingResult<StoreViewModel>>> GetAllStoresNoPaging(BaseRequestViewModel request)
+        public async Task<BaseViewModel<PagingResult<StoreViewModel>>> GetAllStoresNoPaging(GetStoreWithGPSRequestViewmovel request)
         {
-            return await GetAll(new BasePagingRequestViewModel
+            return await GetAll(new GetStoreWithGPSRequestViewmovel
             {
                 PageIndex = null,
                 PageSize = null,
                 Filter = request.Filter,
                 Include = request.Include,
-                SortBy = request.SortBy
+                SortBy = request.SortBy,
+                Latitude = request.Latitude,
+                Longitude = request.Longitude
             }, Constants.DEAFAULT_DELETE_STATUS_EXPRESSION);
         }
 
 
-        private async Task<BaseViewModel<PagingResult<StoreViewModel>>> GetAll(BasePagingRequestViewModel request, string defaultCondition = null)
+        private async Task<BaseViewModel<PagingResult<StoreViewModel>>> GetAll(GetStoreWithGPSRequestViewmovel request, string defaultCondition = null)
         {
             var pageSize = request.PageSize;
             var pageIndex = request.PageIndex;
@@ -129,6 +131,17 @@ namespace CocShop.Service.Services
                     PageSize = pageSizeReturn,
                     TotalRecords = _repository.Count(queryArgs.Filter)
                 };
+            }
+            if (request.Longitude != null && request.Latitude != null)
+            {
+                foreach (var item in result?.Data?.Results)
+                {
+                    var sCoord = new GeoCoordinate(item.Latitude, item.Longitude);
+                    var eCoord = new GeoCoordinate(request.Latitude.Value, request.Longitude.Value);
+
+                    item.Distance = (sCoord.GetDistanceTo(eCoord) / 1000.0);
+
+                }
             }
 
             return result;
@@ -178,7 +191,7 @@ namespace CocShop.Service.Services
         }
 
 
-        public async Task<BaseViewModel<PagingResult<StoreViewModel>>> GetStoreByCategoryID(Guid cateId, BasePagingRequestViewModel request)
+        public async Task<BaseViewModel<PagingResult<StoreViewModel>>> GetStoreByCategoryID(Guid cateId, GetStoreWithGPSRequestViewmovel request)
         {
             var cate = _StoreCategoryRepository.GetById(cateId);
             var listStore = _repository.GetMany(_ => _.IsDelete == false && _.Cate_Id == cateId);
@@ -222,7 +235,7 @@ namespace CocShop.Service.Services
             foreach (var item in result?.Data?.Results)
             {
                 var sCoord = new GeoCoordinate(item.Latitude, item.Longitude);
-                var eCoord = new GeoCoordinate(request.Latitude, request.Longitude);
+                var eCoord = new GeoCoordinate(request.Latitude.Value, request.Longitude.Value);
 
                 item.Distance = (sCoord.GetDistanceTo(eCoord) / 1000.0);
 
