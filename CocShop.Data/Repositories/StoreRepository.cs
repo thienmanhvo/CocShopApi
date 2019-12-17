@@ -40,7 +40,8 @@ namespace CocShop.Repository.Repositories
 							    ,g.[Brand_Id]
 							    ,g.[Cate_Id]
 							    ,g.[Number_Of_Rating]
-							    ,g.[Location_Name] 
+							    ,g.[Location_Name]
+                                ,g.[Average_Price]
                                 ,(SELECT Count(*) FROM dbo.Store s WHERE s.Brand_Id = g.Brand_Id) AS Total_Store
                                 
                             FROM(
