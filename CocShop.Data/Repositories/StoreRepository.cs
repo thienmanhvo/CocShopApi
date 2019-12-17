@@ -74,8 +74,21 @@ namespace CocShop.Repository.Repositories
                              ORDER BY g.distance
                              OFFSET @offset ROWS 
                              FETCH NEXT @limit ROWS ONLY";
-            var a =  DbContext.Store.FromSql(sql, p1, p2, p3, p4, p5);
-            return await a.ToListAsync(); 
+            var a = DbContext.Store.FromSql(sql, p1, p2, p3, p4, p5);
+            return await a.ToListAsync();
+        }
+
+        public async Task<ICollection<Store>> GetTopStore(int? offset = null, int? limit = null)
+        {
+            var p1 = new SqlParameter("@offset", offset);
+            var p2 = new SqlParameter("@limit", limit);
+
+            string sql = $@" SELECT s.*,(s.Rating *1.0/ s.Number_Of_Rating*1.0) AS AVG_RATING 
+                             FROM dbo.Store s ORDER BY AVG_RATING DESC
+                             OFFSET @offset ROWS 
+                             FETCH NEXT @limit ROWS ONLY";
+            var a = DbContext.Store.FromSql(sql, p1, p2);
+            return await a.ToListAsync();
         }
     }
 }

@@ -11,5 +11,6 @@ namespace CocShop.Core.Data.Repository
     public interface IStoreRepository : IRepository<Store>
     {
         Task<ICollection<Store>> GetAllNearestStore(double latpoint, double longpoint, double radius, int? offset = null, int? limit = null);
+        Task<ICollection<Store>> GetTopStore(int? offset = null, int? limit = null);
     }
 }

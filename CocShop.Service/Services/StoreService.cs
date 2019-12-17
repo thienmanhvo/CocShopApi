@@ -184,5 +184,41 @@ namespace CocShop.Service.Services
 
             return await GetAll(request, $"{Constants.DEAFAULT_DELETE_STATUS_EXPRESSION} && _.CateId == new System.Guid(\"{cateId}\")");
         }
+
+        public async Task<BaseViewModel<PagingResult<StoreViewModel>>> GetTopStore(BasePagingRequestViewModel request)
+        {
+            var pageSize = request.PageSize;
+            var pageIndex = request.PageIndex;
+            var result = new BaseViewModel<PagingResult<StoreViewModel>>();
+
+
+
+            var data = await _repository.GetTopStore(pageSize * (pageIndex - 1), pageSize);
+
+            //var sql = data.ToSql();
+
+            if (data == null || data.Count == 0)
+            {
+                result.Description = MessageHandler.CustomMessage(MessageConstants.NO_RECORD);
+                result.Code = MessageConstants.NO_RECORD;
+            }
+            else
+            {
+                var pageSizeReturn = pageSize;
+                if (data.Count < pageSize)
+                {
+                    pageSizeReturn = data.Count;
+                }
+                result.Data = new PagingResult<StoreViewModel>
+                {
+                    Results = _mapper.Map<IEnumerable<StoreViewModel>>(data),
+                    PageIndex = pageIndex,
+                    PageSize = pageSizeReturn,
+                };
+            }
+
+            return result;
+
+        }
     }
 }
