@@ -13,6 +13,7 @@ namespace CocShop.Core.Service
         Task<BaseViewModel<PagingResult<StoreViewModel>>> GetAllStoresNoPaging(GetStoreWithGPSRequestViewmovel request);
         Task<BaseViewModel<PagingResult<StoreViewModel>>> GetAllNearestStore(GetNearestStoreRequestViewmovel request, string defaultCondition = null);
         BaseViewModel<StoreViewModel> GetStore(Guid id, string include = null);
+        Task<BaseViewModel<StoreViewModel>> GetStoreInfor(Guid id);
         //Task<BaseViewModel<PagingResult<StoreViewModel>>> GetStoreByCategoryID(Guid cateId, BasePagingRequestViewModel request);
         //BaseViewModel<StoreViewModel> CreateStore(CreateStoreRequestViewModel Store);
         //BaseViewModel<StoreViewModel> UpdateStore(Guid id, UpdateStoreRequestViewModel Store);
