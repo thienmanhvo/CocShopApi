@@ -29,12 +29,14 @@ namespace CocShop.Service.Services
     public class StoreService : IStoreService
     {
         private readonly IStoreRepository _repository;
+        private readonly IProductRepository _productRepository;
         private readonly IStoreCategoryRepository _StoreCategoryRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public StoreService(IStoreRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IStoreCategoryRepository StoreCategoryRepository)
+        public StoreService(IStoreRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IStoreCategoryRepository StoreCategoryRepository, IProductRepository productRepository)
         {
+            _productRepository = productRepository;
             _repository = repository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -243,6 +245,32 @@ namespace CocShop.Service.Services
 
             return result;
 
+        }
+
+        public async Task<BaseViewModel<StoreViewModel>> GetStoreInfor(Guid id)
+        {
+
+            var Store = _repository.GetMany(_ => _.Id == id && _.IsDelete == false)
+                                        .Include(_ => _.StoreCategory)
+                                        .Include(_ => _.MenuDishes).FirstOrDefault();
+            foreach (var item in Store.MenuDishes)
+            {
+                item.Products = await _productRepository.GetMany(_ => _.IsDelete == false && _.MenuId == item.Id).ToListAsync();
+            }
+            if (Store == null)
+            {
+                return new BaseViewModel<StoreViewModel>
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Description = MessageHandler.CustomErrMessage(ErrMessageConstants.NOTFOUND),
+                    Code = ErrMessageConstants.NOTFOUND
+                };
+            }
+
+            return new BaseViewModel<StoreViewModel>
+            {
+                Data = _mapper.Map<StoreViewModel>(Store),
+            };
         }
     }
 }

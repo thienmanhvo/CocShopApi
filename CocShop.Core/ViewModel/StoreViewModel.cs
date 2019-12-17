@@ -33,6 +33,8 @@ namespace CocShop.Core.ViewModel
         public virtual BrandViewModel Brand { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public virtual StoreCategoryViewModel StoreCategory { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public virtual ICollection<MenuDishViewModel> MenuDishes { get; set; }
 
     }
 

@@ -52,7 +52,7 @@ namespace CocShop.Core.Data.Entity
         [ForeignKey("MenuDish")]
         [Column("Menu_Id")]
 
-        public Guid? Menu_Id { get; set; }
+        public Guid? MenuId { get; set; }
 
         public virtual ProductCategory Category { get; set; }
         public virtual MenuDish MenuDish { get; set; }

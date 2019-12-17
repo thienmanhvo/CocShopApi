@@ -76,6 +76,11 @@ namespace CocShop.Core.AutoMapper
             //CreateMap<ProductCategory, UpdateProductCategoryViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
             //CreateMap<UpdateProductCategoryViewModel, ProductCategory>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
 
+            CreateMap<MenuDish, MenuDishViewModel>().ReverseMap();
+            //CreateMap<CreateProductCategoryRequestViewModel, ProductCategory>().ReverseMap();
+            //CreateMap<ProductCategory, UpdateProductCategoryViewModel>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+            //CreateMap<UpdateProductCategoryViewModel, ProductCategory>().ForAllMembers(opt => opt.Condition((source, dest, sourceMember, destMember) => (sourceMember != null)));
+
         }
     }
     public class GuidToStringConverter : ITypeConverter<Guid, string>
