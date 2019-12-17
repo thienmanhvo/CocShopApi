@@ -648,7 +648,7 @@ namespace CocShop.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("Id");
 
-                    b.Property<double>("AveragePrice")
+                    b.Property<double?>("AveragePrice")
                         .HasColumnName("Average_Price");
 
                     b.Property<Guid?>("BrandId")

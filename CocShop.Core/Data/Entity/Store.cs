@@ -39,7 +39,7 @@ namespace CocShop.Core.Data.Entity
         public string LocationName { get; set; }
 
         [Column("Average_Price")]
-        public double AveragePrice { get; set; }
+        public double? AveragePrice { get; set; }
 
         //[Column("Distance")]
         //public long Distance { get; set; }

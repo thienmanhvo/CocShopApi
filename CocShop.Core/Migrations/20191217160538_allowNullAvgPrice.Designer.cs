@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CocShop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20191217155615_avgPriceType")]
-    partial class avgPriceType
+    [Migration("20191217160538_allowNullAvgPrice")]
+    partial class allowNullAvgPrice
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -650,7 +650,7 @@ namespace CocShop.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("Id");
 
-                    b.Property<double>("AveragePrice")
+                    b.Property<double?>("AveragePrice")
                         .HasColumnName("Average_Price");
 
                     b.Property<Guid?>("BrandId")

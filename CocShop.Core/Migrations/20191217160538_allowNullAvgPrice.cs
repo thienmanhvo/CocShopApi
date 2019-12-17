@@ -2,14 +2,14 @@
 
 namespace CocShop.Data.Migrations
 {
-    public partial class avgPriceType : Migration
+    public partial class allowNullAvgPrice : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<double>(
                 name: "Average_Price",
                 table: "Store",
-                nullable: false,
+                nullable: true,
                 oldClrType: typeof(string),
                 oldNullable: true);
         }
@@ -20,7 +20,8 @@ namespace CocShop.Data.Migrations
                 name: "Average_Price",
                 table: "Store",
                 nullable: true,
-                oldClrType: typeof(double));
+                oldClrType: typeof(double),
+                oldNullable: true);
         }
     }
 }
