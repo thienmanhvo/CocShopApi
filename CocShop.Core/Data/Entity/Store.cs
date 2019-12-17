@@ -38,6 +38,12 @@ namespace CocShop.Core.Data.Entity
         [Column("Location_Name")]
         public string LocationName { get; set; }
 
+        [Column("Average_Price")]
+        public double AveragePrice { get; set; }
+
+        //[Column("Distance")]
+        //public long Distance { get; set; }
+
 
         public virtual Brand Brand { get; set; }
         public virtual ICollection<MenuDish> MenuDishes { get; set; }

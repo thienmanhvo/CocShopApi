@@ -62,12 +62,12 @@ namespace CocShop.WebAPi.Controllers
         }
         [Route("GetTopStore")]
         [HttpGet]
-        public async Task<ActionResult<BaseViewModel<PagingResult<StoreViewModel>>>> GetTopStore([FromQuery]BasePagingRequestViewModel request)
+        public async Task<ActionResult<BaseViewModel<PagingResult<StoreViewModel>>>> GetTopStore([FromQuery]GetStoreWithGPSRequestViewmovel request)
         {
             request.SetDefaultPage();
             //var a = request.Filters[0];
 
-            var result = await _storeService.GetAllStores(request);
+            var result = await _storeService.GetTopStore(request);
 
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 

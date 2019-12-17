@@ -25,6 +25,10 @@ namespace CocShop.Core.ViewModel
         public int? TotalStore { get; set; }
         public string LocationName { get; set; }
 
+        public double Distance { get; set; }
+
+        public double AveragePrice { get; set; }
+
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public virtual BrandViewModel Brand { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -37,5 +41,10 @@ namespace CocShop.Core.ViewModel
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public double Radius { get; set; }
+    }
+    public class GetStoreWithGPSRequestViewmovel : BasePagingRequestViewModel
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 }
