@@ -44,7 +44,7 @@ namespace CocShop.Core.ViewModel
     }
     public class GetStoreWithGPSRequestViewmovel : BasePagingRequestViewModel
     {
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
     }
 }

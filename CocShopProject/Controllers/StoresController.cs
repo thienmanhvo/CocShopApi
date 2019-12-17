@@ -49,7 +49,7 @@ namespace CocShop.WebAPi.Controllers
 
         // GET: api/Product
         [HttpGet]
-        public async Task<ActionResult<BaseViewModel<PagingResult<StoreViewModel>>>> GetAllStore([FromQuery]BasePagingRequestViewModel request)
+        public async Task<ActionResult<BaseViewModel<PagingResult<StoreViewModel>>>> GetAllStore([FromQuery]GetStoreWithGPSRequestViewmovel request)
         {
             request.SetDefaultPage();
             //var a = request.Filters[0];
