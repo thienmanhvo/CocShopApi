@@ -123,7 +123,7 @@ namespace CocShop.Service.Services
                 };
             }
 
-            foreach (var item in result.Data.Results)
+            foreach (var item in result?.Data?.Results)
             {
                 var listStore = _storeRepository.GetMany(_ => _.BrandId == item.Id).ToList();
                 var sumRating = listStore.Sum(_ => _.Rating);

@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using CocShop.Core.Extentions;
 using CocShop.Service.Helpers;
 using Microsoft.EntityFrameworkCore;
+using System.Device.Location;
 
 namespace CocShop.Service.Services
 {
@@ -185,7 +186,7 @@ namespace CocShop.Service.Services
             return await GetAll(request, $"{Constants.DEAFAULT_DELETE_STATUS_EXPRESSION} && _.CateId == new System.Guid(\"{cateId}\")");
         }
 
-        public async Task<BaseViewModel<PagingResult<StoreViewModel>>> GetTopStore(BasePagingRequestViewModel request)
+        public async Task<BaseViewModel<PagingResult<StoreViewModel>>> GetTopStore(GetStoreWithGPSRequestViewmovel request)
         {
             var pageSize = request.PageSize;
             var pageIndex = request.PageIndex;
@@ -215,6 +216,16 @@ namespace CocShop.Service.Services
                     PageIndex = pageIndex,
                     PageSize = pageSizeReturn,
                 };
+
+
+            }
+            foreach (var item in result?.Data?.Results)
+            {
+                var sCoord = new GeoCoordinate(item.Latitude, item.Longitude);
+                var eCoord = new GeoCoordinate(request.Latitude, request.Longitude);
+
+                item.Distance = (sCoord.GetDistanceTo(eCoord) / 1000.0);
+
             }
 
             return result;
