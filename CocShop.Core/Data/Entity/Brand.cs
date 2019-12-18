@@ -18,6 +18,7 @@ namespace CocShop.Core.Data.Entity
         public bool IsDelete { get; set; }
 
         public virtual ICollection<Store> Store { get; set; }
+        public virtual ICollection<Promotion> Promotions { get; set; }
         public override void SetDefaultInsertValue(string username)
         {
             base.SetDefaultInsertValue(username);

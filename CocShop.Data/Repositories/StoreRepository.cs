@@ -43,7 +43,6 @@ namespace CocShop.Repository.Repositories
 							    ,g.[Location_Name]
                                 ,g.[Average_Price]
                                 ,(SELECT Count(*) FROM dbo.Store s WHERE s.Brand_Id = g.Brand_Id) AS Total_Store
-                                
                             FROM(
                                 select f.*,
                                 		ROW_NUMBER() OVER(Partition by f.Brand_Id ORDER BY f.distance) AS Row

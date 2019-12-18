@@ -37,6 +37,9 @@ namespace CocShop.Core.ViewModel
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public virtual ICollection<MenuDishViewModel> MenuDishes { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public virtual ICollection<PromotionViewModel> Promotion { get; set; }
+
     }
 
     public class GetNearestStoreRequestViewmovel : BasePagingRequestViewModel

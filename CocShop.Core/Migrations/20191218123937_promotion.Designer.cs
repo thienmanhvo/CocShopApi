@@ -4,14 +4,16 @@ using CocShop.Core.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CocShop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191218123937_promotion")]
+    partial class promotion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -657,7 +659,7 @@ namespace CocShop.Data.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnName("Created_By");
 
-                    b.Property<double?>("DiscountPercent")
+                    b.Property<bool?>("DiscountPercent")
                         .HasColumnName("Discount_Percent");
 
                     b.Property<bool?>("IsActive")
@@ -665,6 +667,9 @@ namespace CocShop.Data.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnName("Name");
+
+                    b.Property<Guid?>("StoreId")
+                        .HasColumnName("Store_Id");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnName("Updated_At");
@@ -675,6 +680,8 @@ namespace CocShop.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
+
+                    b.HasIndex("StoreId");
 
                     b.ToTable("Promotion");
                 });
@@ -896,8 +903,12 @@ namespace CocShop.Data.Migrations
             modelBuilder.Entity("CocShop.Core.Data.Entity.Promotion", b =>
                 {
                     b.HasOne("CocShop.Core.Data.Entity.Brand", "Brand")
-                        .WithMany("Promotions")
+                        .WithMany()
                         .HasForeignKey("BrandId");
+
+                    b.HasOne("CocShop.Core.Data.Entity.Store", "Store")
+                        .WithMany()
+                        .HasForeignKey("StoreId");
                 });
 
             modelBuilder.Entity("CocShop.Core.Data.Entity.Store", b =>
