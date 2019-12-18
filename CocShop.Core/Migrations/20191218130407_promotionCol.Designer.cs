@@ -4,14 +4,16 @@ using CocShop.Core.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CocShop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191218130407_promotionCol")]
+    partial class promotionCol
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -721,6 +723,9 @@ namespace CocShop.Data.Migrations
                     b.Property<long>("NumberOfRating")
                         .HasColumnName("Number_Of_Rating");
 
+                    b.Property<double?>("Promotion")
+                        .HasColumnName("Promotion");
+
                     b.Property<long>("Rating")
                         .HasColumnName("Rating");
 
@@ -896,7 +901,7 @@ namespace CocShop.Data.Migrations
             modelBuilder.Entity("CocShop.Core.Data.Entity.Promotion", b =>
                 {
                     b.HasOne("CocShop.Core.Data.Entity.Brand", "Brand")
-                        .WithMany("Promotions")
+                        .WithMany()
                         .HasForeignKey("BrandId");
                 });
 

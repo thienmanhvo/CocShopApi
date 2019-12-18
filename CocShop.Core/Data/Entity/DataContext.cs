@@ -50,6 +50,7 @@ namespace CocShop.Core.Data.Entity
         public virtual DbSet<Store> Store { get; set; }
         public virtual DbSet<MenuDish> MenuDish { get; set; }
         public virtual DbSet<StoreCategory> StoreCategories { get; set; }
+        public virtual DbSet<Promotion> Promotion { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

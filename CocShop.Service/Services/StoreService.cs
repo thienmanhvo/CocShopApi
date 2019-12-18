@@ -30,17 +30,19 @@ namespace CocShop.Service.Services
     {
         private readonly IStoreRepository _repository;
         private readonly IProductRepository _productRepository;
+        private readonly IPromotionRepository _promotionRepository;
         private readonly IStoreCategoryRepository _StoreCategoryRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public StoreService(IStoreRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IStoreCategoryRepository StoreCategoryRepository, IProductRepository productRepository)
+        public StoreService(IStoreRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IStoreCategoryRepository StoreCategoryRepository, IProductRepository productRepository, IPromotionRepository promotionRepository)
         {
             _productRepository = productRepository;
             _repository = repository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _StoreCategoryRepository = StoreCategoryRepository;
+            _promotionRepository = promotionRepository;
         }
 
 
@@ -133,6 +135,12 @@ namespace CocShop.Service.Services
                     PageSize = pageSizeReturn,
                     TotalRecords = _repository.Count(queryArgs.Filter)
                 };
+                foreach (var item in result.Data.Results)
+                {
+                    var listPromo = _promotionRepository.GetMany(_ => _.BrandId == item.BrandId && _.IsActive == true);
+                    item.Promotion = _mapper.Map<ICollection<PromotionViewModel>>(listPromo);
+
+                }
             }
             if (request.Longitude != null && request.Latitude != null)
             {
@@ -154,8 +162,6 @@ namespace CocShop.Service.Services
             var pageSize = request.PageSize;
             var pageIndex = request.PageIndex;
             var result = new BaseViewModel<PagingResult<StoreViewModel>>();
-
-
 
 
 
@@ -181,6 +187,12 @@ namespace CocShop.Service.Services
                     PageIndex = pageIndex,
                     PageSize = pageSizeReturn,
                 };
+                foreach (var item in result.Data.Results)
+                {
+                    var listPromo = _promotionRepository.GetMany(_ => _.BrandId == item.BrandId && _.IsActive == true);
+                    item.Promotion = _mapper.Map<ICollection<PromotionViewModel>>(listPromo);
+
+                }
             }
 
             return result;
@@ -211,6 +223,7 @@ namespace CocShop.Service.Services
 
             var data = await _repository.GetTopStore(pageSize * (pageIndex - 1), pageSize);
 
+
             //var sql = data.ToSql();
 
             if (data == null || data.Count == 0)
@@ -232,7 +245,12 @@ namespace CocShop.Service.Services
                     PageSize = pageSizeReturn,
                 };
 
+                foreach (var item in result.Data.Results)
+                {
+                    var listPromo = _promotionRepository.GetMany(_ => _.BrandId == item.BrandId && _.IsActive == true);
+                    item.Promotion = _mapper.Map<ICollection<PromotionViewModel>>(listPromo);
 
+                }
             }
             foreach (var item in result?.Data?.Results)
             {
@@ -253,6 +271,7 @@ namespace CocShop.Service.Services
             var Store = _repository.GetMany(_ => _.Id == id && _.IsDelete == false)
                                         .Include(_ => _.StoreCategory)
                                         .Include(_ => _.MenuDishes).FirstOrDefault();
+
             foreach (var item in Store.MenuDishes)
             {
                 item.Products = await _productRepository.GetMany(_ => _.IsDelete == false && _.MenuId == item.Id).ToListAsync();
@@ -271,6 +290,8 @@ namespace CocShop.Service.Services
             {
                 Data = _mapper.Map<StoreViewModel>(Store),
             };
+            var listPromo = _promotionRepository.GetMany(_ => _.BrandId == result.Data.BrandId && _.IsActive == true);
+            result.Data.Promotion = _mapper.Map<ICollection<PromotionViewModel>>(listPromo);
             if (latitude != null && longitude != null)
             {
                 var sCoord = new GeoCoordinate(result.Data.Latitude, result.Data.Longitude);
