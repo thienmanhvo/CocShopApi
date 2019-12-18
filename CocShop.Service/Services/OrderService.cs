@@ -168,6 +168,9 @@ namespace CocShop.Service.Services
             var listOrderDetail = new HashSet<OrderDetail>();
             var username = _orderRepository.GetUsername();
             var orderEntity = _mapper.Map<Order>(order);
+            orderEntity.DeliveryToLatitude = order.Latitude;
+            orderEntity.DeliveryToLongitude = order.longitude;
+
             orderEntity.SetDefaultInsertValue(_orderRepository.GetUsername());
             if (order.PaymentId != null)
             {
