@@ -22,15 +22,17 @@ namespace CocShop.Service.Services
     {
         private readonly IBrandRepository _repository;
         private readonly IStoreRepository _storeRepository;
+        private readonly IPromotionRepository _promotionRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public BrandService(IBrandRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IStoreRepository storeRepository)
+        public BrandService(IBrandRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IStoreRepository storeRepository, IPromotionRepository promotionRepository)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _storeRepository = storeRepository;
+            _promotionRepository = promotionRepository;
         }
 
 

@@ -138,7 +138,7 @@ namespace CocShop.Service.Services
                 foreach (var item in result.Data.Results)
                 {
                     var listPromo = _promotionRepository.GetMany(_ => _.BrandId == item.BrandId && _.IsActive == true);
-                    item.Promotion = _mapper.Map<ICollection<PromotionViewModel>>(listPromo);
+                    item.Promotions = _mapper.Map<ICollection<PromotionViewModel>>(listPromo);
 
                 }
             }
@@ -190,7 +190,7 @@ namespace CocShop.Service.Services
                 foreach (var item in result.Data.Results)
                 {
                     var listPromo = _promotionRepository.GetMany(_ => _.BrandId == item.BrandId && _.IsActive == true);
-                    item.Promotion = _mapper.Map<ICollection<PromotionViewModel>>(listPromo);
+                    item.Promotions = _mapper.Map<ICollection<PromotionViewModel>>(listPromo);
 
                 }
             }
@@ -248,7 +248,7 @@ namespace CocShop.Service.Services
                 foreach (var item in result.Data.Results)
                 {
                     var listPromo = _promotionRepository.GetMany(_ => _.BrandId == item.BrandId && _.IsActive == true);
-                    item.Promotion = _mapper.Map<ICollection<PromotionViewModel>>(listPromo);
+                    item.Promotions = _mapper.Map<ICollection<PromotionViewModel>>(listPromo);
 
                 }
             }
@@ -291,7 +291,7 @@ namespace CocShop.Service.Services
                 Data = _mapper.Map<StoreViewModel>(Store),
             };
             var listPromo = _promotionRepository.GetMany(_ => _.BrandId == result.Data.BrandId && _.IsActive == true);
-            result.Data.Promotion = _mapper.Map<ICollection<PromotionViewModel>>(listPromo);
+            result.Data.Promotions = _mapper.Map<ICollection<PromotionViewModel>>(listPromo);
             if (latitude != null && longitude != null)
             {
                 var sCoord = new GeoCoordinate(result.Data.Latitude, result.Data.Longitude);
