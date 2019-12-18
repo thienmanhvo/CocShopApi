@@ -29,8 +29,12 @@ namespace CocShop.Core.ViewModel
         //[CheckGuidOrNull(Property = "PaymentId")]
         public string PaymentId { get; set; }
 
+        public Single Latitude { get; set; }
+        public Single longitude { get; set; }
+
         [Required, MinLength(1, ErrorMessage = "At least one item required in order")]
         public IEnumerable<ProductToOrderViewModel> Products { get; set; }
+
     }
     //public class OrderInformationViewModel
     //{
