@@ -356,7 +356,7 @@ namespace CocShop.WebAPi.Controllers
             var token = new JwtSecurityToken(
                     issuer: AppSettings.Configs.GetValue<string>("JwtSettings:Issuer"),
                     audience: user.FullName,
-                    expires: DateTime.Now.AddMinutes(30),
+                    expires: DateTime.Now.AddDays(30),
                     signingCredentials: signingCredentials,
                     claims: claims
                 );
