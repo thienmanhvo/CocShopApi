@@ -18,6 +18,7 @@ namespace CocShop.Core.Service
         BaseViewModel<OrderViewModel> GetOrderByUser(Guid id, string include = null);
         //BaseViewModel<IEnumerable<OrderViewModel>> GetOrderByID(Guid cateId);
         BaseViewModel<OrderViewModel> CreateOrder(CreateOrderRequestViewModel product);
+        BaseViewModel<OrderViewModel> CreateOrderNoValidate(CreateOrderRequestViewModel order);
         //BaseViewModel<OrderViewModel> UpdateOrder(Guid id, UpdateOrderRequestViewModel product);
         //BaseViewModel<string> DeleteOrder(Guid id);
         void Save();
