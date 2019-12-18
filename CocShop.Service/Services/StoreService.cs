@@ -247,7 +247,7 @@ namespace CocShop.Service.Services
 
         }
 
-        public async Task<BaseViewModel<StoreViewModel>> GetStoreInfor(Guid id)
+        public async Task<BaseViewModel<StoreViewModel>> GetStoreInfor(Guid id, double? latitude, double? longitude)
         {
 
             var Store = _repository.GetMany(_ => _.Id == id && _.IsDelete == false)
@@ -267,10 +267,18 @@ namespace CocShop.Service.Services
                 };
             }
 
-            return new BaseViewModel<StoreViewModel>
+            var result = new BaseViewModel<StoreViewModel>
             {
                 Data = _mapper.Map<StoreViewModel>(Store),
             };
+            if (latitude != null && longitude != null)
+            {
+                var sCoord = new GeoCoordinate(result.Data.Latitude, result.Data.Longitude);
+                var eCoord = new GeoCoordinate(latitude.Value, longitude.Value);
+                result.Data.Distance = (sCoord.GetDistanceTo(eCoord) / 1000.0);
+            }
+            return result;
+
         }
     }
 }
