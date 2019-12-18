@@ -132,7 +132,7 @@ namespace CocShop.WebAPi.Controllers
         {
 
 
-            var result = _orderService.CreateOrder(order);
+            var result = _orderService.CreateOrderNoValidate(order);
 
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 

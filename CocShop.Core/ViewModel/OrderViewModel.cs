@@ -23,10 +23,10 @@ namespace CocShop.Core.ViewModel
         //public string Status { get; set; }
 
         //public Guid? DeliveryUserId { get; set; }
-        [Required]
-        [CheckGuid(Property = "LocationId")]
+        //[Required]
+        //[CheckGuid(Property = "LocationId")]
         public string LocationId { get; set; }
-        [CheckGuidOrNull(Property = "PaymentId")]
+        //[CheckGuidOrNull(Property = "PaymentId")]
         public string PaymentId { get; set; }
 
         [Required, MinLength(1, ErrorMessage = "At least one item required in order")]
