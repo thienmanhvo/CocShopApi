@@ -7,6 +7,7 @@ namespace CocShop.Core.ViewModel
 {
     public class StoreViewModel
     {
+        public String Id { get; set; }
 
         public string Name { get; set; }
 
