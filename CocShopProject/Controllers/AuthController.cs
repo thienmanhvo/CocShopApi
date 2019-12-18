@@ -368,7 +368,7 @@ namespace CocShop.WebAPi.Controllers
                 Email = user.Email,
                 AvatarPath = user.AvatarPath,
                 Access_token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expires_in = DateTime.Now.AddMinutes(30),
+                Expires_in = DateTime.Now.AddDays(30),
 
                 //(int)TimeSpan.FromDays(1).TotalSeconds
             };

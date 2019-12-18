@@ -126,7 +126,7 @@ namespace CocShop.WebAPi.Controllers
 
 
         [ValidateModel]
-        [Authorize(Roles = Role.Admin + "," + Role.Staff)]
+        [Authorize(Roles = Role.User)]
         [HttpPost]
         public ActionResult<BaseViewModel<OrderViewModel>> PostOrder(CreateOrderRequestViewModel order)
         {
