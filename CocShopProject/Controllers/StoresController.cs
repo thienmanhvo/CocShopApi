@@ -77,11 +77,11 @@ namespace CocShop.WebAPi.Controllers
 
         [Route("GetStoreInfor/{id}")]
         [HttpGet]
-        public async Task<ActionResult<BaseViewModel<StoreViewModel>>> GetStoreInfor([CheckGuid]string id)
+        public async Task<ActionResult<BaseViewModel<StoreViewModel>>> GetStoreInfor([CheckGuid]string id, double? latitude, double? longitude)
         {
             //var a = request.Filters[0];
 
-            var result = await _storeService.GetStoreInfor(new Guid(id));
+            var result = await _storeService.GetStoreInfor(new Guid(id), latitude, longitude);
 
             this.HttpContext.Response.StatusCode = (int)result.StatusCode;
 
