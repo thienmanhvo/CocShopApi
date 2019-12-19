@@ -28,7 +28,7 @@ namespace CocShop.Core.ViewModel
         public string LocationId { get; set; }
         //[CheckGuidOrNull(Property = "PaymentId")]
         public string PaymentId { get; set; }
-
+        public string StoreId { get; set; }
         public Single Latitude { get; set; }
         public Single longitude { get; set; }
 
@@ -49,7 +49,7 @@ namespace CocShop.Core.ViewModel
     public class OrderViewModel
     {
         public string Id { get; set; }
-
+        public string StoreId { get; set; }
         public Guid CreatedUserId { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
