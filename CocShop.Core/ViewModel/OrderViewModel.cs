@@ -80,5 +80,12 @@ namespace CocShop.Core.ViewModel
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public virtual ICollection<OrderDetailViewModel> OrderDetail { get; set; }
         public DateTime? CreatedAt { get; set; }
+
+        public string DeliveryToName { get; set; }
+
+
+        public Single DeliveryToLatitude { get; set; }
+
+        public Single DeliveryToLongitude { get; set; }
     }
 }
