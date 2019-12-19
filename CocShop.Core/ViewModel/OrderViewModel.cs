@@ -87,5 +87,7 @@ namespace CocShop.Core.ViewModel
         public Single DeliveryToLatitude { get; set; }
 
         public Single DeliveryToLongitude { get; set; }
+        
+        public StoreViewModel Store { get; set; }
     }
 }

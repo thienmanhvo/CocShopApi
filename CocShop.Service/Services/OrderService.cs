@@ -24,6 +24,7 @@ namespace CocShop.Service.Services
     {
         private readonly IOrderRepository _orderRepository;
         private readonly ILocationRepository _locationRepository;
+        private readonly IStoreRepository _storeRepository;
         private readonly IPaymentMethodRepository _paymentMethodRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IProductRepository _productRepository;
@@ -39,6 +40,8 @@ namespace CocShop.Service.Services
             _orderDetailRepository = serviceProvider.GetRequiredService<IOrderDetailRepository>();
             _locationRepository = serviceProvider.GetRequiredService<ILocationRepository>();
             _paymentMethodRepository = serviceProvider.GetRequiredService<IPaymentMethodRepository>();
+            _storeRepository = serviceProvider.GetRequiredService<IStoreRepository>();
+
         }
 
         public BaseViewModel<OrderViewModel> CreateOrder(CreateOrderRequestViewModel order)
@@ -332,6 +335,10 @@ namespace CocShop.Service.Services
                     PageSize = pageSizeReturn,
                     TotalRecords = _orderRepository.Count(queryArgs.Filter)
                 };
+                foreach (var item in result.Data.Results)
+                {
+                    if (item.StoreId != null) { item.Store = _mapper.Map<StoreViewModel>(_storeRepository.GetMany(_ => _.Id == new Guid(item.StoreId)).FirstOrDefault()); }
+                }
             }
 
             return result;
