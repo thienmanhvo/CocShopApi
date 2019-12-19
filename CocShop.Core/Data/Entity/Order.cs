@@ -26,6 +26,9 @@ namespace CocShop.Core.Data.Entity
         [Column("Location_Id")]
         public Guid? LocationId { get; set; }
 
+        [Column("Store_Id")]
+        public Guid? StoreId { get; set; }
+
         [ForeignKey("Payment")]
         [Column("Payment_Id")]
         public Guid? PaymentId { get; set; }
