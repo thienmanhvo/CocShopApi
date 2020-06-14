@@ -11,4 +11,3 @@ commands:
 artifacts:
 files:
 - CocShopProject/build_output/**/*
-- scripts/**/*
