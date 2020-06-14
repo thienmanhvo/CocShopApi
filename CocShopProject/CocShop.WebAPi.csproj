@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.Lambda" Version="3.3.109.40" />
     <PackageReference Include="HangFire" Version="1.7.6" />
     <PackageReference Include="Mapster" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
