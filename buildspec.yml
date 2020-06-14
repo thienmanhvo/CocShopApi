@@ -1,13 +1,15 @@
 version: 0.2
+
 phases:
-pre_build:
-commands:
-- echo Restore started on `date`
-- dotnet restore CocShop.WebAPi.csproj
-build:
-commands:
-- echo Build started on `date`
-- dotnet publish -c release -o ./build_output CocShop.WebAPi.csproj
+    pre_build:
+        commands:
+            - echo Restore started on `date`
+            - dotnet build CocShopProject/CocShop.WebAPi.csproj --configuration Release
+    build:
+        commands:
+            - echo Build started on `date`
+            - dotnet publish CocShopProject/CocShop.WebAPi.csproj -o ./build_output --configuration Release
 artifacts:
-files:
-- CocShopProject/build_output/**/*
+    files:
+        - '**/*'
+    base-directory: 'build_output'
